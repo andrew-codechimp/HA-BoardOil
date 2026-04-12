@@ -23,3 +23,5 @@ class BoardOilData:
     client: BoardOilApiClient
     coordinator: BoardOilDataUpdateCoordinator
     integration: Integration
+    version: str
+    build: str
