@@ -17,9 +17,8 @@ if TYPE_CHECKING:
 
 ENTITY_DESCRIPTIONS = (
     SensorEntityDescription(
-        key="boardoil",
-        name="Integration Sensor",
-        icon="mdi:format-quote-close",
+        key="boardoil_version",
+        name="Version",
     ),
 )
 
@@ -54,4 +53,4 @@ class BoardOilSensor(BoardOilEntity, SensorEntity):
     @property
     def native_value(self) -> str | None:
         """Return the native value of the sensor."""
-        return self.coordinator.data.get("body")
+        return self.coordinator.data["data"].get("version")

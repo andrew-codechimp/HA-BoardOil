@@ -40,27 +40,34 @@ class BoardOilApiClient:
 
     def __init__(
         self,
-        username: str,
-        password: str,
+        host: str,
+        api_token: str,
         session: aiohttp.ClientSession,
     ) -> None:
-        """Sample API Client."""
-        self._username = username
-        self._password = password
+        """BoardOil API Client."""
+        self._host = host
+        self._apitoken = api_token
         self._session = session
 
-    async def async_get_data(self) -> Any:
-        """Get data from the API."""
+    async def async_get_me(self) -> Any:
+        """Get me from the API."""
         return await self._api_wrapper(
             method="get",
-            url="https://jsonplaceholder.typicode.com/posts/1",
+            path="auth/me",
+        )
+
+    async def async_get_version(self) -> Any:
+        """Get version from the API."""
+        return await self._api_wrapper(
+            method="get",
+            path="version",
         )
 
     async def async_set_title(self, value: str) -> Any:
         """Get data from the API."""
         return await self._api_wrapper(
             method="patch",
-            url="https://jsonplaceholder.typicode.com/posts/1",
+            path="https://jsonplaceholder.typicode.com/posts/1",
             data={"title": value},
             headers={"Content-type": "application/json; charset=UTF-8"},
         )
@@ -68,7 +75,7 @@ class BoardOilApiClient:
     async def _api_wrapper(
         self,
         method: str,
-        url: str,
+        path: str,
         data: dict | None = None,
         headers: dict | None = None,
     ) -> Any:
@@ -77,8 +84,12 @@ class BoardOilApiClient:
             async with async_timeout.timeout(10):
                 response = await self._session.request(
                     method=method,
-                    url=url,
-                    headers=headers,
+                    url=f"{self._host}/api/{path}",
+                    headers={
+                        "Authorization": f"Bearer {self._apitoken}",
+                        "Accept": "application/json",
+                        **(headers or {}),
+                    },
                     json=data,
                 )
                 _verify_response_or_raise(response)

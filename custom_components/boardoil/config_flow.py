@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import voluptuous as vol
 from homeassistant import config_entries
-from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
+from homeassistant.const import CONF_API_TOKEN, CONF_HOST
 from homeassistant.helpers import selector
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from homeassistant.loader import async_get_loaded_integration
@@ -17,6 +17,18 @@ from .api import (
     BoardOilApiClientError,
 )
 from .const import DOMAIN, LOGGER
+
+USER_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_HOST): str,
+        vol.Required(CONF_API_TOKEN): str,
+    }
+)
+REAUTH_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_API_TOKEN): str,
+    }
+)
 
 
 class BoardOilFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
@@ -33,8 +45,8 @@ class BoardOilFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             try:
                 await self._test_credentials(
-                    username=user_input[CONF_USERNAME],
-                    password=user_input[CONF_PASSWORD],
+                    host=user_input[CONF_HOST],
+                    api_token=user_input[CONF_API_TOKEN],
                 )
             except BoardOilApiClientAuthenticationError as exception:
                 LOGGER.warning(exception)
@@ -50,11 +62,11 @@ class BoardOilFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     ## Do NOT use this in production code
                     ## The unique_id should never be something that can change
                     ## https://developers.home-assistant.io/docs/config_entries_config_flow_handler#unique-ids
-                    unique_id=slugify(user_input[CONF_USERNAME])
+                    unique_id=slugify(user_input[CONF_HOST])
                 )
                 self._abort_if_unique_id_configured()
                 return self.async_create_entry(
-                    title=user_input[CONF_USERNAME],
+                    title=user_input[CONF_HOST],
                     data=user_input,
                 )
 
@@ -71,14 +83,14 @@ class BoardOilFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             data_schema=vol.Schema(
                 {
                     vol.Required(
-                        CONF_USERNAME,
-                        default=(user_input or {}).get(CONF_USERNAME, vol.UNDEFINED),
+                        CONF_HOST,
+                        default=(user_input or {}).get(CONF_HOST, vol.UNDEFINED),
                     ): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT,
                         ),
                     ),
-                    vol.Required(CONF_PASSWORD): selector.TextSelector(
+                    vol.Required(CONF_API_TOKEN): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.PASSWORD,
                         ),
@@ -88,11 +100,12 @@ class BoardOilFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             errors=_errors,
         )
 
-    async def _test_credentials(self, username: str, password: str) -> None:
+    async def _test_credentials(self, host: str, api_token: str) -> None:
         """Validate credentials."""
         client = BoardOilApiClient(
-            username=username,
-            password=password,
+            host=host,
+            api_token=api_token,
             session=async_create_clientsession(self.hass),
         )
-        await client.async_get_data()
+        result = await client.async_get_me()
+        print(result)
