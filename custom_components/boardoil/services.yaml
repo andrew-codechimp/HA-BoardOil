@@ -1,0 +1,27 @@
+get_card:
+  name: Get card
+  description: Return card data from the coordinator for a board and card ID.
+  fields:
+    config_entry:
+      name: Config entry
+      description: The BoardOil config entry ID.
+      required: true
+      selector:
+        config_entry:
+          integration: boardoil
+    board_id:
+      name: Board ID
+      description: Numeric ID of the board containing the card.
+      required: true
+      selector:
+        number:
+          min: 1
+          mode: box
+    card_id:
+      name: Card ID
+      description: Numeric ID of the card to fetch.
+      required: true
+      selector:
+        number:
+          min: 1
+          mode: box

@@ -20,6 +20,7 @@ from .api import BoardOilApiClient
 from .const import DOMAIN, LOGGER
 from .coordinator import BoardOilDataUpdateCoordinator
 from .data import BoardOilData
+from .services import async_setup_services
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -28,17 +29,16 @@ if TYPE_CHECKING:
 
 PLATFORMS: list[Platform] = [
     Platform.SENSOR,
-    Platform.BINARY_SENSOR,
-    Platform.SWITCH,
 ]
 
 
-# https://developers.home-assistant.io/docs/config_entries_index/#setting-up-an-entry
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: BoardOilConfigEntry,
 ) -> bool:
     """Set up this integration using UI."""
+    await async_setup_services(hass)
+
     client = BoardOilApiClient(
         host=entry.data[CONF_HOST],
         api_token=entry.data[CONF_API_TOKEN],
@@ -56,7 +56,7 @@ async def async_setup_entry(
         hass=hass,
         logger=LOGGER,
         name=DOMAIN,
-        update_interval=timedelta(hours=1),
+        update_interval=timedelta(minutes=1),
     )
     entry.runtime_data = BoardOilData(
         client=client,

@@ -63,6 +63,20 @@ class BoardOilApiClient:
             path="version",
         )
 
+    async def async_get_boards(self) -> Any:
+        """Get boards from the API."""
+        return await self._api_wrapper(
+            method="get",
+            path="boards",
+        )
+
+    async def async_get_board(self, board_id: int) -> Any:
+        """Get board from the API."""
+        return await self._api_wrapper(
+            method="get",
+            path=f"boards/{board_id!s}",
+        )
+
     async def async_set_title(self, value: str) -> Any:
         """Get data from the API."""
         return await self._api_wrapper(

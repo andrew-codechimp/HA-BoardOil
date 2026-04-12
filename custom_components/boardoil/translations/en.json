@@ -1,4 +1,24 @@
 {
+    "services": {
+        "get_card": {
+            "name": "Get card",
+            "description": "Return card data from the coordinator for a board and card ID.",
+            "fields": {
+                "config_entry": {
+                    "name": "Config entry",
+                    "description": "The BoardOil config entry ID."
+                },
+                "board_id": {
+                    "name": "Board ID",
+                    "description": "Numeric ID of the board containing the card."
+                },
+                "card_id": {
+                    "name": "Card ID",
+                    "description": "Numeric ID of the card to fetch."
+                }
+            }
+        }
+    },
     "config": {
         "step": {
             "user": {
