@@ -118,14 +118,18 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         """Confirm reauth dialog."""
-        errors: dict[str, str] = {}
+        _errors: dict[str, str] = {}
         if user_input:
-            errors, user_id = await self._test_credentials(
+            client_id = await self._test_credentials(
                 self.host,
                 user_input[CONF_API_TOKEN],
             )
-            if not errors:
-                await self.async_set_unique_id(user_id)
+            if not client_id:
+                _errors["base"] = "auth"
+            if not _errors:
+                await self.async_set_unique_id(
+                    slugify(f"{user_input[CONF_HOST]}-{client_id}")
+                )
                 self._abort_if_unique_id_mismatch(reason="wrong_account")
                 return self.async_update_reload_and_abort(
                     self._get_reauth_entry(),
@@ -134,20 +138,22 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="reauth_confirm",
             data_schema=REAUTH_SCHEMA,
-            errors=errors,
+            errors=_errors,
         )
 
     async def async_step_reconfigure(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         """Handle reconfiguration of the integration."""
-        errors: dict[str, str] = {}
+        _errors: dict[str, str] = {}
         if user_input:
             client_id = await self._test_credentials(
                 user_input[CONF_HOST],
                 user_input[CONF_API_TOKEN],
             )
-            if not errors:
+            if not client_id:
+                _errors["base"] = "auth"
+            if not _errors:
                 await self.async_set_unique_id(
                     slugify(f"{user_input[CONF_HOST]}-{client_id}"),
                 )
@@ -162,7 +168,7 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="reconfigure",
             data_schema=USER_SCHEMA,
-            errors=errors,
+            errors=_errors,
         )
 
     async def _test_credentials(self, host: str, api_token: str) -> str | None:
