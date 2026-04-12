@@ -4,13 +4,37 @@
             "user": {
                 "description": "If you need help with the configuration have a look here: {documentation_url}",
                 "data": {
-                    "username": "Username",
-                    "password": "Password"
+                    "api_token": "Client account token",
+                    "host": "Hostname or IP address of the BoardOil server"
+                },
+                "data_description": {
+                    "api_token": "The client account token of your BoardOil instance from system settings/client accounts.",
+                    "host": "The URL of your BoardOil instance."
                 }
+            },
+            "reauth_confirm": {
+                "data": {
+                    "api_token": "Client account token"
+                },
+                "data_description": {
+                    "api_token": "The client account token of your BoardOil instance from system settings/client accounts."
+                },
+                "description": "Please reauthenticate with BoardOil."
+            },
+            "reconfigure": {
+                "data": {
+                    "api_token": "Client account token",
+                    "host": "Hostname or IP address of the BoardOil server"
+                },
+                "data_description": {
+                    "api_token": "The client account token of your BoardOil instance from system settings/client accounts.",
+                    "host": "The URL of your BoardOil instance."
+                },
+                "description": "Please reconfigure with BoardOil."
             }
         },
         "error": {
-            "auth": "Username/Password is wrong.",
+            "auth": "Host name or Client account token is wrong.",
             "connection": "Unable to connect to the server.",
             "unknown": "Unknown error occurred."
         },
