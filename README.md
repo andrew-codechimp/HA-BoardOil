@@ -1,0 +1,2 @@
+# BoardOil Home Assistant Integration
+

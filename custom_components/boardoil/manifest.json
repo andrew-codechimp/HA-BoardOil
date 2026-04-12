@@ -1,0 +1,12 @@
+{
+  "domain": "boardoil",
+  "name": "BoardOil",
+  "codeowners": [
+    "@andrew-codechimp"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/andrew-codechimp/ha-boardoil",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/andrew-codechimp/ha-boardoil/issues",
+  "version": "0.1.0"
+}
