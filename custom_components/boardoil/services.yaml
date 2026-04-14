@@ -4,7 +4,7 @@ get_card:
   fields:
     config_entry:
       name: Config entry
-      description: The BoardOil config entry ID.
+      description: The Board Oil config entry ID.
       required: true
       selector:
         config_entry:
@@ -32,7 +32,7 @@ add_card:
   fields:
     config_entry:
       name: Config entry
-      description: The BoardOil config entry ID.
+      description: The Board Oil config entry ID.
       required: true
       selector:
         config_entry:

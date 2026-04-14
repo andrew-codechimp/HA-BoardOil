@@ -1,7 +1,7 @@
 [project]
 name = "ha-boardoil"
 version = "0.0.0"
-description = "HA-BoardOil - A Home Assistant integration for BoardOil"
+description = "HA-BoardOil - A Home Assistant integration for Board Oil"
 authors = [{ email = "Andrew Jackson <andrew@codechimp.org>" }]
 maintainers = [{ email = "Andrew Jackson <andrew@codechimp.org>" }]
 

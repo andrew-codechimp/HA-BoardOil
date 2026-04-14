@@ -96,14 +96,14 @@ async def async_setup_entry(
                 include_disabled_entities=True,
             ):
                 LOGGER.debug(
-                    "Removing orphaned BoardOil entity %s from device %s",
+                    "Removing orphaned Board Oil entity %s from device %s",
                     entity_entry.entity_id,
                     device.id,
                 )
                 entity_registry.async_remove(entity_entry.entity_id)
 
             LOGGER.debug(
-                "Removing orphaned BoardOil device %s identifiers=%s",
+                "Removing orphaned Board Oil device %s identifiers=%s",
                 device.id,
                 sorted(device_identifiers),
             )
@@ -171,7 +171,7 @@ class BoardOilColumnCardCountSensor(BoardOilEntity, SensorEntity):
         )
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, f"{coordinator.config_entry.entry_id}:{board.id}")},
-            name=f"BoardOil - {board.name}",
+            name=f"Board Oil - {board.name}",
             sw_version=(
                 f"{coordinator.config_entry.runtime_data.version} "
                 f"({coordinator.config_entry.runtime_data.build})"

@@ -1,4 +1,4 @@
-"""BoardOilEntity class."""
+"""Board Oil Entity class."""
 
 from __future__ import annotations
 

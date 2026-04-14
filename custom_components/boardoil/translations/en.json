@@ -6,7 +6,7 @@
             "fields": {
                 "config_entry": {
                     "name": "Config entry",
-                    "description": "The BoardOil config entry ID."
+                    "description": "The Board Oil config entry ID."
                 },
                 "board_id": {
                     "name": "Board ID",
@@ -40,7 +40,7 @@
             "fields": {
                 "config_entry": {
                     "name": "Config entry",
-                    "description": "The BoardOil config entry ID."
+                    "description": "The Board Oil config entry ID."
                 },
                 "board_id": {
                     "name": "Board ID",
@@ -59,11 +59,11 @@
                 "description": "If you need help with the configuration have a look here: {documentation_url}",
                 "data": {
                     "api_token": "Client account token",
-                    "host": "Hostname or IP address of the BoardOil server"
+                    "host": "Hostname or IP address of the Board Oil server"
                 },
                 "data_description": {
-                    "api_token": "The client account token of your BoardOil instance from system settings/client accounts.",
-                    "host": "The URL of your BoardOil instance."
+                    "api_token": "The client account token of your Board Oil instance from system settings/client accounts.",
+                    "host": "The URL of your Board Oil instance."
                 }
             },
             "reauth_confirm": {
@@ -71,20 +71,20 @@
                     "api_token": "Client account token"
                 },
                 "data_description": {
-                    "api_token": "The client account token of your BoardOil instance from system settings/client accounts."
+                    "api_token": "The client account token of your Board Oil instance from system settings/client accounts."
                 },
-                "description": "Please reauthenticate with BoardOil."
+                "description": "Please reauthenticate with Board Oil."
             },
             "reconfigure": {
                 "data": {
                     "api_token": "Client account token",
-                    "host": "Hostname or IP address of the BoardOil server"
+                    "host": "Hostname or IP address of the Board Oil server"
                 },
                 "data_description": {
-                    "api_token": "The client account token of your BoardOil instance from system settings/client accounts.",
-                    "host": "The URL of your BoardOil instance."
+                    "api_token": "The client account token of your Board Oil instance from system settings/client accounts.",
+                    "host": "The URL of your Board Oil instance."
                 },
-                "description": "Please reconfigure with BoardOil."
+                "description": "Please reconfigure with Board Oil."
             }
         },
         "error": {
