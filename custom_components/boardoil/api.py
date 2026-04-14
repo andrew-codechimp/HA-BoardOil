@@ -77,7 +77,7 @@ class BoardOilApiClient:
             path=f"boards/{board_id!s}",
         )
 
-    async def async_add_card(
+    async def async_add_card(  # noqa: PLR0913
         self,
         board_id: int,
         column_id: int,
