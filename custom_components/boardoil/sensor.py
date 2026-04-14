@@ -8,10 +8,11 @@ from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.const import CONF_HOST
 from homeassistant.core import callback
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.device_registry import DeviceInfo
 
-from .const import DOMAIN
+from .const import DOMAIN, LOGGER
 from .coordinator import ColumnData
 from .entity import BoardOilEntity
 
@@ -30,6 +31,7 @@ async def async_setup_entry(
 ) -> None:
     """Set up the sensor platform."""
     coordinator = entry.runtime_data.coordinator
+    device_registry = dr.async_get(hass)
     entity_registry = er.async_get(hass)
 
     entities = {
@@ -40,6 +42,9 @@ async def async_setup_entry(
 
     @callback
     def _async_sync_entities() -> None:
+        expected_board_identifiers = {
+            f"{entry.entry_id}:{board.id}" for board in coordinator.data
+        }
         latest_keys = {
             _build_entity_key(board_id=board.id, column_id=column.id)
             for board in coordinator.data
@@ -69,6 +74,43 @@ async def async_setup_entry(
             if entity_id:
                 entity_registry.async_remove(entity_id)
 
+        # Remove devices for boards that no longer exist in coordinator data.
+        for device in dr.async_entries_for_config_entry(
+            device_registry,
+            entry.entry_id,
+        ):
+            device_identifiers = {
+                identifier
+                for device_domain, identifier in device.identifiers
+                if device_domain == DOMAIN
+            }
+            if not device_identifiers:
+                continue
+
+            if device_identifiers & expected_board_identifiers:
+                continue
+
+            for entity_entry in er.async_entries_for_device(
+                entity_registry,
+                device.id,
+                include_disabled_entities=True,
+            ):
+                LOGGER.debug(
+                    "Removing orphaned BoardOil entity %s from device %s",
+                    entity_entry.entity_id,
+                    device.id,
+                )
+                entity_registry.async_remove(entity_entry.entity_id)
+
+            LOGGER.debug(
+                "Removing orphaned BoardOil device %s identifiers=%s",
+                device.id,
+                sorted(device_identifiers),
+            )
+            device_registry.async_remove_device(device.id)
+
+    # Run once on setup so orphan cleanup happens immediately, not only on refresh.
+    _async_sync_entities()
     entry.async_on_unload(coordinator.async_add_listener(_async_sync_entities))
 
 
@@ -124,7 +166,10 @@ class BoardOilColumnCardCountSensor(BoardOilEntity, SensorEntity):
                 f"{coordinator.config_entry.runtime_data.version} "
                 f"({coordinator.config_entry.runtime_data.build})"
             ),
-            configuration_url=coordinator.config_entry.data[CONF_HOST],
+            configuration_url=(
+                f"{coordinator.config_entry.data[CONF_HOST].rstrip('/')}/boards/"
+                f"{board.id}"
+            ),
         )
         self._attr_native_unit_of_measurement = "cards"
 
