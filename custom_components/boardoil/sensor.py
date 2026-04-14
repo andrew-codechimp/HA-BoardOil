@@ -6,9 +6,10 @@ from typing import TYPE_CHECKING
 
 from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
 from homeassistant.components.sensor import SensorEntity
+from homeassistant.const import CONF_HOST
 from homeassistant.core import callback
 from homeassistant.helpers import entity_registry as er
-from homeassistant.util import slugify
+from homeassistant.helpers.device_registry import DeviceInfo
 
 from .const import DOMAIN
 from .coordinator import ColumnData
@@ -40,7 +41,7 @@ async def async_setup_entry(
     @callback
     def _async_sync_entities() -> None:
         latest_keys = {
-            _build_entity_key(board_name=board.name, column_name=column.title)
+            _build_entity_key(board_id=board.id, column_id=column.id)
             for board in coordinator.data
             for column in board.columns
         }
@@ -71,9 +72,9 @@ async def async_setup_entry(
     entry.async_on_unload(coordinator.async_add_listener(_async_sync_entities))
 
 
-def _build_entity_key(board_name: str, column_name: str) -> str:
+def _build_entity_key(board_id: int, column_id: int) -> str:
     """Build a stable key for a board and column pair."""
-    return f"{slugify(board_name)}::{slugify(column_name)}"
+    return f"{board_id}:{column_id}"
 
 
 def _create_entities(
@@ -84,8 +85,8 @@ def _create_entities(
     return [
         BoardOilColumnCardCountSensor(
             coordinator=coordinator,
-            board_name=board.name,
-            column_name=column.title,
+            board=board,
+            column=column,
         )
         for board in boards
         for column in board.columns
@@ -100,20 +101,30 @@ class BoardOilColumnCardCountSensor(BoardOilEntity, SensorEntity):
     def __init__(
         self,
         coordinator: BoardOilDataUpdateCoordinator,
-        board_name: str,
-        column_name: str,
+        board: BoardData,
+        column: ColumnData,
     ) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator)
         self.has_entity_name = True
-        self._board_name = board_name
-        self._column_name = column_name
-        self.key = _build_entity_key(board_name=board_name, column_name=column_name)
+        self._board_id = board.id
+        self._board_name = board.name
+        self._column_id = column.id
+        self._column_name = column.title
+        self.key = _build_entity_key(board_id=board.id, column_id=column.id)
         self.icon = "mdi:table-column"
-        self._attr_name = f"{board_name} - {column_name}"
+        self._attr_name = column.title
         self._attr_unique_id = (
-            f"{coordinator.config_entry.entry_id}_"
-            f"{slugify(board_name)}_{slugify(column_name)}_card_count"
+            f"{coordinator.config_entry.entry_id}_{board.id}_{column.id}_card_count"
+        )
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, f"{coordinator.config_entry.entry_id}:{board.id}")},
+            name=board.name,
+            sw_version=(
+                f"{coordinator.config_entry.runtime_data.version} "
+                f"({coordinator.config_entry.runtime_data.build})"
+            ),
+            configuration_url=coordinator.config_entry.data[CONF_HOST],
         )
         self._attr_native_unit_of_measurement = "cards"
 
@@ -144,10 +155,18 @@ class BoardOilColumnCardCountSensor(BoardOilEntity, SensorEntity):
     def _get_board_and_column(self) -> tuple[int, str, ColumnData]:
         """Get latest board and column data from coordinator."""
         for board in self.coordinator.data:
-            if board.name != self._board_name:
+            if board.id != self._board_id:
                 continue
             for column in board.columns:
-                if column.title == self._column_name:
+                if column.id == self._column_id:
                     return board.id, board.name, column
 
-        return 0, self._board_name, ColumnData(id=0, title=self._column_name, cards=[])
+        return (
+            self._board_id,
+            self._board_name,
+            ColumnData(
+                id=self._column_id,
+                title=self._column_name,
+                cards=[],
+            ),
+        )
