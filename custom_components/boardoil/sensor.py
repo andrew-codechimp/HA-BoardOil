@@ -140,6 +140,16 @@ class BoardOilColumnCardCountSensor(BoardOilEntity, SensorEntity):
 
     _unrecorded_attributes = frozenset({"cards"})
 
+    @property
+    def board_name(self) -> str:
+        """Return the board name for entity-id migration."""
+        return self._board_name
+
+    @property
+    def column_name(self) -> str:
+        """Return the column name for entity-id migration."""
+        return self._column_name
+
     def __init__(
         self,
         coordinator: BoardOilDataUpdateCoordinator,
@@ -161,7 +171,7 @@ class BoardOilColumnCardCountSensor(BoardOilEntity, SensorEntity):
         )
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, f"{coordinator.config_entry.entry_id}:{board.id}")},
-            name=board.name,
+            name=f"BoardOil - {board.name}",
             sw_version=(
                 f"{coordinator.config_entry.runtime_data.version} "
                 f"({coordinator.config_entry.runtime_data.build})"
