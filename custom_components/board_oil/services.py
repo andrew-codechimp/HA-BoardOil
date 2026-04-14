@@ -1,4 +1,4 @@
-"""Services for boardoil."""
+"""Services for board_oil."""
 
 from __future__ import annotations
 
@@ -109,8 +109,8 @@ async def async_get_card_service(call: ServiceCall) -> dict[str, object]:
     if entry is None or entry.domain != DOMAIN:
         raise InvalidConfigEntryError
 
-    boardoil_entry = cast("BoardOilConfigEntry", entry)
-    coordinator = boardoil_entry.runtime_data.coordinator
+    board_oil_entry = cast("BoardOilConfigEntry", entry)
+    coordinator = board_oil_entry.runtime_data.coordinator
 
     for board in coordinator.data:
         if board.id != board_id:
@@ -151,8 +151,8 @@ async def async_add_card_service(call: ServiceCall) -> None:
 
     tag_names = _normalize_tag_names(call.data.get("tag_names"))
 
-    boardoil_entry = cast("BoardOilConfigEntry", entry)
-    await boardoil_entry.runtime_data.client.async_add_card(
+    board_oil_entry = cast("BoardOilConfigEntry", entry)
+    await board_oil_entry.runtime_data.client.async_add_card(
         board_id=call.data["board_id"],
         column_id=call.data["column_id"],
         title=call.data["title"],
@@ -160,11 +160,11 @@ async def async_add_card_service(call: ServiceCall) -> None:
         tag_names=tag_names,
         card_type_id=call.data["card_type_id"],
     )
-    await boardoil_entry.runtime_data.coordinator.async_request_refresh()
+    await board_oil_entry.runtime_data.coordinator.async_request_refresh()
 
 
 async def async_setup_services(hass: HomeAssistant) -> None:
-    """Set up boardoil services."""
+    """Set up board_oil services."""
     hass.services.async_register(
         DOMAIN,
         SERVICE_GET_CARD,

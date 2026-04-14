@@ -87,7 +87,7 @@
         {
             "label": "MyPy: Type Check",
             "type": "shell",
-            "command": "uv run mypy custom_components/boardoil/ --check-untyped-defs",
+            "command": "uv run mypy custom_components/board_oil/ --check-untyped-defs",
             "problemMatcher": {
                 "owner": "mypy",
                 "fileLocation": ["relative", "${workspaceFolder}"],

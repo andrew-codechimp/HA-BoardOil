@@ -8,7 +8,7 @@ get_card:
       required: true
       selector:
         config_entry:
-          integration: boardoil
+          integration: board_oil
     board_id:
       name: Board ID
       description: Numeric ID of the board containing the card.
@@ -36,7 +36,7 @@ add_card:
       required: true
       selector:
         config_entry:
-          integration: boardoil
+          integration: board_oil
     board_id:
       name: Board ID
       description: Numeric ID of the target board.

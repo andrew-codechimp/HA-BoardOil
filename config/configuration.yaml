@@ -9,4 +9,4 @@ homeassistant:
 logger:
   default: info
   logs:
-    custom_components.boardoil: debug
+    custom_components.board_oil: debug

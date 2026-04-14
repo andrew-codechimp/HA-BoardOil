@@ -1,4 +1,4 @@
-"""Custom types for boardoil."""
+"""Custom types for board_oil."""
 
 from __future__ import annotations
 
