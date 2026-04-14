@@ -25,3 +25,59 @@ get_card:
         number:
           min: 1
           mode: box
+
+add_card:
+  name: Add card
+  description: Add a new card to a board column.
+  fields:
+    config_entry:
+      name: Config entry
+      description: The BoardOil config entry ID.
+      required: true
+      selector:
+        config_entry:
+          integration: boardoil
+    board_id:
+      name: Board ID
+      description: Numeric ID of the target board.
+      required: true
+      selector:
+        number:
+          min: 1
+          mode: box
+    column_id:
+      name: Column ID
+      description: Numeric ID of the target column in the board.
+      required: true
+      selector:
+        number:
+          min: 1
+          mode: box
+    card_type_id:
+      name: Card type ID
+      description: Numeric ID of the card type.
+      required: true
+      selector:
+        number:
+          min: 1
+          mode: box
+    title:
+      name: Title
+      description: Card title.
+      required: true
+      selector:
+        text:
+    description:
+      name: Description
+      description: Card description.
+      required: true
+      selector:
+        text:
+          multiline: true
+    tag_names:
+      name: Tag names
+      description: Comma-separated tag names to apply to the card.
+      required: false
+      selector:
+        text:
+          multiline: true

@@ -1,0 +1,10 @@
+{
+    "services": {
+        "add_card": {
+            "service": "mdi:card-plus-outline"
+        },
+        "get_card": {
+            "service": "mdi:card-outline"
+        }
+    }
+}

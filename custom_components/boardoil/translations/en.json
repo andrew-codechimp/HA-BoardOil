@@ -1,5 +1,39 @@
 {
     "services": {
+        "add_card": {
+            "name": "Add card",
+            "description": "Add a new card to a board column.",
+            "fields": {
+                "config_entry": {
+                    "name": "Config entry",
+                    "description": "The BoardOil config entry ID."
+                },
+                "board_id": {
+                    "name": "Board ID",
+                    "description": "Numeric ID of the target board."
+                },
+                "column_id": {
+                    "name": "Column ID",
+                    "description": "Numeric ID of the target column in the board."
+                },
+                "title": {
+                    "name": "Title",
+                    "description": "Card title."
+                },
+                "description": {
+                    "name": "Description",
+                    "description": "Card description."
+                },
+                "tag_names": {
+                    "name": "Tag names",
+                    "description": "Comma-separated tag names to apply to the card."
+                },
+                "card_type_id": {
+                    "name": "Card type ID",
+                    "description": "Numeric ID of the card type."
+                }
+            }
+        },
         "get_card": {
             "name": "Get card",
             "description": "Return card data from the coordinator for a board and card ID.",

@@ -109,6 +109,7 @@ class BoardOilColumnCardCountSensor(BoardOilEntity, SensorEntity):
         self._board_name = board_name
         self._column_name = column_name
         self.key = _build_entity_key(board_name=board_name, column_name=column_name)
+        self.icon = "mdi:table-column"
         self._attr_name = f"{board_name} - {column_name}"
         self._attr_unique_id = (
             f"{coordinator.config_entry.entry_id}_"

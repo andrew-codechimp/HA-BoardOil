@@ -77,12 +77,26 @@ class BoardOilApiClient:
             path=f"boards/{board_id!s}",
         )
 
-    async def async_set_title(self, value: str) -> Any:
-        """Get data from the API."""
+    async def async_add_card(
+        self,
+        board_id: int,
+        column_id: int,
+        title: str,
+        description: str,
+        tag_names: list[str] | None,
+        card_type_id: int,
+    ) -> None:
+        """Post a card to the API."""
         return await self._api_wrapper(
-            method="patch",
-            path="https://jsonplaceholder.typicode.com/posts/1",
-            data={"title": value},
+            method="post",
+            path=f"boards/{board_id!s}/cards",
+            data={
+                "boardColumnId": column_id,
+                "title": title,
+                "description": description,
+                "tagNames": tag_names or [],
+                "cardTypeId": card_type_id,
+            },
             headers={"Content-type": "application/json; charset=UTF-8"},
         )
 

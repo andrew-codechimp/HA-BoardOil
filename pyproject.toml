@@ -115,6 +115,7 @@ ignore = [
   "TD002",  # Missing auther in TODO
   "TD003",  # Missing issue link TODO
   "TRY400",  # Use `logging.exception` instead of `logging.error`
+  "PLR0913", # Too many parameters
 
   # TODO: Temporary ignores, to review
   "ANN001",  # Missing type annotation for function argument
