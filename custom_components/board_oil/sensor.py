@@ -172,7 +172,6 @@ class BoardOilColumnCardCountSensor(BoardOilEntity, SensorEntity):
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, f"{coordinator.config_entry.entry_id}:{board.id}")},
             name=f"Board Oil - {board.name}",
-            manufacturer="dozigden",
             sw_version=(
                 f"{coordinator.config_entry.runtime_data.version} "
                 f"({coordinator.config_entry.runtime_data.build})"
