@@ -11,7 +11,6 @@ import voluptuous as vol
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.const import CONF_API_TOKEN, CONF_HOST, CONF_VERIFY_SSL
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
-from homeassistant.loader import async_get_loaded_integration
 from slugify import slugify
 
 from .api import (
@@ -89,14 +88,10 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
                     data=user_input,
                 )
 
-        integration = async_get_loaded_integration(self.hass, DOMAIN)
         return self.async_show_form(
             step_id="user",
             data_schema=USER_SCHEMA,
             errors=errors,
-            description_placeholders={
-                "documentation_url": integration.documentation or "",
-            },
         )
 
     async def async_step_reauth(

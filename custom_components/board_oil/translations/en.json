@@ -74,7 +74,6 @@
     "config": {
         "step": {
             "user": {
-                "description": "If you need help with the configuration have a look here: {documentation_url}",
                 "data": {
                     "api_token": "Client account token",
                     "host": "Hostname or IP address of the Board Oil server",
