@@ -40,6 +40,7 @@ class Card:
     """Data class for card data."""
 
     id: int
+    card_type_id: int
     card_type_name: str
     title: str
     description: str
@@ -75,8 +76,9 @@ class BoardOilDataUpdateCoordinator(DataUpdateCoordinator[list[BoardData]]):
                 for column in board_data.get("columns", []):
                     cards = [
                         Card(
-                            id=card_data.get("id", 0),
-                            card_type_name=card_data.get("cardTypeName", ""),
+                            id=card_data["id"],
+                            card_type_id=card_data["cardTypeId"],
+                            card_type_name=card_data["cardTypeName"],
                             title=card_data.get("title", ""),
                             description=card_data.get("description", ""),
                             raw_data=card_data,
@@ -87,7 +89,7 @@ class BoardOilDataUpdateCoordinator(DataUpdateCoordinator[list[BoardData]]):
                     ]
                     columns.append(
                         ColumnData(
-                            id=column.get("id", 0),
+                            id=column["id"],
                             title=column.get("title", ""),
                             cards=cards,
                         )
@@ -95,7 +97,7 @@ class BoardOilDataUpdateCoordinator(DataUpdateCoordinator[list[BoardData]]):
 
                 self.boards.append(
                     BoardData(
-                        id=board_data.get("id", board_id),
+                        id=board_id,
                         name=board_data.get("name", ""),
                         columns=columns,
                     )

@@ -5,6 +5,9 @@
         },
         "get_card": {
             "service": "mdi:card-outline"
+        },
+        "get_cards": {
+            "service": "mdi:card-multiple-outline"
         }
     }
 }

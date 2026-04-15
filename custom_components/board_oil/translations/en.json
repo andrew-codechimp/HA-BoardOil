@@ -51,6 +51,24 @@
                     "description": "Numeric ID of the card to fetch."
                 }
             }
+        },
+        "get_cards": {
+            "name": "Get cards",
+            "description": "Return card data from the coordinator for a board, optionally filtered by column ID.",
+            "fields": {
+                "config_entry": {
+                    "name": "Config entry",
+                    "description": "The Board Oil config entry ID."
+                },
+                "board_id": {
+                    "name": "Board ID",
+                    "description": "Numeric ID of the board containing the cards."
+                },
+                "column_id": {
+                    "name": "Column ID",
+                    "description": "Optional numeric ID of a specific column to filter cards."
+                }
+            }
         }
     },
     "config": {

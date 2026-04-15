@@ -138,7 +138,9 @@ def _create_entities(
 class BoardOilColumnCardCountSensor(BoardOilEntity, SensorEntity):
     """Sensor showing number of cards for a board column."""
 
-    _unrecorded_attributes = frozenset({"cards"})
+    _unrecorded_attributes = frozenset(
+        {"board_id", "board_name", "column_id", "column_title", "cards"}
+    )
 
     @property
     def board_name(self) -> str:
@@ -200,6 +202,7 @@ class BoardOilColumnCardCountSensor(BoardOilEntity, SensorEntity):
             "cards": [
                 {
                     "id": card.id,
+                    "card_type_id": card.card_type_id,
                     "card_type_name": card.card_type_name,
                     "title": card.title,
                 }

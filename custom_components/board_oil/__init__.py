@@ -52,7 +52,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:  # noqa:
         return False
 
     # Register custom services
-    async_setup_services(hass)
+    await async_setup_services(hass)
 
     return True
 

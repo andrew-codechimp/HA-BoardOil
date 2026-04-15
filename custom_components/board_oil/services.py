@@ -22,6 +22,14 @@ SERVICE_SCHEMA_GET_CARD = vol.Schema(
         vol.Required("card_id"): cv.positive_int,
     }
 )
+SERVICE_GET_CARDS = "get_cards"
+SERVICE_SCHEMA_GET_CARDS = vol.Schema(
+    {
+        vol.Required("config_entry"): cv.string,
+        vol.Required("board_id"): cv.positive_int,
+        vol.Optional("column_id"): cv.positive_int,
+    }
+)
 SERVICE_ADD_CARD = "add_card"
 SERVICE_SCHEMA_ADD_CARD = vol.Schema(
     {
@@ -30,7 +38,7 @@ SERVICE_SCHEMA_ADD_CARD = vol.Schema(
         vol.Required("column_id"): cv.positive_int,
         vol.Required("card_type_id"): cv.positive_int,
         vol.Required("title"): cv.string,
-        vol.Required("description"): cv.string,
+        vol.Optional("description", default=""): cv.string,
         vol.Optional("tag_names"): vol.Any(
             cv.string,
             vol.All(cv.ensure_list, [cv.string]),
@@ -90,6 +98,15 @@ class BoardNotFoundError(HomeAssistantError):
         super().__init__(msg)
 
 
+class ColumnNotFoundError(HomeAssistantError):
+    """Raised when a column id is not found in a board."""
+
+    def __init__(self, board_id: int, column_id: int) -> None:
+        """Initialize the exception."""
+        msg = f"Column id {column_id} not found in board {board_id}"
+        super().__init__(msg)
+
+
 class InvalidConfigEntryError(HomeAssistantError):
     """Raised when a config entry id is invalid for this domain."""
 
@@ -141,6 +158,59 @@ async def async_get_card_service(call: ServiceCall) -> dict[str, object]:
     raise BoardNotFoundError(board_id)
 
 
+async def async_get_cards_service(call: ServiceCall) -> dict[str, object]:
+    """Return card data for a board, optionally filtered by column."""
+    config_entry_id = call.data["config_entry"]
+    board_id = call.data["board_id"]
+    column_id = call.data.get("column_id")
+
+    entry = call.hass.config_entries.async_get_entry(config_entry_id)
+    if entry is None or entry.domain != DOMAIN:
+        raise InvalidConfigEntryError
+
+    board_oil_entry = cast("BoardOilConfigEntry", entry)
+    coordinator = board_oil_entry.runtime_data.coordinator
+
+    for board in coordinator.data:
+        if board.id != board_id:
+            continue
+
+        cards: list[dict[str, object]] = []
+        matching_columns = (
+            [column for column in board.columns if column.id == column_id]
+            if column_id is not None
+            else board.columns
+        )
+
+        if column_id is not None and not matching_columns:
+            raise ColumnNotFoundError(board_id=board_id, column_id=column_id)
+
+        for column in matching_columns:
+            cards.extend(
+                {
+                    "column": {
+                        "id": column.id,
+                        "title": column.title,
+                    },
+                    "card": {
+                        **card.raw_data,
+                    },
+                }
+                for card in column.cards
+            )
+
+        return {
+            "config_entry": config_entry_id,
+            "board": {
+                "id": board.id,
+                "name": board.name,
+            },
+            "cards": cards,
+        }
+
+    raise BoardNotFoundError(board_id)
+
+
 async def async_add_card_service(call: ServiceCall) -> None:
     """Add a card to a board column."""
     config_entry_id = call.data["config_entry"]
@@ -156,7 +226,7 @@ async def async_add_card_service(call: ServiceCall) -> None:
         board_id=call.data["board_id"],
         column_id=call.data["column_id"],
         title=call.data["title"],
-        description=call.data["description"],
+        description=call.data.get("description", ""),
         tag_names=tag_names,
         card_type_id=call.data["card_type_id"],
     )
@@ -170,6 +240,13 @@ async def async_setup_services(hass: HomeAssistant) -> None:
         SERVICE_GET_CARD,
         async_get_card_service,
         schema=SERVICE_SCHEMA_GET_CARD,
+        supports_response=SupportsResponse.ONLY,
+    )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_GET_CARDS,
+        async_get_cards_service,
+        schema=SERVICE_SCHEMA_GET_CARDS,
         supports_response=SupportsResponse.ONLY,
     )
     hass.services.async_register(
