@@ -1,25 +1,17 @@
 get_card:
-  name: Get card
-  description: Return card data from the coordinator for a board and card ID.
   fields:
     config_entry_id:
-      name: Config entry
-      description: The Board Oil config entry ID.
       required: true
       selector:
         config_entry:
           integration: board_oil
     board_id:
-      name: Board ID
-      description: Numeric ID of the board containing the card.
       required: true
       selector:
         number:
           min: 1
           mode: box
     card_id:
-      name: Card ID
-      description: Numeric ID of the card to fetch.
       required: true
       selector:
         number:
@@ -27,27 +19,19 @@ get_card:
           mode: box
 
 get_cards:
-  name: Get cards
-  description: Return card data from the coordinator for a board, optionally filtered by column ID.
   fields:
     config_entry_id:
-      name: Config entry
-      description: The Board Oil config entry ID.
       required: true
       selector:
         config_entry:
           integration: board_oil
     board_id:
-      name: Board ID
-      description: Numeric ID of the board containing the cards.
       required: true
       selector:
         number:
           min: 1
           mode: box
     column_id:
-      name: Column ID
-      description: Optional numeric ID of a specific column to filter cards.
       required: false
       selector:
         number:
@@ -55,56 +39,40 @@ get_cards:
           mode: box
 
 add_card:
-  name: Add card
-  description: Add a new card to a board column.
   fields:
     config_entry_id:
-      name: Config entry
-      description: The Board Oil config entry ID.
       required: true
       selector:
         config_entry:
           integration: board_oil
     board_id:
-      name: Board ID
-      description: Numeric ID of the target board.
       required: true
       selector:
         number:
           min: 1
           mode: box
     column_id:
-      name: Column ID
-      description: Numeric ID of the target column in the board.
       required: true
       selector:
         number:
           min: 1
           mode: box
     card_type_id:
-      name: Card type ID
-      description: Numeric ID of the card type.
       required: true
       selector:
         number:
           min: 1
           mode: box
     title:
-      name: Title
-      description: Card title.
       required: true
       selector:
         text:
     description:
-      name: Description
-      description: Card description.
       required: false
       selector:
         text:
           multiline: true
     tag_names:
-      name: Tag names
-      description: Comma-separated tag names to apply to the card.
       required: false
       selector:
         text:

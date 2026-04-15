@@ -9,5 +9,5 @@
   "integration_type": "service",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/andrew-codechimp/ha-boardoil/issues",
-  "version": "0.1.2"
+  "version": "0.1.3"
 }

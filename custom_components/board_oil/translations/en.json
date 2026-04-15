@@ -10,11 +10,11 @@
                 },
                 "board_id": {
                     "name": "Board ID",
-                    "description": "Numeric ID of the target board."
+                    "description": "Numeric ID of the board."
                 },
                 "column_id": {
                     "name": "Column ID",
-                    "description": "Numeric ID of the target column in the board."
+                    "description": "Numeric ID of the column in the board."
                 },
                 "title": {
                     "name": "Title",
@@ -36,7 +36,7 @@
         },
         "get_card": {
             "name": "Get card",
-            "description": "Return card data from the coordinator for a board and card ID.",
+            "description": "Return card data for a card on a board.",
             "fields": {
                 "config_entry_id": {
                     "name": "Board Oil instance",
@@ -44,7 +44,7 @@
                 },
                 "board_id": {
                     "name": "Board ID",
-                    "description": "Numeric ID of the board containing the card."
+                    "description": "Numeric ID of the board."
                 },
                 "card_id": {
                     "name": "Card ID",
@@ -54,7 +54,7 @@
         },
         "get_cards": {
             "name": "Get cards",
-            "description": "Return card data from the coordinator for a board, optionally filtered by column ID.",
+            "description": "Return card data for cards on a board, optionally filtered by column ID.",
             "fields": {
                 "config_entry_id": {
                     "name": "Board Oil instance",
@@ -62,11 +62,11 @@
                 },
                 "board_id": {
                     "name": "Board ID",
-                    "description": "Numeric ID of the board containing the cards."
+                    "description": "Numeric ID of the board."
                 },
                 "column_id": {
                     "name": "Column ID",
-                    "description": "Optional numeric ID of a specific column to filter cards."
+                    "description": "Optional numeric ID of a specific column to filter cards (default all cards for the board)."
                 }
             }
         }
