@@ -19,11 +19,9 @@ def bump_version() -> None:
     current_version = manifest["version"]
     parts = current_version.split(".")
 
-    if len(parts) != 3:
+    if len(parts) != 3:  # noqa: PLR2004
         msg = f"Invalid version format: {current_version}. Expected major.minor.patch"
-        raise ValueError(
-            msg
-        )
+        raise ValueError(msg)
 
     major, minor, patch = parts
     patch = str(int(patch) + 1)
@@ -37,7 +35,7 @@ def bump_version() -> None:
         json.dump(manifest, f, indent=2)
         f.write("\n")  # Add trailing newline
 
-    print(f"Version bumped: {current_version} → {new_version}")
+    print(f"Version bumped: {current_version} → {new_version}")  # noqa: T201
 
 
 if __name__ == "__main__":
