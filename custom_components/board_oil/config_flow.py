@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 import voluptuous as vol
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
-from homeassistant.const import CONF_API_TOKEN, CONF_HOST
+from homeassistant.const import CONF_API_TOKEN, CONF_HOST, CONF_VERIFY_SSL
 from homeassistant.helpers import selector
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from homeassistant.loader import async_get_loaded_integration
@@ -23,12 +23,6 @@ from .api import (
 )
 from .const import DOMAIN, LOGGER
 
-USER_SCHEMA = vol.Schema(
-    {
-        vol.Required(CONF_HOST): str,
-        vol.Required(CONF_API_TOKEN): str,
-    }
-)
 REAUTH_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_API_TOKEN): str,
@@ -42,6 +36,36 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
     VERSION = 1
 
     host: str | None = None
+    verify_ssl: bool = True
+
+    def _build_user_schema(self, user_input: Mapping[str, Any] | None) -> vol.Schema:
+        """Build schema used by user and reconfigure steps."""
+        return vol.Schema(
+            {
+                vol.Required(
+                    CONF_HOST,
+                    default=(user_input or {}).get(CONF_HOST, vol.UNDEFINED),
+                ): selector.TextSelector(
+                    selector.TextSelectorConfig(
+                        type=selector.TextSelectorType.TEXT,
+                    ),
+                ),
+                vol.Required(
+                    CONF_API_TOKEN,
+                    default=(user_input or {}).get(CONF_API_TOKEN, vol.UNDEFINED),
+                ): selector.TextSelector(
+                    selector.TextSelectorConfig(
+                        type=selector.TextSelectorType.PASSWORD,
+                    ),
+                ),
+                vol.Required(
+                    CONF_VERIFY_SSL,
+                    default=(user_input or {}).get(CONF_VERIFY_SSL, True),
+                ): selector.BooleanSelector(
+                    selector.BooleanSelectorConfig(),
+                ),
+            },
+        )
 
     async def async_step_user(
         self,
@@ -54,6 +78,7 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
                 client_id = await self._test_credentials(
                     host=user_input[CONF_HOST],
                     api_token=user_input[CONF_API_TOKEN],
+                    verify_ssl=user_input[CONF_VERIFY_SSL],
                 )
                 if not client_id:
                     _errors["base"] = "auth"
@@ -87,23 +112,7 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
             description_placeholders={
                 "documentation_url": integration.documentation,
             },
-            data_schema=vol.Schema(
-                {
-                    vol.Required(
-                        CONF_HOST,
-                        default=(user_input or {}).get(CONF_HOST, vol.UNDEFINED),
-                    ): selector.TextSelector(
-                        selector.TextSelectorConfig(
-                            type=selector.TextSelectorType.TEXT,
-                        ),
-                    ),
-                    vol.Required(CONF_API_TOKEN): selector.TextSelector(
-                        selector.TextSelectorConfig(
-                            type=selector.TextSelectorType.PASSWORD,
-                        ),
-                    ),
-                },
-            ),
+            data_schema=self._build_user_schema(user_input),
             errors=_errors,
         )
 
@@ -112,6 +121,7 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
     ) -> ConfigFlowResult:
         """Perform reauth upon an API authentication error."""
         self.host = entry_data[CONF_HOST]
+        self.verify_ssl = entry_data.get(CONF_VERIFY_SSL, True)
         return await self.async_step_reauth_confirm()
 
     async def async_step_reauth_confirm(
@@ -121,8 +131,7 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
         _errors: dict[str, str] = {}
         if user_input:
             client_id = await self._test_credentials(
-                self.host,
-                user_input[CONF_API_TOKEN],
+                self.host, user_input[CONF_API_TOKEN], self.verify_ssl
             )
             if not client_id:
                 _errors["base"] = "auth"
@@ -146,10 +155,12 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
     ) -> ConfigFlowResult:
         """Handle reconfiguration of the integration."""
         _errors: dict[str, str] = {}
+        defaults = user_input or self._get_reconfigure_entry().data
         if user_input:
             client_id = await self._test_credentials(
                 user_input[CONF_HOST],
                 user_input[CONF_API_TOKEN],
+                user_input[CONF_VERIFY_SSL],
             )
             if not client_id:
                 _errors["base"] = "auth"
@@ -167,16 +178,21 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
                 )
         return self.async_show_form(
             step_id="reconfigure",
-            data_schema=USER_SCHEMA,
+            data_schema=self._build_user_schema(defaults),
             errors=_errors,
         )
 
-    async def _test_credentials(self, host: str, api_token: str) -> str | None:
+    async def _test_credentials(
+        self,
+        host: str,
+        api_token: str,
+        verify_ssl: bool,  # noqa: FBT001
+    ) -> str | None:
         """Validate credentials."""
         client = BoardOilApiClient(
             host=host,
             api_token=api_token,
-            session=async_create_clientsession(self.hass),
+            session=async_create_clientsession(self.hass, verify_ssl=verify_ssl),
         )
         result = await client.async_get_me()
         return result.get("data", {}).get("id", "")

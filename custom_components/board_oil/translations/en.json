@@ -77,11 +77,13 @@
                 "description": "If you need help with the configuration have a look here: {documentation_url}",
                 "data": {
                     "api_token": "Client account token",
-                    "host": "Hostname or IP address of the Board Oil server"
+                    "host": "Hostname or IP address of the Board Oil server",
+                    "verify_ssl": "Verify SSL certificate"
                 },
                 "data_description": {
                     "api_token": "The client account token of your Board Oil instance from system settings/client accounts.",
-                    "host": "The URL of your Board Oil instance."
+                    "host": "The URL of your Board Oil instance.",
+                    "verify_ssl": "Should SSL certificates be verified? This should be off for self-signed certificates."
                 }
             },
             "reauth_confirm": {
@@ -96,11 +98,13 @@
             "reconfigure": {
                 "data": {
                     "api_token": "Client account token",
-                    "host": "Hostname or IP address of the Board Oil server"
+                    "host": "Hostname or IP address of the Board Oil server",
+                    "verify_ssl": "Verify SSL certificate"
                 },
                 "data_description": {
                     "api_token": "The client account token of your Board Oil instance from system settings/client accounts.",
-                    "host": "The URL of your Board Oil instance."
+                    "host": "The URL of your Board Oil instance.",
+                    "verify_ssl": "Should SSL certificates be verified? This should be off for self-signed certificates."
                 },
                 "description": "Please reconfigure with Board Oil."
             }

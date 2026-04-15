@@ -15,6 +15,7 @@ from awesomeversion.awesomeversion import AwesomeVersion
 from homeassistant.const import (
     CONF_API_TOKEN,
     CONF_HOST,
+    CONF_VERIFY_SSL,
     Platform,
 )
 from homeassistant.const import __version__ as HA_VERSION  # noqa: N812
@@ -65,7 +66,9 @@ async def async_setup_entry(
     client = BoardOilApiClient(
         host=entry.data[CONF_HOST],
         api_token=entry.data[CONF_API_TOKEN],
-        session=async_get_clientsession(hass),
+        session=async_get_clientsession(
+            hass, verify_ssl=entry.data.get(CONF_VERIFY_SSL, True)
+        ),
     )
     try:
         response = await client.async_get_version()
