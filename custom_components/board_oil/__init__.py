@@ -7,27 +7,54 @@ https://github.com/andrew-codechimp/ha-boardoil
 
 from __future__ import annotations
 
+import logging
 from datetime import timedelta
 from typing import TYPE_CHECKING
 
-from homeassistant.const import CONF_API_TOKEN, CONF_HOST, Platform
+from awesomeversion.awesomeversion import AwesomeVersion
+from homeassistant.const import (
+    CONF_API_TOKEN,
+    CONF_HOST,
+    Platform,
+)
+from homeassistant.const import __version__ as HA_VERSION  # noqa: N812
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.loader import async_get_loaded_integration
 
 from .api import BoardOilApiClient, BoardOilApiClientError
-from .const import DOMAIN, LOGGER
+from .const import DOMAIN, LOGGER, MIN_HA_VERSION
 from .coordinator import BoardOilDataUpdateCoordinator
 from .data import BoardOilData
 from .services import async_setup_services
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.typing import ConfigType
 
     from .data import BoardOilConfigEntry
+
+_LOGGER = logging.getLogger(__name__)
 
 PLATFORMS: list[Platform] = [
     Platform.SENSOR,
 ]
+
+
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:  # noqa: ARG001
+    """Integration setup."""
+    if AwesomeVersion(HA_VERSION) < AwesomeVersion(MIN_HA_VERSION):  # pragma: no cover
+        msg = (
+            "This integration requires at least Home Assistant version "
+            f"{MIN_HA_VERSION}, you are running version {HA_VERSION}. "
+            "Please upgrade Home Assistant to continue using this integration."
+        )
+        _LOGGER.critical(msg)
+        return False
+
+    # Register custom services
+    async_setup_services(hass)
+
+    return True
 
 
 async def async_setup_entry(
@@ -35,8 +62,6 @@ async def async_setup_entry(
     entry: BoardOilConfigEntry,
 ) -> bool:
     """Set up this integration using UI."""
-    await async_setup_services(hass)
-
     client = BoardOilApiClient(
         host=entry.data[CONF_HOST],
         api_token=entry.data[CONF_API_TOKEN],
