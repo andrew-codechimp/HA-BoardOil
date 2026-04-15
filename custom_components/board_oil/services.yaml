@@ -2,7 +2,7 @@ get_card:
   name: Get card
   description: Return card data from the coordinator for a board and card ID.
   fields:
-    config_entry:
+    config_entry_id:
       name: Config entry
       description: The Board Oil config entry ID.
       required: true
@@ -30,7 +30,7 @@ get_cards:
   name: Get cards
   description: Return card data from the coordinator for a board, optionally filtered by column ID.
   fields:
-    config_entry:
+    config_entry_id:
       name: Config entry
       description: The Board Oil config entry ID.
       required: true
@@ -58,7 +58,7 @@ add_card:
   name: Add card
   description: Add a new card to a board column.
   fields:
-    config_entry:
+    config_entry_id:
       name: Config entry
       description: The Board Oil config entry ID.
       required: true

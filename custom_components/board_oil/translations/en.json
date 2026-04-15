@@ -4,9 +4,9 @@
             "name": "Add card",
             "description": "Add a new card to a board column.",
             "fields": {
-                "config_entry": {
-                    "name": "Config entry",
-                    "description": "The Board Oil config entry ID."
+                "config_entry_id": {
+                    "name": "Board Oil instance",
+                    "description": "The Board Oil instance to use for this action."
                 },
                 "board_id": {
                     "name": "Board ID",
@@ -38,9 +38,9 @@
             "name": "Get card",
             "description": "Return card data from the coordinator for a board and card ID.",
             "fields": {
-                "config_entry": {
-                    "name": "Config entry",
-                    "description": "The Board Oil config entry ID."
+                "config_entry_id": {
+                    "name": "Board Oil instance",
+                    "description": "The Board Oil instance to use for this action."
                 },
                 "board_id": {
                     "name": "Board ID",
@@ -56,9 +56,9 @@
             "name": "Get cards",
             "description": "Return card data from the coordinator for a board, optionally filtered by column ID.",
             "fields": {
-                "config_entry": {
-                    "name": "Config entry",
-                    "description": "The Board Oil config entry ID."
+                "config_entry_id": {
+                    "name": "Board Oil instance",
+                    "description": "The Board Oil instance to use for this action."
                 },
                 "board_id": {
                     "name": "Board ID",

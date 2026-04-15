@@ -2,14 +2,25 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING
 
 import voluptuous as vol
+from homeassistant.const import ATTR_CONFIG_ENTRY_ID
 from homeassistant.core import HomeAssistant, ServiceCall, SupportsResponse
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers import service
 
-from .const import DOMAIN
+from .const import (
+    ATTR_BOARD_ID,
+    ATTR_CARD_ID,
+    ATTR_CARD_TYPE_ID,
+    ATTR_COLUMN_ID,
+    ATTR_DESCRIPTION,
+    ATTR_TAG_NAMES,
+    ATTR_TITLE,
+    DOMAIN,
+)
 
 if TYPE_CHECKING:
     from .data import BoardOilConfigEntry
@@ -17,29 +28,29 @@ if TYPE_CHECKING:
 SERVICE_GET_CARD = "get_card"
 SERVICE_SCHEMA_GET_CARD = vol.Schema(
     {
-        vol.Required("config_entry"): cv.string,
-        vol.Required("board_id"): cv.positive_int,
-        vol.Required("card_id"): cv.positive_int,
+        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+        vol.Required(ATTR_BOARD_ID): cv.positive_int,
+        vol.Required(ATTR_CARD_ID): cv.positive_int,
     }
 )
 SERVICE_GET_CARDS = "get_cards"
 SERVICE_SCHEMA_GET_CARDS = vol.Schema(
     {
-        vol.Required("config_entry"): cv.string,
-        vol.Required("board_id"): cv.positive_int,
-        vol.Optional("column_id"): cv.positive_int,
+        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+        vol.Required(ATTR_BOARD_ID): cv.positive_int,
+        vol.Optional(ATTR_COLUMN_ID): cv.positive_int,
     }
 )
 SERVICE_ADD_CARD = "add_card"
 SERVICE_SCHEMA_ADD_CARD = vol.Schema(
     {
-        vol.Required("config_entry"): cv.string,
-        vol.Required("board_id"): cv.positive_int,
-        vol.Required("column_id"): cv.positive_int,
-        vol.Required("card_type_id"): cv.positive_int,
-        vol.Required("title"): cv.string,
-        vol.Optional("description", default=""): cv.string,
-        vol.Optional("tag_names"): vol.Any(
+        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+        vol.Required(ATTR_BOARD_ID): cv.positive_int,
+        vol.Required(ATTR_COLUMN_ID): cv.positive_int,
+        vol.Required(ATTR_CARD_TYPE_ID): cv.positive_int,
+        vol.Required(ATTR_TITLE): cv.string,
+        vol.Optional(ATTR_DESCRIPTION, default=""): cv.string,
+        vol.Optional(ATTR_TAG_NAMES): vol.Any(
             cv.string,
             vol.All(cv.ensure_list, [cv.string]),
             {cv.string: object},
@@ -107,27 +118,15 @@ class ColumnNotFoundError(HomeAssistantError):
         super().__init__(msg)
 
 
-class InvalidConfigEntryError(HomeAssistantError):
-    """Raised when a config entry id is invalid for this domain."""
-
-    def __init__(self) -> None:
-        """Initialize the exception."""
-        msg = "Invalid BoardOil config entry"
-        super().__init__(msg)
-
-
 async def async_get_card_service(call: ServiceCall) -> dict[str, object]:
     """Return card data for a given config entry, board id and card id."""
-    config_entry_id = call.data["config_entry"]
-    board_id = call.data["board_id"]
-    card_id = call.data["card_id"]
+    entry: BoardOilConfigEntry = service.async_get_config_entry(
+        call.hass, DOMAIN, call.data[ATTR_CONFIG_ENTRY_ID]
+    )
+    board_id = call.data[ATTR_BOARD_ID]
+    card_id = call.data[ATTR_CARD_ID]
 
-    entry = call.hass.config_entries.async_get_entry(config_entry_id)
-    if entry is None or entry.domain != DOMAIN:
-        raise InvalidConfigEntryError
-
-    board_oil_entry = cast("BoardOilConfigEntry", entry)
-    coordinator = board_oil_entry.runtime_data.coordinator
+    coordinator = entry.runtime_data.coordinator
 
     for board in coordinator.data:
         if board.id != board_id:
@@ -139,15 +138,6 @@ async def async_get_card_service(call: ServiceCall) -> dict[str, object]:
                     continue
 
                 return {
-                    "config_entry": config_entry_id,
-                    "board": {
-                        "id": board.id,
-                        "name": board.name,
-                    },
-                    "column": {
-                        "id": column.id,
-                        "title": column.title,
-                    },
                     "card": {
                         **card.raw_data,
                     },
@@ -160,16 +150,13 @@ async def async_get_card_service(call: ServiceCall) -> dict[str, object]:
 
 async def async_get_cards_service(call: ServiceCall) -> dict[str, object]:
     """Return card data for a board, optionally filtered by column."""
-    config_entry_id = call.data["config_entry"]
-    board_id = call.data["board_id"]
-    column_id = call.data.get("column_id")
+    entry: BoardOilConfigEntry = service.async_get_config_entry(
+        call.hass, DOMAIN, call.data[ATTR_CONFIG_ENTRY_ID]
+    )
+    board_id = call.data[ATTR_BOARD_ID]
+    column_id = call.data.get(ATTR_COLUMN_ID)
 
-    entry = call.hass.config_entries.async_get_entry(config_entry_id)
-    if entry is None or entry.domain != DOMAIN:
-        raise InvalidConfigEntryError
-
-    board_oil_entry = cast("BoardOilConfigEntry", entry)
-    coordinator = board_oil_entry.runtime_data.coordinator
+    coordinator = entry.runtime_data.coordinator
 
     for board in coordinator.data:
         if board.id != board_id:
@@ -188,10 +175,6 @@ async def async_get_cards_service(call: ServiceCall) -> dict[str, object]:
         for column in matching_columns:
             cards.extend(
                 {
-                    "column": {
-                        "id": column.id,
-                        "title": column.title,
-                    },
                     "card": {
                         **card.raw_data,
                     },
@@ -200,11 +183,6 @@ async def async_get_cards_service(call: ServiceCall) -> dict[str, object]:
             )
 
         return {
-            "config_entry": config_entry_id,
-            "board": {
-                "id": board.id,
-                "name": board.name,
-            },
             "cards": cards,
         }
 
@@ -213,24 +191,20 @@ async def async_get_cards_service(call: ServiceCall) -> dict[str, object]:
 
 async def async_add_card_service(call: ServiceCall) -> None:
     """Add a card to a board column."""
-    config_entry_id = call.data["config_entry"]
-
-    entry = call.hass.config_entries.async_get_entry(config_entry_id)
-    if entry is None or entry.domain != DOMAIN:
-        raise InvalidConfigEntryError
-
-    tag_names = _normalize_tag_names(call.data.get("tag_names"))
-
-    board_oil_entry = cast("BoardOilConfigEntry", entry)
-    await board_oil_entry.runtime_data.client.async_add_card(
-        board_id=call.data["board_id"],
-        column_id=call.data["column_id"],
-        title=call.data["title"],
-        description=call.data.get("description", ""),
-        tag_names=tag_names,
-        card_type_id=call.data["card_type_id"],
+    entry: BoardOilConfigEntry = service.async_get_config_entry(
+        call.hass, DOMAIN, call.data[ATTR_CONFIG_ENTRY_ID]
     )
-    await board_oil_entry.runtime_data.coordinator.async_request_refresh()
+    tag_names = _normalize_tag_names(call.data.get(ATTR_TAG_NAMES))
+
+    await entry.runtime_data.client.async_add_card(
+        board_id=call.data[ATTR_BOARD_ID],
+        column_id=call.data[ATTR_COLUMN_ID],
+        title=call.data[ATTR_TITLE],
+        description=call.data.get(ATTR_DESCRIPTION, ""),
+        tag_names=tag_names,
+        card_type_id=call.data[ATTR_CARD_TYPE_ID],
+    )
+    await entry.runtime_data.coordinator.async_request_refresh()
 
 
 async def async_setup_services(hass: HomeAssistant) -> None:
