@@ -80,23 +80,27 @@ class BoardOilApiClient:
     async def async_add_card(  # noqa: PLR0913
         self,
         board_id: int,
-        column_id: int,
+        column_id: int | None,
         title: str,
         description: str,
         tag_names: list[str] | None,
-        card_type_id: int,
+        card_type_id: int | None,
     ) -> None:
         """Post a card to the API."""
+        payload: dict[str, Any] = {
+            "title": title,
+            "description": description,
+            "tagNames": tag_names or [],
+        }
+        if column_id is not None:
+            payload["boardColumnId"] = column_id
+        if card_type_id is not None:
+            payload["cardTypeId"] = card_type_id
+
         return await self._api_wrapper(
             method="post",
             path=f"boards/{board_id!s}/cards",
-            data={
-                "boardColumnId": column_id,
-                "title": title,
-                "description": description,
-                "tagNames": tag_names or [],
-                "cardTypeId": card_type_id,
-            },
+            data=payload,
             headers={"Content-type": "application/json; charset=UTF-8"},
         )
 

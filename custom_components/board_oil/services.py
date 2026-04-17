@@ -46,8 +46,8 @@ SERVICE_SCHEMA_ADD_CARD = vol.Schema(
     {
         vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
         vol.Required(ATTR_BOARD_ID): cv.positive_int,
-        vol.Required(ATTR_COLUMN_ID): cv.positive_int,
-        vol.Required(ATTR_CARD_TYPE_ID): cv.positive_int,
+        vol.Optional(ATTR_COLUMN_ID): cv.positive_int,
+        vol.Optional(ATTR_CARD_TYPE_ID): cv.positive_int,
         vol.Required(ATTR_TITLE): cv.string,
         vol.Optional(ATTR_DESCRIPTION, default=""): cv.string,
         vol.Optional(ATTR_TAG_NAMES): vol.Any(
@@ -190,7 +190,7 @@ async def async_get_cards_service(call: ServiceCall) -> dict[str, object]:
 
 
 async def async_add_card_service(call: ServiceCall) -> None:
-    """Add a card to a board column."""
+    """Add a card to a board."""
     entry: BoardOilConfigEntry = service.async_get_config_entry(
         call.hass, DOMAIN, call.data[ATTR_CONFIG_ENTRY_ID]
     )
@@ -198,11 +198,11 @@ async def async_add_card_service(call: ServiceCall) -> None:
 
     await entry.runtime_data.client.async_add_card(
         board_id=call.data[ATTR_BOARD_ID],
-        column_id=call.data[ATTR_COLUMN_ID],
+        column_id=call.data.get(ATTR_COLUMN_ID),
         title=call.data[ATTR_TITLE],
         description=call.data.get(ATTR_DESCRIPTION, ""),
         tag_names=tag_names,
-        card_type_id=call.data[ATTR_CARD_TYPE_ID],
+        card_type_id=call.data.get(ATTR_CARD_TYPE_ID),
     )
     await entry.runtime_data.coordinator.async_request_refresh()
 

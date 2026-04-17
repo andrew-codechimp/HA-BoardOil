@@ -14,7 +14,7 @@
                 },
                 "column_id": {
                     "name": "Column ID",
-                    "description": "Numeric ID of the column in the board."
+                    "description": "Numeric ID of the column in the board (default: first column)."
                 },
                 "title": {
                     "name": "Title",
@@ -30,7 +30,7 @@
                 },
                 "card_type_id": {
                     "name": "Card type ID",
-                    "description": "Numeric ID of the card type."
+                    "description": "Numeric ID of the card type (default: card type default within Board Oil)."
                 }
             }
         },
