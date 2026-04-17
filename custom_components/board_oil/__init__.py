@@ -19,11 +19,12 @@ from homeassistant.const import (
     Platform,
 )
 from homeassistant.const import __version__ as HA_VERSION  # noqa: N812
+from homeassistant.exceptions import ConfigEntryError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.loader import async_get_loaded_integration
 
 from .api import BoardOilApiClient, BoardOilApiClientError
-from .const import DOMAIN, LOGGER, MIN_HA_VERSION
+from .const import DOMAIN, LOGGER, MIN_HA_VERSION, MIN_REQUIRED_BOARDOIL_VERSION
 from .coordinator import BoardOilDataUpdateCoordinator
 from .data import BoardOilData
 from .services import async_setup_services
@@ -77,6 +78,17 @@ async def async_setup_entry(
     except BoardOilApiClientError as exception:
         LOGGER.error("Error connecting to BoardOil API: %s", exception)
         return False
+
+    v = AwesomeVersion(version)
+    if v.valid and v < MIN_REQUIRED_BOARDOIL_VERSION:
+        raise ConfigEntryError(
+            translation_domain=DOMAIN,
+            translation_key="version_error",
+            translation_placeholders={
+                "boardoil_version": version,
+                "min_version": MIN_REQUIRED_BOARDOIL_VERSION,
+            },
+        )
 
     coordinator = BoardOilDataUpdateCoordinator(
         hass=hass,

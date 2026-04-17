@@ -2,10 +2,13 @@
 
 from logging import Logger, getLogger
 
+from awesomeversion import AwesomeVersion
+
 LOGGER: Logger = getLogger(__package__)
 
 DOMAIN = "board_oil"
 MIN_HA_VERSION = "2026.4.0"
+MIN_REQUIRED_BOARDOIL_VERSION = AwesomeVersion("0.2.0")
 
 ATTR_BOARD_ID = "board_id"
 ATTR_CARD_ID = "card_id"

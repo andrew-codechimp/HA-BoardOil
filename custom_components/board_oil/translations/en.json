@@ -111,6 +111,7 @@
         "error": {
             "auth": "Host name or Client account token is wrong.",
             "connection": "Unable to connect to the server.",
+            "boardoil_version": "Minimum required version is 0.2.0. Please upgrade Board Oil and then retry.",
             "unknown": "Unknown error occurred."
         },
         "abort": {
@@ -119,6 +120,11 @@
             "reauth_successful": "Re-authentication was successful",
             "reconfigure_successful": "Reconfiguration was successful",
             "wrong_account": "You have to use the same account that was used to configure the integration."
+        }
+    },
+    "exceptions": {
+        "version_error": {
+            "message": "You are running {boardoil_version} of Board Oil. Minimum required version is {min_version}. Please upgrade Board Oil and then retry."
         }
     }
 }
