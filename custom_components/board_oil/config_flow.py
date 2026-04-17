@@ -63,12 +63,12 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
             result_version = await client.async_get_version()
             version = result_version.get("data", {}).get("version", "")
         except BoardOilApiClientAuthenticationError:
-            return {"base": "auth"}, None
+            return {"base": "auth"}, None, None
         except BoardOilApiClientCommunicationError:
-            return {"base": "connection"}, None
+            return {"base": "connection"}, None, None
         except BoardOilApiClientError:
             LOGGER.exception("Unexpected error")
-            return {"base": "unknown"}, None
+            return {"base": "unknown"}, None, None
         return {}, client_id, version
 
     async def async_step_user(
@@ -83,7 +83,7 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
                 user_input[CONF_VERIFY_SSL],
             )
             v = AwesomeVersion(version) if version else None
-            if v.valid and v < MIN_REQUIRED_BOARDOIL_VERSION:
+            if v is not None and v.valid and v < MIN_REQUIRED_BOARDOIL_VERSION:
                 errors["base"] = "boardoil_version"
 
             if not errors:
@@ -124,7 +124,7 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
                 self.verify_ssl,
             )
             v = AwesomeVersion(version) if version else None
-            if v.valid and v < MIN_REQUIRED_BOARDOIL_VERSION:
+            if v is not None and v.valid and v < MIN_REQUIRED_BOARDOIL_VERSION:
                 errors["base"] = "boardoil_version"
 
             if not errors:
@@ -152,7 +152,7 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
                 user_input[CONF_VERIFY_SSL],
             )
             v = AwesomeVersion(version) if version else None
-            if v.valid and v < MIN_REQUIRED_BOARDOIL_VERSION:
+            if v is not None and v.valid and v < MIN_REQUIRED_BOARDOIL_VERSION:
                 errors["base"] = "boardoil_version"
 
             if not errors:
