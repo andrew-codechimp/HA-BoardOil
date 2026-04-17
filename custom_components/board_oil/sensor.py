@@ -66,6 +66,8 @@ async def async_setup_entry(
         removed_keys = existing_keys - latest_keys
         for key in removed_keys:
             entity = entities.pop(key)
+            if entity.unique_id is None:
+                continue
             entity_id = entity_registry.async_get_entity_id(
                 SENSOR_DOMAIN,
                 DOMAIN,

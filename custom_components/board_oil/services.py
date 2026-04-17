@@ -2,11 +2,16 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 import voluptuous as vol
 from homeassistant.const import ATTR_CONFIG_ENTRY_ID
-from homeassistant.core import HomeAssistant, ServiceCall, SupportsResponse
+from homeassistant.core import (
+    HomeAssistant,
+    ServiceCall,
+    ServiceResponse,
+    SupportsResponse,
+)
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import service
@@ -23,6 +28,8 @@ from .const import (
 )
 
 if TYPE_CHECKING:
+    from homeassistant.util.json import JsonObjectType, JsonValueType
+
     from .data import BoardOilConfigEntry
 
 SERVICE_GET_CARD = "get_card"
@@ -118,7 +125,7 @@ class ColumnNotFoundError(HomeAssistantError):
         super().__init__(msg)
 
 
-async def async_get_card_service(call: ServiceCall) -> dict[str, object]:
+async def async_get_card_service(call: ServiceCall) -> ServiceResponse:
     """Return card data for a given config entry, board id and card id."""
     entry: BoardOilConfigEntry = service.async_get_config_entry(
         call.hass, DOMAIN, call.data[ATTR_CONFIG_ENTRY_ID]
@@ -139,7 +146,7 @@ async def async_get_card_service(call: ServiceCall) -> dict[str, object]:
 
                 return {
                     "card": {
-                        **card.raw_data,
+                        **cast("JsonObjectType", card.raw_data),
                     },
                 }
 
@@ -148,7 +155,7 @@ async def async_get_card_service(call: ServiceCall) -> dict[str, object]:
     raise BoardNotFoundError(board_id)
 
 
-async def async_get_cards_service(call: ServiceCall) -> dict[str, object]:
+async def async_get_cards_service(call: ServiceCall) -> ServiceResponse:
     """Return card data for a board, optionally filtered by column."""
     entry: BoardOilConfigEntry = service.async_get_config_entry(
         call.hass, DOMAIN, call.data[ATTR_CONFIG_ENTRY_ID]
@@ -162,7 +169,7 @@ async def async_get_cards_service(call: ServiceCall) -> dict[str, object]:
         if board.id != board_id:
             continue
 
-        cards: list[dict[str, object]] = []
+        cards: list[JsonValueType] = []
         matching_columns = (
             [column for column in board.columns if column.id == column_id]
             if column_id is not None
@@ -176,7 +183,7 @@ async def async_get_cards_service(call: ServiceCall) -> dict[str, object]:
             cards.extend(
                 {
                     "card": {
-                        **card.raw_data,
+                        **cast("JsonObjectType", card.raw_data),
                     },
                 }
                 for card in column.cards
