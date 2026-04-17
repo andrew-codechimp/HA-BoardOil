@@ -12,7 +12,6 @@ if TYPE_CHECKING:
 import voluptuous as vol
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.const import CONF_API_TOKEN, CONF_HOST, CONF_VERIFY_SSL
-from homeassistant.exceptions import ConfigEntryError
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from slugify import slugify
 
