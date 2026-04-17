@@ -11,7 +11,7 @@ It creates:
 Sensor attributes include additional card details.
 
 It also provides actions to:
-- Get all cards
+- Get all cards for a board, optionally a specific column
 - Get a specific card
 - Add a new card
 
