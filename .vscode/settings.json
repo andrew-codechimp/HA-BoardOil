@@ -1,12 +1,9 @@
 {
     "git.autofetch": true,
     "python.createEnvironment.trigger": "off",
-    "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.formatOnSave": true,
     "editor.formatOnSaveMode": "file",
-    "editor.codeActionsOnSave": {
-        "source.organizeImports": "always",
-    },
+    "editor.codeActionsOnSave": {},
     "[python]": {
         "editor.defaultFormatter": "charliermarsh.ruff",
         "editor.formatOnSave": true,
@@ -15,6 +12,9 @@
         "editor.codeActionsOnSave": {
             "source.organizeImports": "always"
         }
+    },
+    "[markdown]": {
+        "editor.formatOnSave": false
     },
     "ruff.nativeServer": "off",
     "ruff.importStrategy": "fromEnvironment",
