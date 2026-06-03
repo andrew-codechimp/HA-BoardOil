@@ -244,7 +244,7 @@ class BoardOilColumnCardCountSensor(BoardOilEntity, SensorEntity):
 
     def _sync_metadata_from_latest_data(self) -> None:
         """Sync entity metadata fields from the latest coordinator data."""
-        board_id, board_name, column = self._get_board_and_column()
+        _, board_name, column = self._get_board_and_column()
         self._board_name = board_name
 
         if self._column_name != column.title:
