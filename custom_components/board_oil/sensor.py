@@ -66,6 +66,11 @@ async def async_setup_entry(
         removed_keys = existing_keys - latest_keys
         for key in removed_keys:
             entity = entities.pop(key)
+
+            # Ensure deleted columns are removed from state immediately.
+            if entity.hass is not None:
+                hass.async_create_task(entity.async_remove(force_remove=True))
+
             if entity.unique_id is None:
                 continue
             entity_id = entity_registry.async_get_entity_id(
@@ -192,6 +197,12 @@ class BoardOilColumnCardCountSensor(BoardOilEntity, SensorEntity):
         """Return the number of cards in this column."""
         return len(self._get_board_and_column()[2].cards)
 
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated data from the coordinator."""
+        self._sync_metadata_from_latest_data()
+        super()._handle_coordinator_update()
+
     @property
     def extra_state_attributes(self) -> dict[str, object]:
         """Return extra state attributes."""
@@ -230,3 +241,12 @@ class BoardOilColumnCardCountSensor(BoardOilEntity, SensorEntity):
                 cards=[],
             ),
         )
+
+    def _sync_metadata_from_latest_data(self) -> None:
+        """Sync entity metadata fields from the latest coordinator data."""
+        board_id, board_name, column = self._get_board_and_column()
+        self._board_name = board_name
+
+        if self._column_name != column.title:
+            self._column_name = column.title
+            self._attr_name = column.title
