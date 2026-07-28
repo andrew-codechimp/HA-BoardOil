@@ -77,3 +77,7 @@ add_card:
       selector:
         text:
           multiline: true
+    slick_name:
+      required: false
+      selector:
+        text:

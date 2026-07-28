@@ -31,6 +31,10 @@
                 "card_type_id": {
                     "name": "Card type ID",
                     "description": "Numeric ID of the card type (default: card type default within Board Oil)."
+                },
+                "slick_name": {
+                    "name": "Slick name",
+                    "description": "Slick to add card to."
                 }
             }
         },
