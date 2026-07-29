@@ -86,13 +86,15 @@ class BoardOilApiClient:
         tag_names: list[str] | None,
         card_type_id: int | None,
         slick_name: str | None,
+        external_url: str | None,
     ) -> None:
         """Post a card to the API."""
         payload: dict[str, Any] = {
             "title": title,
             "description": description,
             "tagNames": tag_names or [],
-            "slickName": slick_name or "",
+            "slickName": slick_name,
+            "externalUrl": external_url,
         }
         if column_id is not None:
             payload["boardColumnId"] = column_id

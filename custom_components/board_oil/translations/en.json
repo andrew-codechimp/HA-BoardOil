@@ -35,6 +35,10 @@
                 "slick_name": {
                     "name": "Slick name",
                     "description": "Slick to add card to."
+                },
+                "external_url": {
+                    "name": "External URL",
+                    "description": "An external URL to add to the card."
                 }
             }
         },
@@ -127,6 +131,9 @@
         }
     },
     "exceptions": {
+        "invalid_url": {
+            "message": "The provided URL is not valid. Please provide a valid HTTP or HTTPS URL."
+        },
         "version_error": {
             "message": "You are running {boardoil_version} of Board Oil. Minimum required version is {min_version}. Please upgrade Board Oil and then retry."
         }

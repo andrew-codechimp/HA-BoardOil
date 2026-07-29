@@ -81,3 +81,7 @@ add_card:
       required: false
       selector:
         text:
+    external_url:
+      required: false
+      selector:
+        text:

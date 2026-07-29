@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, cast
+from urllib.parse import urlparse
 
 import voluptuous as vol
 from homeassistant.const import ATTR_CONFIG_ENTRY_ID
@@ -12,7 +13,7 @@ from homeassistant.core import (
     ServiceResponse,
     SupportsResponse,
 )
-from homeassistant.exceptions import HomeAssistantError
+from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import service
 
@@ -22,6 +23,7 @@ from .const import (
     ATTR_CARD_TYPE_ID,
     ATTR_COLUMN_ID,
     ATTR_DESCRIPTION,
+    ATTR_EXTERNAL_URL,
     ATTR_SLICK_NAME,
     ATTR_TAG_NAMES,
     ATTR_TITLE,
@@ -58,8 +60,15 @@ SERVICE_SCHEMA_ADD_CARD = vol.Schema({
         vol.All(cv.ensure_list, [cv.string]),
         {cv.string: object},
     ),
-    vol.Optional(ATTR_SLICK_NAME, default=""): cv.string,
+    vol.Optional(ATTR_SLICK_NAME): cv.string,
+    vol.Optional(ATTR_EXTERNAL_URL): cv.string,
 })
+
+
+def _is_valid_url(url: str) -> bool:
+    """Return True if the string is a valid HTTP/HTTPS URL."""
+    result = urlparse(url)
+    return result.scheme in {"http", "https"} and bool(result.netloc)
 
 
 def _normalize_tag_names(raw_tag_names: object) -> list[str]:
@@ -198,6 +207,12 @@ async def async_add_card_service(call: ServiceCall) -> None:
         call.hass, DOMAIN, call.data[ATTR_CONFIG_ENTRY_ID]
     )
     tag_names = _normalize_tag_names(call.data.get(ATTR_TAG_NAMES))
+    url = call.data.get(ATTR_EXTERNAL_URL)
+    if url and not _is_valid_url(url):
+        raise ServiceValidationError(
+            translation_domain=DOMAIN,
+            translation_key="invalid_url",
+        )
 
     await entry.runtime_data.client.async_add_card(
         board_id=call.data[ATTR_BOARD_ID],
@@ -207,6 +222,7 @@ async def async_add_card_service(call: ServiceCall) -> None:
         tag_names=tag_names,
         card_type_id=call.data.get(ATTR_CARD_TYPE_ID),
         slick_name=call.data.get(ATTR_SLICK_NAME),
+        external_url=url,
     )
     await entry.runtime_data.coordinator.async_request_refresh()
 
