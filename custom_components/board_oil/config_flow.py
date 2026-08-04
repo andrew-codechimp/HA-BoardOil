@@ -10,10 +10,11 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
 
 import voluptuous as vol
+from slugify import slugify
+
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.const import CONF_API_TOKEN, CONF_HOST, CONF_VERIFY_SSL
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
-from slugify import slugify
 
 from .api import (
     BoardOilApiClient,
@@ -49,7 +50,7 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
         self,
         host: str,
         api_token: str,
-        verify_ssl: bool,  # noqa: FBT001
+        verify_ssl: bool,
     ) -> tuple[dict[str, str], str | None, str | None]:
         """Check connection to the BoardOil API."""
         client = BoardOilApiClient(

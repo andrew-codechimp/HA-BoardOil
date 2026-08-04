@@ -77,7 +77,7 @@ class BoardOilApiClient:
             path=f"boards/{board_id!s}",
         )
 
-    async def async_add_card(  # noqa: PLR0913
+    async def async_add_card(
         self,
         board_id: int,
         column_id: int | None,
@@ -87,7 +87,7 @@ class BoardOilApiClient:
         card_type_id: int | None,
         slick_name: str | None,
         external_url: str | None,
-    ) -> None:
+    ) -> Any:
         """Post a card to the API."""
         payload: dict[str, Any] = {
             "title": title,

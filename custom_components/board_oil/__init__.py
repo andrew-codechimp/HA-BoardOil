@@ -1,5 +1,4 @@
-"""
-Custom integration to integrate board_oil with Home Assistant.
+"""Custom integration to integrate board_oil with Home Assistant.
 
 For more details about this integration, please refer to
 https://github.com/andrew-codechimp/ha-boardoil
@@ -12,13 +11,14 @@ from datetime import timedelta
 from typing import TYPE_CHECKING
 
 from awesomeversion.awesomeversion import AwesomeVersion
+
 from homeassistant.const import (
     CONF_API_TOKEN,
     CONF_HOST,
     CONF_VERIFY_SSL,
     Platform,
+    __version__ as HA_VERSION,  # noqa: N812
 )
-from homeassistant.const import __version__ as HA_VERSION  # noqa: N812
 from homeassistant.exceptions import ConfigEntryError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.loader import async_get_loaded_integration

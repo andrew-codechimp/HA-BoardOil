@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, cast
 from urllib.parse import urlparse
 
 import voluptuous as vol
+
 from homeassistant.const import ATTR_CONFIG_ENTRY_ID
 from homeassistant.core import (
     HomeAssistant,
@@ -14,8 +15,7 @@ from homeassistant.core import (
     SupportsResponse,
 )
 from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
-from homeassistant.helpers import config_validation as cv
-from homeassistant.helpers import service
+from homeassistant.helpers import config_validation as cv, service
 
 from .const import (
     ATTR_BOARD_ID,
