@@ -10,7 +10,7 @@ from homeassistant.const import CONF_HOST
 from homeassistant.core import callback
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
-from homeassistant.helpers.device_registry import DeviceInfo
+from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
 
 from .const import DOMAIN, LOGGER
 from .coordinator import ColumnData
@@ -146,7 +146,13 @@ class BoardOilColumnCardCountSensor(BoardOilEntity, SensorEntity):
     """Sensor showing number of cards for a board column."""
 
     _unrecorded_attributes = frozenset(
-        {"board_id", "board_name", "column_id", "column_title", "cards"}
+        {
+            "board_id",
+            "board_name",
+            "column_id",
+            "column_title",
+            "cards",
+        }
     )
 
     @property
@@ -180,6 +186,7 @@ class BoardOilColumnCardCountSensor(BoardOilEntity, SensorEntity):
         )
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, f"{coordinator.config_entry.entry_id}:{board.id}")},
+            entry_type=DeviceEntryType.SERVICE,
             name=f"Board Oil - {board.name}",
             sw_version=(
                 f"{coordinator.config_entry.runtime_data.version} "
