@@ -87,7 +87,8 @@ class BoardOilEvent(BoardOilEntity, EventEntity):
             {
                 ATTR_NAME: event_data.title,
                 ATTR_ID: event_data.card_id,
-                "card_type": event_data.card_type_name,
+                "card_type_id": event_data.card_type_id,
+                "card_type_name": event_data.card_type_name,
                 "column_id": event_data.column_id,
                 "column_name": event_data.column_name,
                 "description": event_data.description,
