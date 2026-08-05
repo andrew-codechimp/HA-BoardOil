@@ -16,12 +16,9 @@ from .const import (
     EVENT_TYPE_CARD_REMOVED,
     EVENT_TYPE_CARD_UPDATED,
 )
-from .coordinator import BoardOilDataUpdateCoordinator, BoardOilEventData
+from .coordinator import BoardData, BoardOilDataUpdateCoordinator, BoardOilEventData
 from .data import BoardOilConfigEntry
 from .entity import BoardOilEntity
-
-if TYPE_CHECKING:
-    from .coordinator import BoardData
 
 _LOGGER = logging.getLogger(__name__)
 
