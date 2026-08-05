@@ -6,7 +6,6 @@ https://github.com/andrew-codechimp/ha-boardoil
 
 from __future__ import annotations
 
-from datetime import timedelta
 import logging
 from typing import TYPE_CHECKING
 
@@ -91,12 +90,7 @@ async def async_setup_entry(
             },
         )
 
-    coordinator = BoardOilDataUpdateCoordinator(
-        hass=hass,
-        logger=LOGGER,
-        name=DOMAIN,
-        update_interval=timedelta(minutes=1),
-    )
+    coordinator = BoardOilDataUpdateCoordinator(hass, entry)
     entry.runtime_data = BoardOilData(
         client=client,
         integration=async_get_loaded_integration(hass, entry.domain),

@@ -4,11 +4,12 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
+from datetime import timedelta
 from enum import StrEnum
 from functools import partial
 from typing import TYPE_CHECKING, Any
 
-from homeassistant.core import callback
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
@@ -21,6 +22,8 @@ if TYPE_CHECKING:
     from .data import BoardOilConfigEntry
 
 from .const import (
+    DEFAULT_SCAN_INTERVAL,
+    DOMAIN,
     EVENT_TYPE_CARD_CREATED,
     EVENT_TYPE_CARD_MOVED,
     EVENT_TYPE_CARD_REMOVED,
@@ -150,13 +153,23 @@ class BoardOilDataUpdateCoordinator(DataUpdateCoordinator[list[BoardData]]):
 
     config_entry: BoardOilConfigEntry
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        entry: BoardOilConfigEntry,
+    ) -> None:
         """Initialize the coordinator."""
-        super().__init__(*args, **kwargs)
         self.boards: list[BoardData] = []
         self._previous_boards: list[BoardData] = []
         self._event_listeners: dict[int | str, EventCallback] = {}
         self._first_refresh: bool = True
+        super().__init__(
+            hass,
+            config_entry=entry,
+            name=f"{DOMAIN} - {entry.title}",
+            logger=LOGGER,
+            update_interval=timedelta(seconds=DEFAULT_SCAN_INTERVAL),
+        )
 
     def get_board_changes(self, board_id: int) -> BoardChanges:
         """Compare current board state with previous and return detected changes.
