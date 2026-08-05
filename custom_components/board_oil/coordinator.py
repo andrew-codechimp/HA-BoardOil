@@ -88,10 +88,11 @@ class BoardOilEventData:
     assigned_user_id: int | None
     assigned_user_name: str | None
     external_url: str | None
+    column_id: int
+    column_name: str
     slick_id: int | None = None
     slick_name: str | None = None
     old_column_id: int | None = None
-    new_column_id: int | None = None
 
 
 class CardChangeType(StrEnum):
@@ -281,7 +282,7 @@ class BoardOilDataUpdateCoordinator(DataUpdateCoordinator[list[BoardData]]):
         """Check if a card's content has changed."""
         return old_card.updated_at_utc != new_card.updated_at_utc
 
-    async def _async_update_data(self) -> list[BoardData]:
+    async def _async_update_data(self) -> list[BoardData]:  # noqa: PLR0912
         """Update data via client."""
         # Store previous boards for change detection
         self._previous_boards = self.boards.copy()
@@ -359,6 +360,17 @@ class BoardOilDataUpdateCoordinator(DataUpdateCoordinator[list[BoardData]]):
                         )
                         if card is None:
                             continue
+
+                        # Get column name
+                        column_id = change.new_column_id or change.old_column_id
+                        assert column_id is not None
+                        column_name = ""
+                        if column_id is not None:
+                            for col in board.columns:
+                                if col.id == column_id:
+                                    column_name = col.title
+                                    break
+
                         event = BoardOilEventData(
                             event_type=change.change_type.value,
                             card_id=change.card_id,
@@ -374,10 +386,11 @@ class BoardOilDataUpdateCoordinator(DataUpdateCoordinator[list[BoardData]]):
                             assigned_user_id=card.assigned_user_id,
                             assigned_user_name=card.assigned_user_name,
                             external_url=card.external_url,
+                            column_id=column_id,
+                            column_name=column_name,
                             slick_id=card.slick_id,
                             slick_name=card.slick_name,
                             old_column_id=change.old_column_id,
-                            new_column_id=change.new_column_id,
                         )
                         self._async_notify_event_listeners(event)
 
