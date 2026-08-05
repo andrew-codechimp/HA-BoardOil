@@ -357,6 +357,8 @@ class BoardOilDataUpdateCoordinator(DataUpdateCoordinator[list[BoardData]]):
                             if change.new_card is not None
                             else change.old_card
                         )
+                        if card is None:
+                            continue
                         event = BoardOilEventData(
                             event_type=change.change_type.value,
                             card_id=change.card_id,
