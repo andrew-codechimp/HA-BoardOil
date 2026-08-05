@@ -10,6 +10,9 @@ from .coordinator import BoardOilDataUpdateCoordinator
 class BoardOilEntity(CoordinatorEntity[BoardOilDataUpdateCoordinator]):
     """BoardOilEntity class."""
 
-    def __init__(self, coordinator: BoardOilDataUpdateCoordinator) -> None:
+    def __init__(
+        self,
+        coordinator: BoardOilDataUpdateCoordinator,
+    ) -> None:
         """Initialize."""
         super().__init__(coordinator)

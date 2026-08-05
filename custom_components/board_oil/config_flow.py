@@ -9,8 +9,8 @@ from awesomeversion import AwesomeVersion
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
-import voluptuous as vol
 from slugify import slugify
+import voluptuous as vol
 
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.const import CONF_API_TOKEN, CONF_HOST, CONF_VERIFY_SSL

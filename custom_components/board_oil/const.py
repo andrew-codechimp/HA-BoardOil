@@ -19,3 +19,8 @@ ATTR_DESCRIPTION = "description"
 ATTR_TAG_NAMES = "tag_names"
 ATTR_SLICK_NAME = "slick_name"
 ATTR_EXTERNAL_URL = "external_url"
+
+EVENT_TYPE_CARD_CREATED = "card_created"
+EVENT_TYPE_CARD_REMOVED = "card_removed"
+EVENT_TYPE_CARD_UPDATED = "card_updated"
+EVENT_TYPE_CARD_MOVED = "card_moved"

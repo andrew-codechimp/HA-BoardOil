@@ -6,8 +6,8 @@ https://github.com/andrew-codechimp/ha-boardoil
 
 from __future__ import annotations
 
-import logging
 from datetime import timedelta
+import logging
 from typing import TYPE_CHECKING
 
 from awesomeversion.awesomeversion import AwesomeVersion
@@ -38,6 +38,7 @@ if TYPE_CHECKING:
 _LOGGER = logging.getLogger(__name__)
 
 PLATFORMS: list[Platform] = [
+    Platform.EVENT,
     Platform.SENSOR,
 ]
 

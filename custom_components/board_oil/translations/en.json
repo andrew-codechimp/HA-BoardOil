@@ -130,6 +130,23 @@
             "wrong_account": "You have to use the same account that was used to configure the integration."
         }
     },
+    "entity": {
+        "event": {
+            "torrent": {
+                "name": "Card",
+                "state_attributes": {
+                    "event_type": {
+                        "state": {
+                            "card_created": "Created",
+                            "card_moved": "Moved",
+                            "card_removed": "Removed",
+                            "card_updated": "Updated"
+                        }
+                    }
+                }
+            }
+        }
+    },
     "exceptions": {
         "invalid_url": {
             "message": "The provided URL is not valid. Please provide a valid HTTP or HTTPS URL."

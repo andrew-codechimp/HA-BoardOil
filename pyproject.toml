@@ -155,6 +155,8 @@ section-order = [
 ]
 known-first-party = ["homeassistant"]
 combine-as-imports = true
+force-sort-within-sections = true
+force-single-line = false
 
 [tool.ruff.lint.flake8-import-conventions.extend-aliases]
 "homeassistant.helpers.area_registry" = "ar"
