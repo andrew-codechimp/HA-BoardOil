@@ -3,14 +3,12 @@
 import logging
 from typing import TYPE_CHECKING, override
 
-from homeassistant.components.event import EventEntity, EventEntityDescription
-from homeassistant.const import ATTR_ID, ATTR_NAME, CONF_HOST
+from homeassistant.components.event import EventEntity
+from homeassistant.const import ATTR_ID, ATTR_NAME
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from .const import (
-    DOMAIN,
     EVENT_TYPE_CARD_CREATED,
     EVENT_TYPE_CARD_MOVED,
     EVENT_TYPE_CARD_REMOVED,
