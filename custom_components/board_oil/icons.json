@@ -1,11 +1,4 @@
 {
-    "entity": {
-        "event": {
-            "card": {
-                "default": "mdi:card-outline"
-            }
-        }
-    },
     "services": {
         "add_card": {
             "service": "mdi:card-plus-outline"

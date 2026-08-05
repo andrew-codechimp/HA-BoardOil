@@ -46,35 +46,18 @@ class BoardOilEvent(BoardOilEntity, EventEntity):
         board: BoardData,
     ) -> None:
         """Initialize."""
-        super().__init__(coordinator)
-        self._board_id = board.id
-        self._board_name = board.name
-        self.has_entity_name = True
-        self.entity_description = EventEntityDescription(
-            key="card",
-            translation_key="card",
-            event_types=[
-                EVENT_TYPE_CARD_CREATED,
-                EVENT_TYPE_CARD_MOVED,
-                EVENT_TYPE_CARD_REMOVED,
-                EVENT_TYPE_CARD_UPDATED,
-            ],
-        )
+        super().__init__(coordinator, board)
+        self.key = "card"
+        self.translation_key = "card"
+        self.icon = "mdi:card-outline"
+        self.event_types = [
+            EVENT_TYPE_CARD_CREATED,
+            EVENT_TYPE_CARD_MOVED,
+            EVENT_TYPE_CARD_REMOVED,
+            EVENT_TYPE_CARD_UPDATED,
+        ]
         self._attr_unique_id = (
             f"{coordinator.config_entry.entry_id}_{board.id}_card_event"
-        )
-        self._attr_device_info = DeviceInfo(
-            identifiers={(DOMAIN, f"{coordinator.config_entry.entry_id}:{board.id}")},
-            entry_type=DeviceEntryType.SERVICE,
-            name=f"Board Oil - {board.name}",
-            sw_version=(
-                f"{coordinator.config_entry.runtime_data.version} "
-                f"({coordinator.config_entry.runtime_data.build})"
-            ),
-            configuration_url=(
-                f"{coordinator.config_entry.data[CONF_HOST].rstrip('/')}/boards/"
-                f"{board.id}"
-            ),
         )
 
     @override
@@ -86,15 +69,13 @@ class BoardOilEvent(BoardOilEntity, EventEntity):
             assert self._attr_unique_id
 
         self.async_on_remove(
-            self.coordinator.async_add_event_listener(
-                self._handle_event, self._board_id
-            )
+            self.coordinator.async_add_event_listener(self._handle_event, self.board_id)
         )
 
     @callback
     def _handle_event(self, event_data: BoardOilEventData) -> None:
         """Handle the torrent events."""
-        if event_data.board_id != self._board_id:
+        if event_data.board_id != self.board_id:
             return
 
         event_type = event_data.event_type

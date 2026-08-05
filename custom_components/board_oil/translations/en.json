@@ -132,7 +132,7 @@
     },
     "entity": {
         "event": {
-            "torrent": {
+            "card": {
                 "name": "Card",
                 "state_attributes": {
                     "event_type": {

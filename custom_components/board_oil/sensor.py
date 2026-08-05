@@ -5,10 +5,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN, SensorEntity
-from homeassistant.const import CONF_HOST
 from homeassistant.core import callback
 from homeassistant.helpers import device_registry as dr, entity_registry as er
-from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
 
 from .const import DOMAIN, LOGGER
 from .coordinator import ColumnData
@@ -143,20 +141,13 @@ def _create_entities(
 class BoardOilColumnCardCountSensor(BoardOilEntity, SensorEntity):
     """Sensor showing number of cards for a board column."""
 
-    _unrecorded_attributes = frozenset(
-        {
-            "board_id",
-            "board_name",
-            "column_id",
-            "column_title",
-            "cards",
-        }
-    )
-
-    @property
-    def board_name(self) -> str:
-        """Return the board name for entity-id migration."""
-        return self._board_name
+    _unrecorded_attributes = frozenset({
+        "board_id",
+        "board_name",
+        "column_id",
+        "column_title",
+        "cards",
+    })
 
     @property
     def column_name(self) -> str:
@@ -170,10 +161,7 @@ class BoardOilColumnCardCountSensor(BoardOilEntity, SensorEntity):
         column: ColumnData,
     ) -> None:
         """Initialize the sensor."""
-        super().__init__(coordinator)
-        self.has_entity_name = True
-        self._board_id = board.id
-        self._board_name = board.name
+        super().__init__(coordinator, board)
         self._column_id = column.id
         self._column_name = column.title
         self.key = _build_entity_key(board_id=board.id, column_id=column.id)
@@ -182,19 +170,7 @@ class BoardOilColumnCardCountSensor(BoardOilEntity, SensorEntity):
         self._attr_unique_id = (
             f"{coordinator.config_entry.entry_id}_{board.id}_{column.id}_card_count"
         )
-        self._attr_device_info = DeviceInfo(
-            identifiers={(DOMAIN, f"{coordinator.config_entry.entry_id}:{board.id}")},
-            entry_type=DeviceEntryType.SERVICE,
-            name=f"Board Oil - {board.name}",
-            sw_version=(
-                f"{coordinator.config_entry.runtime_data.version} "
-                f"({coordinator.config_entry.runtime_data.build})"
-            ),
-            configuration_url=(
-                f"{coordinator.config_entry.data[CONF_HOST].rstrip('/')}/boards/"
-                f"{board.id}"
-            ),
-        )
+
         self._attr_native_unit_of_measurement = "cards"
 
     @property
@@ -231,15 +207,15 @@ class BoardOilColumnCardCountSensor(BoardOilEntity, SensorEntity):
     def _get_board_and_column(self) -> tuple[int, str, ColumnData]:
         """Get latest board and column data from coordinator."""
         for board in self.coordinator.data:
-            if board.id != self._board_id:
+            if board.id != self.board_id:
                 continue
             for column in board.columns:
                 if column.id == self._column_id:
                     return board.id, board.name, column
 
         return (
-            self._board_id,
-            self._board_name,
+            self.board_id,
+            self.board_name,
             ColumnData(
                 id=self._column_id,
                 title=self._column_name,
@@ -250,7 +226,7 @@ class BoardOilColumnCardCountSensor(BoardOilEntity, SensorEntity):
     def _sync_metadata_from_latest_data(self) -> None:
         """Sync entity metadata fields from the latest coordinator data."""
         _, board_name, column = self._get_board_and_column()
-        self._board_name = board_name
+        self.board_name = board_name
 
         if self._column_name != column.title:
             self._column_name = column.title

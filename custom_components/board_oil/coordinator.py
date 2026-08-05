@@ -344,7 +344,7 @@ class BoardOilDataUpdateCoordinator(DataUpdateCoordinator[list[BoardData]]):
         except BoardOilApiClientError as exception:
             raise UpdateFailed(exception) from exception
 
-        if self._first_refresh:
+        if not self._first_refresh:
             for board in self.boards:
                 changes = self.get_board_changes(board.id)
                 if changes.has_changes():
