@@ -4,11 +4,17 @@ import logging
 from typing import TYPE_CHECKING, override
 
 from homeassistant.components.event import EventEntity
-from homeassistant.const import ATTR_ID, ATTR_NAME
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from .const import (
+    ATTR_CARD_ID,
+    ATTR_CARD_TYPE_ID,
+    ATTR_CARD_TYPE_NAME,
+    ATTR_COLUMN_ID,
+    ATTR_COLUMN_NAME,
+    ATTR_TAG_NAMES,
+    ATTR_TITLE,
     EVENT_TYPE_CARD_CREATED,
     EVENT_TYPE_CARD_MOVED,
     EVENT_TYPE_CARD_REMOVED,
@@ -85,13 +91,13 @@ class BoardOilEvent(BoardOilEntity, EventEntity):
         self._trigger_event(
             event_type,
             {
-                ATTR_NAME: event_data.title,
-                ATTR_ID: event_data.card_id,
-                "card_type_id": event_data.card_type_id,
-                "card_type_name": event_data.card_type_name,
-                "column_id": event_data.column_id,
-                "column_name": event_data.column_name,
-                "tags": event_data.tag_names,
+                ATTR_TITLE: event_data.title,
+                ATTR_CARD_ID: event_data.card_id,
+                ATTR_CARD_TYPE_ID: event_data.card_type_id,
+                ATTR_CARD_TYPE_NAME: event_data.card_type_name,
+                ATTR_COLUMN_ID: event_data.column_id,
+                ATTR_COLUMN_NAME: event_data.column_name,
+                ATTR_TAG_NAMES: event_data.tag_names,
             },
         )
 
