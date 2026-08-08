@@ -119,7 +119,7 @@
         "error": {
             "auth": "Host name or Client account token is wrong.",
             "connection": "Unable to connect to the server.",
-            "boardoil_version": "Minimum required version is 0.2.0. Please upgrade Board Oil and then retry.",
+            "boardoil_version": "The version of Board Oil you are running is not compatible with this integration, please upgrade Board Oil.",
             "unknown": "Unknown error occurred."
         },
         "abort": {
