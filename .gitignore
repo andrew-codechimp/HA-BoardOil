@@ -10,11 +10,4 @@ __pycache__
 # misc
 .coverage
 coverage.xml
-
-
-# Home Assistant configuration
-config/*
-!config/configuration.yaml
 .DS_Store
-backup/*
-
