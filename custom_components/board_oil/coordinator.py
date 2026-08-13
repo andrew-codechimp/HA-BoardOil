@@ -354,9 +354,15 @@ class BoardOilDataUpdateCoordinator(DataUpdateCoordinator[list[BoardData]]):
                 )
 
         except BoardOilApiClientAuthenticationError as exception:
-            raise ConfigEntryAuthFailed(exception) from exception
+            raise ConfigEntryAuthFailed(
+                translation_domain=DOMAIN,
+                translation_key="auth_failed",
+            ) from exception
         except BoardOilApiClientError as exception:
-            raise UpdateFailed(exception) from exception
+            raise UpdateFailed(
+                translation_domain=DOMAIN,
+                translation_key="update_failed",
+            ) from exception
 
         if not self._first_refresh:
             for board in self.boards:

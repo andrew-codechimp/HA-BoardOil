@@ -148,8 +148,14 @@
         }
     },
     "exceptions": {
+        "auth_failed": {
+            "message": "Authentication failed. Please reauthenticate."
+        },
         "invalid_url": {
             "message": "The provided URL is not valid. Please provide a valid HTTP or HTTPS URL."
+        },
+        "update_failed": {
+            "message": "Unable to fetch Board Oil data."
         },
         "version_error": {
             "message": "You are running {boardoil_version} of Board Oil. Minimum required version is {min_version}. Please upgrade Board Oil and then retry."
