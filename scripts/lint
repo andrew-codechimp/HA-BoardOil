@@ -8,6 +8,6 @@ echo "Running ruff check..."
 uv run ruff check . --fix
 
 echo "Running mypy type checking..."
-uv run mypy custom_components/board_oil/ --check-untyped-defs
+uv run mypy custom_components/boardoil/ --check-untyped-defs
 
 echo "Lint completed successfully!"

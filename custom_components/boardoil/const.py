@@ -1,4 +1,4 @@
-"""Constants for board_oil."""
+"""Constants for boardoil."""
 
 from logging import Logger, getLogger
 
@@ -6,7 +6,7 @@ from awesomeversion import AwesomeVersion
 
 LOGGER: Logger = getLogger(__package__)
 
-DOMAIN = "board_oil"
+DOMAIN = "boardoil"
 MIN_HA_VERSION = "2026.7.0"
 MIN_REQUIRED_BOARDOIL_VERSION = AwesomeVersion("1.4.0")
 DEFAULT_SCAN_INTERVAL = 60  # seconds

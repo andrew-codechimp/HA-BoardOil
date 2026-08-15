@@ -1,4 +1,4 @@
-"""Sensor platform for board_oil."""
+"""Sensor platform for boardoil."""
 
 from __future__ import annotations
 

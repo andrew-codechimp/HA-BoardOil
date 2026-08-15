@@ -4,7 +4,7 @@ get_card:
       required: true
       selector:
         config_entry:
-          integration: board_oil
+          integration: boardoil
     board_id:
       required: true
       selector:
@@ -24,7 +24,7 @@ get_cards:
       required: true
       selector:
         config_entry:
-          integration: board_oil
+          integration: boardoil
     board_id:
       required: true
       selector:
@@ -44,7 +44,7 @@ add_card:
       required: true
       selector:
         config_entry:
-          integration: board_oil
+          integration: boardoil
     board_id:
       required: true
       selector:

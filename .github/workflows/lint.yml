@@ -50,5 +50,5 @@ jobs:
         run: uv sync
 
       - name: Run mypy
-        run: uv run mypy custom_components/board_oil/ --check-untyped-defs
+        run: uv run mypy custom_components/boardoil/ --check-untyped-defs
 

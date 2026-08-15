@@ -1,4 +1,4 @@
-"""Custom integration to integrate board_oil with Home Assistant.
+"""Custom integration to integrate boardoil with Home Assistant.
 
 For more details about this integration, please refer to
 https://github.com/andrew-codechimp/ha-boardoil

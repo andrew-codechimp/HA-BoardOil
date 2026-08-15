@@ -1,4 +1,4 @@
-"""Services for board_oil."""
+"""Services for boardoil."""
 
 from __future__ import annotations
 
@@ -228,7 +228,7 @@ async def async_add_card_service(call: ServiceCall) -> None:
 
 
 async def async_setup_services(hass: HomeAssistant) -> None:
-    """Set up board_oil services."""
+    """Set up boardoil services."""
     hass.services.async_register(
         DOMAIN,
         SERVICE_GET_CARD,

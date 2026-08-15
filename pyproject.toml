@@ -61,7 +61,7 @@ dev = [
 default-groups = ["dev"]
 [tool.ruff]
 target-version = "py313"
-src = ["custom_components/board_oil"]
+src = ["custom_components/boardoil"]
 
 [tool.ruff.format]
 docstring-code-format = true

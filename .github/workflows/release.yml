@@ -21,15 +21,15 @@ jobs:
         shell: "bash"
         run: |
           yq -i -o json '.version="${{ github.event.release.tag_name }}"' \
-            "${{ github.workspace }}/custom_components/board_oil/manifest.json"
+            "${{ github.workspace }}/custom_components/boardoil/manifest.json"
 
       - name: "ZIP the integration directory"
         shell: "bash"
         run: |
-          cd "${{ github.workspace }}/custom_components/board_oil"
-          zip board_oil.zip -r ./
+          cd "${{ github.workspace }}/custom_components/boardoil"
+          zip boardoil.zip -r ./
 
       - name: "Upload the ZIP file to the release"
         uses: softprops/action-gh-release@v2.6.1
         with:
-          files: ${{ github.workspace }}/custom_components/board_oil/board_oil.zip
+          files: ${{ github.workspace }}/custom_components/boardoil/boardoil.zip

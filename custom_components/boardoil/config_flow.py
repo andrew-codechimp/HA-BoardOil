@@ -1,4 +1,4 @@
-"""Adds config flow for board_oil."""
+"""Adds config flow for boardoil."""
 
 from __future__ import annotations
 

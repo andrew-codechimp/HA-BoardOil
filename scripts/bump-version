@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 MANIFEST_PATH = (
-    Path(__file__).parent.parent / "custom_components" / "board_oil" / "manifest.json"
+    Path(__file__).parent.parent / "custom_components" / "boardoil" / "manifest.json"
 )
 
 

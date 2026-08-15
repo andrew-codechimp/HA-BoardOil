@@ -1,4 +1,4 @@
-"""Define events for the board_oil integration."""
+"""Define events for the boardoil integration."""
 
 import logging
 from typing import TYPE_CHECKING, override

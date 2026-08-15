@@ -1,6 +1,6 @@
 {
     "name": "BoardOil",
-    "filename": "board_oil.zip",
+    "filename": "boardoil.zip",
     "hide_default_branch": true,
     "homeassistant": "2026.7.0",
     "zip_release": true

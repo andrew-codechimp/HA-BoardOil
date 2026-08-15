@@ -1,4 +1,4 @@
-"""DataUpdateCoordinator for board_oil."""
+"""DataUpdateCoordinator for boardoil."""
 
 from __future__ import annotations
 
