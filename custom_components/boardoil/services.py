@@ -69,7 +69,7 @@ SERVICE_SCHEMA_UPDATE_CARD = vol.Schema({
     vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
     vol.Required(ATTR_BOARD_ID): cv.positive_int,
     vol.Required(ATTR_CARD_ID): cv.positive_int,
-    vol.Required(ATTR_TITLE): cv.string,
+    vol.Optional(ATTR_TITLE, default=""): cv.string,
     vol.Optional(ATTR_DESCRIPTION, default=""): cv.string,
     vol.Optional(ATTR_TAG_NAMES): vol.Any(
         cv.string,
@@ -302,6 +302,8 @@ async def async_update_card_service(call: ServiceCall) -> None:
         raise BoardNotFoundError(board_id)
 
     # Apply new values to existing card data
+    existing_title = existing_card_raw.get("title", "")
+    existing_title_str: str = existing_title if isinstance(existing_title, str) else ""
     existing_description = existing_card_raw.get("description", "")
     existing_description_str: str = (
         existing_description if isinstance(existing_description, str) else ""
@@ -322,7 +324,7 @@ async def async_update_card_service(call: ServiceCall) -> None:
     await entry.runtime_data.client.async_update_card(
         board_id=board_id,
         card_id=card_id,
-        title=call.data[ATTR_TITLE],
+        title=call.data.get(ATTR_TITLE) or existing_title_str,
         description=call.data.get(ATTR_DESCRIPTION) or existing_description_str,
         tag_names=tag_names or existing_tag_names_list,
         column_id=call.data.get(ATTR_COLUMN_ID),
