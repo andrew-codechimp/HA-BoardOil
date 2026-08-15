@@ -77,13 +77,6 @@ class BoardOilApiClient:
             path=f"boards/{board_id!s}",
         )
 
-    async def async_get_card(self, board_id: int, card_id: int) -> Any:
-        """Get a specific card from the API."""
-        return await self._api_wrapper(
-            method="get",
-            path=f"boards/{board_id!s}/cards/{card_id!s}",
-        )
-
     async def async_add_card(
         self,
         board_id: int,

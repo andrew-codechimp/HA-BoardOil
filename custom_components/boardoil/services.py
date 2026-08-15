@@ -17,7 +17,6 @@ from homeassistant.core import (
 from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
 from homeassistant.helpers import config_validation as cv, service
 
-from .api import BoardOilApiClientError
 from .const import (
     ATTR_ASSIGNED_USER_ID,
     ATTR_BOARD_ID,
@@ -287,30 +286,63 @@ async def async_update_card_service(call: ServiceCall) -> None:
             translation_key="invalid_url",
         )
 
-    # Fetch the latest card data from API
-    try:
-        existing_card = await entry.runtime_data.client.async_get_card(
-            board_id, card_id
-        )
-    except BoardOilApiClientError as err:
-        raise CardNotFoundError(board_id=board_id, card_id=card_id) from err
+    # Find existing card in coordinator data
+    coordinator = entry.runtime_data.coordinator
+    existing_card_raw: JsonObjectType | None = None
+
+    for board in coordinator.data:
+        if board.id != board_id:
+            continue
+
+        for column in board.columns:
+            for card in column.cards:
+                if card.id != card_id:
+                    continue
+                existing_card_raw = cast("JsonObjectType", card.raw_data)
+                break
+            if existing_card_raw:
+                break
+
+        if existing_card_raw is None:
+            raise CardNotFoundError(board_id=board_id, card_id=card_id)
+        break
+
+    if existing_card_raw is None:
+        raise BoardNotFoundError(board_id)
 
     # Apply new values to existing card data
+    existing_description = existing_card_raw.get("description", "")
+    existing_description_str: str = (
+        existing_description if isinstance(existing_description, str) else ""
+    )
+    existing_tag_names = existing_card_raw.get("tagNames", [])
+    existing_tag_names_list: list[str] = (
+        [str(tag) for tag in existing_tag_names]
+        if isinstance(existing_tag_names, list)
+        else []
+    )
+    existing_external_url = existing_card_raw.get("externalUrl")
+    existing_external_url_str: str | None = (
+        existing_external_url
+        if existing_external_url is None or isinstance(existing_external_url, str)
+        else None
+    )
+
     await entry.runtime_data.client.async_update_card(
         board_id=board_id,
         card_id=card_id,
         title=call.data[ATTR_TITLE],
-        description=call.data.get(
-            ATTR_DESCRIPTION, existing_card.get("description", "")
-        ),
-        tag_names=tag_names or existing_card.get("tagNames", []),
+        description=call.data.get(ATTR_DESCRIPTION) or existing_description_str,
+        tag_names=tag_names or existing_tag_names_list,
         column_id=call.data.get(ATTR_COLUMN_ID),
-        card_type_id=call.data.get(ATTR_CARD_TYPE_ID, existing_card.get("cardTypeId")),
-        assigned_user_id=call.data.get(
-            ATTR_ASSIGNED_USER_ID, existing_card.get("assignedUserId")
+        card_type_id=call.data.get(
+            ATTR_CARD_TYPE_ID, existing_card_raw.get("cardTypeId")
         ),
-        slick_name=call.data.get(ATTR_SLICK_NAME, existing_card.get("slickName")),
-        external_url=url or existing_card.get("externalUrl"),
+        assigned_user_id=call.data.get(
+            ATTR_ASSIGNED_USER_ID, existing_card_raw.get("assignedUserId")
+        ),
+        slick_name=call.data.get(ATTR_SLICK_NAME, existing_card_raw.get("slickName")),
+        external_url=url or existing_external_url_str,
     )
     await entry.runtime_data.coordinator.async_request_refresh()
 
