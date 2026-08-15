@@ -85,3 +85,103 @@ add_card:
       required: false
       selector:
         text:
+
+update_card:
+  fields:
+    config_entry_id:
+      required: true
+      selector:
+        config_entry:
+          integration: boardoil
+    board_id:
+      required: true
+      selector:
+        number:
+          min: 1
+          mode: box
+    card_id:
+      required: true
+      selector:
+        number:
+          min: 1
+          mode: box
+    title:
+      required: true
+      selector:
+        text:
+    description:
+      required: false
+      selector:
+        text:
+          multiline: true
+    tag_names:
+      required: false
+      selector:
+        text:
+          multiline: true
+    column_id:
+      required: false
+      selector:
+        number:
+          min: 1
+          mode: box
+    card_type_id:
+      required: false
+      selector:
+        number:
+          min: 1
+          mode: box
+    assigned_user_id:
+      required: false
+      selector:
+        number:
+          min: 1
+          mode: box
+    slick_name:
+      required: false
+      selector:
+        text:
+    external_url:
+      required: false
+      selector:
+        text:
+
+delete_card:
+  fields:
+    config_entry_id:
+      required: true
+      selector:
+        config_entry:
+          integration: boardoil
+    board_id:
+      required: true
+      selector:
+        number:
+          min: 1
+          mode: box
+    card_id:
+      required: true
+      selector:
+        number:
+          min: 1
+          mode: box
+
+archive_card:
+  fields:
+    config_entry_id:
+      required: true
+      selector:
+        config_entry:
+          integration: boardoil
+    board_id:
+      required: true
+      selector:
+        number:
+          min: 1
+          mode: box
+    card_id:
+      required: true
+      selector:
+        number:
+          min: 1
+          mode: box

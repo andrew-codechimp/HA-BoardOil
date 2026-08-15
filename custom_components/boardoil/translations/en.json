@@ -10,11 +10,11 @@
                 },
                 "board_id": {
                     "name": "Board ID",
-                    "description": "Numeric ID of the board."
+                    "description": "ID of the board."
                 },
                 "column_id": {
                     "name": "Column ID",
-                    "description": "Numeric ID of the column in the board (default: first column)."
+                    "description": "ID of the column in the board (default: first column)."
                 },
                 "title": {
                     "name": "Title",
@@ -30,7 +30,7 @@
                 },
                 "card_type_id": {
                     "name": "Card type ID",
-                    "description": "Numeric ID of the card type (default: card type default within BoardOil)."
+                    "description": "ID of the card type (default: card type default within BoardOil)."
                 },
                 "slick_name": {
                     "name": "Slick name",
@@ -39,6 +39,92 @@
                 "external_url": {
                     "name": "External URL",
                     "description": "An external URL to add to the card."
+                }
+            }
+        },
+        "update_card": {
+            "name": "Update card",
+            "description": "Update an existing card on a board.",
+            "fields": {
+                "config_entry_id": {
+                    "name": "BoardOil instance",
+                    "description": "The BoardOil instance to use for this action."
+                },
+                "board_id": {
+                    "name": "Board ID",
+                    "description": "ID of the board."
+                },
+                "card_id": {
+                    "name": "Card ID",
+                    "description": "ID of the card to update."
+                },
+                "title": {
+                    "name": "Title",
+                    "description": "Card title."
+                },
+                "description": {
+                    "name": "Description",
+                    "description": "Card description."
+                },
+                "tag_names": {
+                    "name": "Tag names",
+                    "description": "Comma-separated tag names to apply to the card."
+                },
+                "column_id": {
+                    "name": "Column ID",
+                    "description": "ID of the column in the board."
+                },
+                "card_type_id": {
+                    "name": "Card type ID",
+                    "description": "ID of the card type."
+                },
+                "assigned_user_id": {
+                    "name": "Assigned user ID",
+                    "description": "ID of the user to assign the card to."
+                },
+                "slick_name": {
+                    "name": "Slick name",
+                    "description": "Slick to add card to."
+                },
+                "external_url": {
+                    "name": "External URL",
+                    "description": "An external URL to add to the card."
+                }
+            }
+        },
+        "delete_card": {
+            "name": "Delete card",
+            "description": "Delete a card from a board.",
+            "fields": {
+                "config_entry_id": {
+                    "name": "BoardOil instance",
+                    "description": "The BoardOil instance to use for this action."
+                },
+                "board_id": {
+                    "name": "Board ID",
+                    "description": "ID of the board."
+                },
+                "card_id": {
+                    "name": "Card ID",
+                    "description": "ID of the card to delete."
+                }
+            }
+        },
+        "archive_card": {
+            "name": "Archive card",
+            "description": "Archive a card on a board.",
+            "fields": {
+                "config_entry_id": {
+                    "name": "BoardOil instance",
+                    "description": "The BoardOil instance to use for this action."
+                },
+                "board_id": {
+                    "name": "Board ID",
+                    "description": "ID of the board."
+                },
+                "card_id": {
+                    "name": "Card ID",
+                    "description": "ID of the card to archive."
                 }
             }
         },
@@ -52,11 +138,11 @@
                 },
                 "board_id": {
                     "name": "Board ID",
-                    "description": "Numeric ID of the board."
+                    "description": "ID of the board."
                 },
                 "card_id": {
                     "name": "Card ID",
-                    "description": "Numeric ID of the card to fetch."
+                    "description": "ID of the card to fetch."
                 }
             }
         },
@@ -70,11 +156,11 @@
                 },
                 "board_id": {
                     "name": "Board ID",
-                    "description": "Numeric ID of the board."
+                    "description": "ID of the board."
                 },
                 "column_id": {
                     "name": "Column ID",
-                    "description": "Optional numeric ID of a specific column to filter cards (default all cards for the board)."
+                    "description": "Optional ID of a specific column to filter cards (default all cards for the board)."
                 }
             }
         }

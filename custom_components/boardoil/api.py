@@ -108,6 +108,65 @@ class BoardOilApiClient:
             headers={"Content-type": "application/json; charset=UTF-8"},
         )
 
+    async def async_update_card(
+        self,
+        board_id: int,
+        card_id: int,
+        title: str,
+        description: str,
+        tag_names: list[str] | None,
+        card_type_id: int | None,
+        column_id: int | None,
+        assigned_user_id: int | None,
+        slick_name: str | None,
+        external_url: str | None,
+    ) -> Any:
+        """Update a card via the API."""
+        payload: dict[str, Any] = {
+            "title": title,
+            "description": description,
+            "tagNames": tag_names or [],
+        }
+        if card_type_id is not None:
+            payload["cardTypeId"] = card_type_id
+        if column_id is not None:
+            payload["boardColumnId"] = column_id
+        if assigned_user_id is not None:
+            payload["assignedUserId"] = assigned_user_id
+        if slick_name is not None:
+            payload["slickName"] = slick_name
+        if external_url is not None:
+            payload["externalUrl"] = external_url
+
+        return await self._api_wrapper(
+            method="put",
+            path=f"boards/{board_id!s}/cards/{card_id!s}",
+            data=payload,
+            headers={"Content-type": "application/json; charset=UTF-8"},
+        )
+
+    async def async_delete_card(
+        self,
+        board_id: int,
+        card_id: int,
+    ) -> Any:
+        """Delete a card via the API."""
+        return await self._api_wrapper(
+            method="delete",
+            path=f"boards/{board_id!s}/cards/{card_id!s}",
+        )
+
+    async def async_archive_card(
+        self,
+        board_id: int,
+        card_id: int,
+    ) -> Any:
+        """Archive a card via the API."""
+        return await self._api_wrapper(
+            method="post",
+            path=f"boards/{board_id!s}/cards/{card_id!s}/archive",
+        )
+
     async def _api_wrapper(
         self,
         method: str,

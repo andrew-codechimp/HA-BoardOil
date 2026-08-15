@@ -1,0 +1,4655 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "BoardOil API",
+        "version": "1.4.0"
+    },
+    "paths": {
+        "/api/auth/register-initial-admin": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterInitialAdminRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/auth/change-password": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ChangeOwnPasswordRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/auth/refresh": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/auth/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/auth/machine/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/auth/machine/refresh": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MachineRefreshRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/auth/machine/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MachineLogoutRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/auth/access-tokens": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "description": "Access token notes:\n- Access tokens cannot call this endpoint.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateMachinePatRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    }
+                ]
+            },
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "description": "Access token notes:\n- Access tokens cannot call this endpoint.",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    }
+                ]
+            }
+        },
+        "/api/auth/access-tokens/{id}": {
+            "delete": {
+                "tags": [
+                    "Auth"
+                ],
+                "description": "Access token notes:\n- Access tokens cannot call this endpoint.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    }
+                ]
+            }
+        },
+        "/api/auth/csrf": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:read`.",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:read"
+                ]
+            }
+        },
+        "/api/auth/me": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:read`.",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:read"
+                ]
+            }
+        },
+        "/api/auth/bootstrap-status": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/boards": {
+            "get": {
+                "tags": [
+                    "Boards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:read`.",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:read"
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Boards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateBoardRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/boards/{boardId}": {
+            "get": {
+                "tags": [
+                    "Boards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:read`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:read"
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Boards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateBoardRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Boards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/export": {
+            "get": {
+                "tags": [
+                    "Boards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:read`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:read"
+                ]
+            }
+        },
+        "/api/boards/import": {
+            "post": {
+                "tags": [
+                    "Boards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/members": {
+            "get": {
+                "tags": [
+                    "Boards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:read`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:read"
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Boards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddBoardMemberRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/members/{userId}": {
+            "patch": {
+                "tags": [
+                    "Boards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateBoardMemberRoleRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Boards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/card-types": {
+            "get": {
+                "tags": [
+                    "Card Types"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:read`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:read"
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Card Types"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateCardTypeRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/card-types/{cardTypeId}": {
+            "put": {
+                "tags": [
+                    "Card Types"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "cardTypeId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateCardTypeRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Card Types"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "cardTypeId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/card-types/{cardTypeId}/default": {
+            "patch": {
+                "tags": [
+                    "Card Types"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "cardTypeId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/cards": {
+            "post": {
+                "tags": [
+                    "Cards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateCardRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/cards/search": {
+            "post": {
+                "tags": [
+                    "Cards"
+                ],
+                "summary": "Search cards on a board",
+                "description": "Searches cards on the specified board using between 1 and 10 filters. All filters must match.\n\nCurrently supports the `externalUrl` field with these operators:\n- `exact`: case-sensitive full-value match.\n- `contains`: case-insensitive literal substring match.\n\nResults are returned in board column and card order. All matches are returned without pagination.\n\nAccess token notes:\n- Required access token scope: `api:read`.",
+                "operationId": "SearchCards",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchCardsRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CardDtoIReadOnlyListApiResult"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResult"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResult"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:read"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/cards/archived": {
+            "get": {
+                "tags": [
+                    "Cards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:read`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:read"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/cards/archived/{id}": {
+            "get": {
+                "tags": [
+                    "Cards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:read`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:read"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/cards/archived/{id}/unarchive": {
+            "post": {
+                "tags": [
+                    "Cards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/cards/{id}": {
+            "put": {
+                "tags": [
+                    "Cards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateCardRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Cards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/cards/{id}/comments": {
+            "get": {
+                "tags": [
+                    "Cards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:read`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:read"
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Cards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateCardCommentRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/cards/{id}/move": {
+            "patch": {
+                "tags": [
+                    "Cards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MoveCardRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/cards/edit": {
+            "patch": {
+                "tags": [
+                    "Cards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BulkEditCardsRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/cards/delete": {
+            "post": {
+                "tags": [
+                    "Cards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BulkDeleteCardsRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/cards/{id}/archive": {
+            "post": {
+                "tags": [
+                    "Cards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/cards/archive": {
+            "post": {
+                "tags": [
+                    "Cards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ArchiveCardsRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/columns": {
+            "get": {
+                "tags": [
+                    "Columns"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:read`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:read"
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Columns"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateColumnRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/columns/{id}": {
+            "put": {
+                "tags": [
+                    "Columns"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateColumnRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Columns"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/columns/{id}/move": {
+            "patch": {
+                "tags": [
+                    "Columns"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MoveColumnRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/system/configuration": {
+            "get": {
+                "tags": [
+                    "Configuration"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Configuration"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateConfigurationRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            }
+        },
+        "/api/system/error-logs:purge": {
+            "post": {
+                "tags": [
+                    "ErrorLogs"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            }
+        },
+        "/api/system/error-logs:report-client-error": {
+            "post": {
+                "tags": [
+                    "ErrorLogs"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ClientErrorReportRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            }
+        },
+        "/api/system/error-logs": {
+            "get": {
+                "tags": [
+                    "ErrorLogs"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "parameters": [
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            }
+        },
+        "/api/system/error-logs/{id}": {
+            "get": {
+                "tags": [
+                    "ErrorLogs"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            }
+        },
+        "/api/oauth-connections": {
+            "get": {
+                "tags": [
+                    "OAuth Connections"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:read`.",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:read"
+                ]
+            }
+        },
+        "/api/oauth-connections/{id}": {
+            "delete": {
+                "tags": [
+                    "OAuth Connections"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/health": {
+            "get": {
+                "tags": [
+                    "Other"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/version": {
+            "get": {
+                "tags": [
+                    "Other"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/internal/realtime/board-events": {
+            "post": {
+                "tags": [
+                    "Other"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BoardRealtimeRelayEvent"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/boards/{boardId}/slicks": {
+            "get": {
+                "tags": [
+                    "Slicks"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:read`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:read"
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Slicks"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateSlickRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/slicks/create-default-style": {
+            "get": {
+                "tags": [
+                    "Slicks"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:read`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:read"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/slicks/{slickId}": {
+            "put": {
+                "tags": [
+                    "Slicks"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "slickId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateSlickRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Slicks"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "slickId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/system/boards": {
+            "get": {
+                "tags": [
+                    "System Boards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            }
+        },
+        "/api/system/boards/{boardId}/members": {
+            "get": {
+                "tags": [
+                    "System Boards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            },
+            "post": {
+                "tags": [
+                    "System Boards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddBoardMemberRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            }
+        },
+        "/api/system/boards/{boardId}/members/{userId}": {
+            "patch": {
+                "tags": [
+                    "System Boards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateBoardMemberRoleRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "System Boards"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            }
+        },
+        "/api/system/client-accounts": {
+            "get": {
+                "tags": [
+                    "System Client Accounts"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            },
+            "post": {
+                "tags": [
+                    "System Client Accounts"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateClientAccountRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            }
+        },
+        "/api/system/client-accounts/{id}": {
+            "put": {
+                "tags": [
+                    "System Client Accounts"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateClientAccountRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "System Client Accounts"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            }
+        },
+        "/api/system/client-accounts/{id}/tokens": {
+            "get": {
+                "tags": [
+                    "System Client Accounts"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            },
+            "post": {
+                "tags": [
+                    "System Client Accounts"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateClientAccessTokenRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            }
+        },
+        "/api/system/client-accounts/{id}/profile-image": {
+            "post": {
+                "tags": [
+                    "System Client Accounts"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "System Client Accounts"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            }
+        },
+        "/api/system/client-accounts/{id}/tokens/{tokenId}": {
+            "delete": {
+                "tags": [
+                    "System Client Accounts"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "tokenId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            }
+        },
+        "/api/system/oauth-connections": {
+            "get": {
+                "tags": [
+                    "System OAuth Connections"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            }
+        },
+        "/api/system/oauth-connections/{id}": {
+            "delete": {
+                "tags": [
+                    "System OAuth Connections"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            }
+        },
+        "/api/system/users": {
+            "get": {
+                "tags": [
+                    "System Users"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            },
+            "post": {
+                "tags": [
+                    "System Users"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateUserRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            }
+        },
+        "/api/system/users/{id}": {
+            "put": {
+                "tags": [
+                    "System Users"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateUserRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "System Users"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            }
+        },
+        "/api/system/users/{id}/password": {
+            "put": {
+                "tags": [
+                    "System Users"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ResetUserPasswordRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            }
+        },
+        "/api/system/system-info-message": {
+            "get": {
+                "tags": [
+                    "SystemInfoMessage"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            },
+            "put": {
+                "tags": [
+                    "SystemInfoMessage"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:system`.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SystemInfoMessageDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:system"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/tags": {
+            "get": {
+                "tags": [
+                    "Tags"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:read`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:read"
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Tags"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateTagRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/tags/create-default-style": {
+            "get": {
+                "tags": [
+                    "Tags"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:read`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:read"
+                ]
+            }
+        },
+        "/api/boards/{boardId}/tags/{tagId}": {
+            "put": {
+                "tags": [
+                    "Tags"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "tagId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateTagStyleRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Tags"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "tagId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:read`.",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:read"
+                ]
+            }
+        },
+        "/api/users/me": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:read`.",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:read"
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateOwnUserProfileRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        },
+        "/api/users/me/profile-image": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:read`.",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:read"
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Access token notes:\n- Required access token scope: `api:write`.",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": [ ]
+                    },
+                    {
+                        "PatBearer": [ ]
+                    }
+                ],
+                "x-pat-scopes": [
+                    "api:write"
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AddBoardMemberRequest": {
+                "required": [
+                    "role"
+                ],
+                "type": "object",
+                "properties": {
+                    "userId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "role": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "ApiResult": {
+                "type": "object",
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "statusCode": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "validationErrors": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "nullable": true
+                        },
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "ArchiveCardsRequest": {
+                "type": "object",
+                "properties": {
+                    "cardIds": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "BoardRealtimeRelayEvent": {
+                "type": "object",
+                "properties": {
+                    "eventType": {
+                        "type": "string"
+                    },
+                    "boardId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "column": {
+                        "$ref": "#/components/schemas/ColumnDto"
+                    },
+                    "columnId": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "card": {
+                        "$ref": "#/components/schemas/CardDto"
+                    },
+                    "cardId": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "comment": {
+                        "$ref": "#/components/schemas/CardCommentDto"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "BulkDeleteCardsRequest": {
+                "type": "object",
+                "properties": {
+                    "cardIds": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "BulkEditCardsRequest": {
+                "type": "object",
+                "properties": {
+                    "cardIds": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "nullable": true
+                    },
+                    "move": {
+                        "$ref": "#/components/schemas/BulkMoveCardsRequest"
+                    },
+                    "addTagNames": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "nullable": true
+                    },
+                    "removeTagNames": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "nullable": true
+                    },
+                    "slick": {
+                        "$ref": "#/components/schemas/BulkEditSlickRequest"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "BulkEditSlickRequest": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "BulkMoveCardsRequest": {
+                "type": "object",
+                "properties": {
+                    "targetColumnId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "positionAfterCardId": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "CardCommentDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "cardId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "authorUserId": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "text": {
+                        "type": "string"
+                    },
+                    "postedAtUtc": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdAtUtc": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "authorDisplayName": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "authorImageRelativePath": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "CardDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "boardColumnId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "cardTypeId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "cardTypeName": {
+                        "type": "string"
+                    },
+                    "cardTypeEmoji": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "sortKey": {
+                        "type": "string"
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CardTagDto"
+                        }
+                    },
+                    "tagNames": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "createdAtUtc": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAtUtc": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "assignedUserId": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "assignedUserName": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "assignedUserImageRelativePath": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "slickId": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "slickName": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "externalUrl": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "CardDtoIReadOnlyListApiResult": {
+                "type": "object",
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "statusCode": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "validationErrors": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "nullable": true
+                        },
+                        "nullable": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CardDto"
+                        },
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "CardSearchFilterRequest": {
+                "required": [
+                    "field",
+                    "operator",
+                    "value"
+                ],
+                "type": "object",
+                "properties": {
+                    "field": {
+                        "enum": [
+                            "externalUrl"
+                        ],
+                        "type": "string",
+                        "description": "Card field to search.",
+                        "example": "externalUrl"
+                    },
+                    "operator": {
+                        "enum": [
+                            "exact",
+                            "contains"
+                        ],
+                        "type": "string",
+                        "description": "Match operator to apply to the field value.",
+                        "example": "contains"
+                    },
+                    "value": {
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Non-empty value to match.",
+                        "example": "github.com/example/repository"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "CardTagDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "styleName": {
+                        "type": "string"
+                    },
+                    "stylePropertiesJson": {
+                        "type": "string"
+                    },
+                    "emoji": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "ChangeOwnPasswordRequest": {
+                "required": [
+                    "currentPassword",
+                    "newPassword"
+                ],
+                "type": "object",
+                "properties": {
+                    "currentPassword": {
+                        "type": "string"
+                    },
+                    "newPassword": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "ClientErrorReportRequest": {
+                "required": [
+                    "message",
+                    "phase"
+                ],
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "exceptionType": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "stackTrace": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "phase": {
+                        "type": "string"
+                    },
+                    "routeName": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "routePath": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "frontendVersion": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "viewport": {
+                        "$ref": "#/components/schemas/ClientErrorViewportDto"
+                    },
+                    "userAgent": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "context": {
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "ClientErrorViewportDto": {
+                "type": "object",
+                "properties": {
+                    "width": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "height": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "ColumnDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "sortKey": {
+                        "type": "string"
+                    },
+                    "createdAtUtc": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAtUtc": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "CreateBoardRequest": {
+                "required": [
+                    "name"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "CreateCardCommentRequest": {
+                "required": [
+                    "text"
+                ],
+                "type": "object",
+                "properties": {
+                    "text": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "CreateCardRequest": {
+                "required": [
+                    "title"
+                ],
+                "type": "object",
+                "properties": {
+                    "boardColumnId": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "tagNames": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "nullable": true
+                    },
+                    "cardTypeId": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "assignedUserId": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "slickName": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "externalUrl": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "CreateCardTypeRequest": {
+                "required": [
+                    "name"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "emoji": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "styleName": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "stylePropertiesJson": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "CreateClientAccessTokenRequest": {
+                "required": [
+                    "name"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "expiresInDays": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "scopes": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "CreateClientAccountRequest": {
+                "required": [
+                    "displayName",
+                    "email",
+                    "role",
+                    "userName"
+                ],
+                "type": "object",
+                "properties": {
+                    "userName": {
+                        "type": "string"
+                    },
+                    "displayName": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "role": {
+                        "type": "string"
+                    },
+                    "tokenName": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "expiresInDays": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "scopes": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "CreateColumnRequest": {
+                "required": [
+                    "title"
+                ],
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "CreateMachinePatRequest": {
+                "required": [
+                    "name"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "expiresInDays": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "scopes": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "CreateSlickRequest": {
+                "required": [
+                    "name"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "styleName": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "stylePropertiesJson": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "CreateTagRequest": {
+                "required": [
+                    "name"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "emoji": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "CreateUserRequest": {
+                "required": [
+                    "displayName",
+                    "email",
+                    "password",
+                    "role",
+                    "userName"
+                ],
+                "type": "object",
+                "properties": {
+                    "userName": {
+                        "type": "string"
+                    },
+                    "displayName": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "role": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "LoginRequest": {
+                "required": [
+                    "password",
+                    "userName"
+                ],
+                "type": "object",
+                "properties": {
+                    "userName": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "MachineLogoutRequest": {
+                "type": "object",
+                "properties": {
+                    "refreshToken": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "MachineRefreshRequest": {
+                "required": [
+                    "refreshToken"
+                ],
+                "type": "object",
+                "properties": {
+                    "refreshToken": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "MoveCardRequest": {
+                "type": "object",
+                "properties": {
+                    "boardColumnId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "positionAfterCardId": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "MoveColumnRequest": {
+                "type": "object",
+                "properties": {
+                    "positionAfterColumnId": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "RegisterInitialAdminRequest": {
+                "required": [
+                    "email",
+                    "password",
+                    "userName"
+                ],
+                "type": "object",
+                "properties": {
+                    "userName": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "ResetUserPasswordRequest": {
+                "required": [
+                    "newPassword"
+                ],
+                "type": "object",
+                "properties": {
+                    "newPassword": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "SearchCardsRequest": {
+                "required": [
+                    "filters"
+                ],
+                "type": "object",
+                "properties": {
+                    "filters": {
+                        "maxItems": 10,
+                        "minItems": 1,
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CardSearchFilterRequest"
+                        },
+                        "description": "Filters to apply. Every filter must match for a card to be returned."
+                    }
+                },
+                "additionalProperties": false,
+                "example": {
+                    "filters": [
+                        {
+                            "field": "externalUrl",
+                            "operator": "contains",
+                            "value": "github.com/example/repository"
+                        }
+                    ]
+                }
+            },
+            "SystemInfoMessageDto": {
+                "type": "object",
+                "properties": {
+                    "enabled": {
+                        "type": "boolean"
+                    },
+                    "emoji": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "styleName": {
+                        "type": "string"
+                    },
+                    "stylePropertiesJson": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "UpdateBoardMemberRoleRequest": {
+                "required": [
+                    "role"
+                ],
+                "type": "object",
+                "properties": {
+                    "role": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "UpdateBoardRequest": {
+                "required": [
+                    "name"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "slickCohesionModeEnabled": {
+                        "type": "boolean"
+                    },
+                    "description": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "UpdateCardRequest": {
+                "required": [
+                    "description",
+                    "tagNames",
+                    "title"
+                ],
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "tagNames": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "cardTypeId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "boardColumnId": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "assignedUserId": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "slickName": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "externalUrl": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "UpdateCardTypeRequest": {
+                "required": [
+                    "name"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "emoji": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "styleName": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "stylePropertiesJson": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "UpdateClientAccountRequest": {
+                "required": [
+                    "displayName",
+                    "email",
+                    "role"
+                ],
+                "type": "object",
+                "properties": {
+                    "displayName": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "role": {
+                        "type": "string"
+                    },
+                    "isActive": {
+                        "type": "boolean"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "UpdateColumnRequest": {
+                "required": [
+                    "title"
+                ],
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "UpdateConfigurationRequest": {
+                "type": "object",
+                "properties": {
+                    "mcpPublicBaseUrl": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "UpdateOwnUserProfileRequest": {
+                "required": [
+                    "displayName",
+                    "email"
+                ],
+                "type": "object",
+                "properties": {
+                    "displayName": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "UpdateSlickRequest": {
+                "required": [
+                    "name",
+                    "styleName",
+                    "stylePropertiesJson"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "styleName": {
+                        "type": "string"
+                    },
+                    "stylePropertiesJson": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "UpdateTagStyleRequest": {
+                "required": [
+                    "name",
+                    "styleName",
+                    "stylePropertiesJson"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "styleName": {
+                        "type": "string"
+                    },
+                    "stylePropertiesJson": {
+                        "type": "string"
+                    },
+                    "emoji": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "UpdateUserRequest": {
+                "required": [
+                    "displayName",
+                    "email",
+                    "role"
+                ],
+                "type": "object",
+                "properties": {
+                    "displayName": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "role": {
+                        "type": "string"
+                    },
+                    "isActive": {
+                        "type": "boolean"
+                    }
+                },
+                "additionalProperties": false
+            }
+        },
+        "securitySchemes": {
+            "Bearer": {
+                "type": "http",
+                "description": "JWT bearer token from a user session. Format: `Bearer {token}`.",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            },
+            "PatBearer": {
+                "type": "http",
+                "description": "Access token. Paste the raw `bo_pat_...` value; Swagger UI will add `Bearer`.",
+                "scheme": "bearer",
+                "bearerFormat": "PAT"
+            }
+        }
+    }
+}

@@ -18,6 +18,7 @@ from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
 from homeassistant.helpers import config_validation as cv, service
 
 from .const import (
+    ATTR_ASSIGNED_USER_ID,
     ATTR_BOARD_ID,
     ATTR_CARD_ID,
     ATTR_CARD_TYPE_ID,
@@ -62,6 +63,36 @@ SERVICE_SCHEMA_ADD_CARD = vol.Schema({
     ),
     vol.Optional(ATTR_SLICK_NAME): cv.string,
     vol.Optional(ATTR_EXTERNAL_URL): cv.string,
+})
+SERVICE_UPDATE_CARD = "update_card"
+SERVICE_SCHEMA_UPDATE_CARD = vol.Schema({
+    vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+    vol.Required(ATTR_BOARD_ID): cv.positive_int,
+    vol.Required(ATTR_CARD_ID): cv.positive_int,
+    vol.Required(ATTR_TITLE): cv.string,
+    vol.Optional(ATTR_DESCRIPTION, default=""): cv.string,
+    vol.Optional(ATTR_TAG_NAMES): vol.Any(
+        cv.string,
+        vol.All(cv.ensure_list, [cv.string]),
+        {cv.string: object},
+    ),
+    vol.Optional(ATTR_COLUMN_ID): cv.positive_int,
+    vol.Optional(ATTR_CARD_TYPE_ID): cv.positive_int,
+    vol.Optional(ATTR_ASSIGNED_USER_ID): cv.positive_int,
+    vol.Optional(ATTR_SLICK_NAME): cv.string,
+    vol.Optional(ATTR_EXTERNAL_URL): cv.string,
+})
+SERVICE_DELETE_CARD = "delete_card"
+SERVICE_SCHEMA_DELETE_CARD = vol.Schema({
+    vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+    vol.Required(ATTR_BOARD_ID): cv.positive_int,
+    vol.Required(ATTR_CARD_ID): cv.positive_int,
+})
+SERVICE_ARCHIVE_CARD = "archive_card"
+SERVICE_SCHEMA_ARCHIVE_CARD = vol.Schema({
+    vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+    vol.Required(ATTR_BOARD_ID): cv.positive_int,
+    vol.Required(ATTR_CARD_ID): cv.positive_int,
 })
 
 
@@ -227,6 +258,60 @@ async def async_add_card_service(call: ServiceCall) -> None:
     await entry.runtime_data.coordinator.async_request_refresh()
 
 
+async def async_update_card_service(call: ServiceCall) -> None:
+    """Update a card on a board."""
+    entry: BoardOilConfigEntry = service.async_get_config_entry(
+        call.hass, DOMAIN, call.data[ATTR_CONFIG_ENTRY_ID]
+    )
+    tag_names = _normalize_tag_names(call.data.get(ATTR_TAG_NAMES))
+    url = call.data.get(ATTR_EXTERNAL_URL)
+    if url and not _is_valid_url(url):
+        raise ServiceValidationError(
+            translation_domain=DOMAIN,
+            translation_key="invalid_url",
+        )
+
+    await entry.runtime_data.client.async_update_card(
+        board_id=call.data[ATTR_BOARD_ID],
+        card_id=call.data[ATTR_CARD_ID],
+        title=call.data[ATTR_TITLE],
+        description=call.data.get(ATTR_DESCRIPTION, ""),
+        tag_names=tag_names,
+        column_id=call.data.get(ATTR_COLUMN_ID),
+        card_type_id=call.data.get(ATTR_CARD_TYPE_ID),
+        assigned_user_id=call.data.get(ATTR_ASSIGNED_USER_ID),
+        slick_name=call.data.get(ATTR_SLICK_NAME),
+        external_url=url,
+    )
+    await entry.runtime_data.coordinator.async_request_refresh()
+
+
+async def async_delete_card_service(call: ServiceCall) -> None:
+    """Delete a card from a board."""
+    entry: BoardOilConfigEntry = service.async_get_config_entry(
+        call.hass, DOMAIN, call.data[ATTR_CONFIG_ENTRY_ID]
+    )
+
+    await entry.runtime_data.client.async_delete_card(
+        board_id=call.data[ATTR_BOARD_ID],
+        card_id=call.data[ATTR_CARD_ID],
+    )
+    await entry.runtime_data.coordinator.async_request_refresh()
+
+
+async def async_archive_card_service(call: ServiceCall) -> None:
+    """Archive a card on a board."""
+    entry: BoardOilConfigEntry = service.async_get_config_entry(
+        call.hass, DOMAIN, call.data[ATTR_CONFIG_ENTRY_ID]
+    )
+
+    await entry.runtime_data.client.async_archive_card(
+        board_id=call.data[ATTR_BOARD_ID],
+        card_id=call.data[ATTR_CARD_ID],
+    )
+    await entry.runtime_data.coordinator.async_request_refresh()
+
+
 async def async_setup_services(hass: HomeAssistant) -> None:
     """Set up boardoil services."""
     hass.services.async_register(
@@ -248,5 +333,26 @@ async def async_setup_services(hass: HomeAssistant) -> None:
         SERVICE_ADD_CARD,
         async_add_card_service,
         schema=SERVICE_SCHEMA_ADD_CARD,
+        supports_response=SupportsResponse.NONE,
+    )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_UPDATE_CARD,
+        async_update_card_service,
+        schema=SERVICE_SCHEMA_UPDATE_CARD,
+        supports_response=SupportsResponse.NONE,
+    )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_DELETE_CARD,
+        async_delete_card_service,
+        schema=SERVICE_SCHEMA_DELETE_CARD,
+        supports_response=SupportsResponse.NONE,
+    )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_ARCHIVE_CARD,
+        async_archive_card_service,
+        schema=SERVICE_SCHEMA_ARCHIVE_CARD,
         supports_response=SupportsResponse.NONE,
     )

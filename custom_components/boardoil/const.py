@@ -22,6 +22,7 @@ ATTR_DESCRIPTION = "description"
 ATTR_TAG_NAMES = "tag_names"
 ATTR_SLICK_NAME = "slick_name"
 ATTR_EXTERNAL_URL = "external_url"
+ATTR_ASSIGNED_USER_ID = "assigned_user_id"
 
 EVENT_TYPE_CARD_CREATED = "card_created"
 EVENT_TYPE_CARD_REMOVED = "card_removed"

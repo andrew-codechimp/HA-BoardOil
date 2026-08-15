@@ -3,6 +3,15 @@
         "add_card": {
             "service": "mdi:card-plus-outline"
         },
+        "update_card": {
+            "service": "mdi:square-edit-outline"
+        },
+        "delete_card": {
+            "service": "mdi:card-remove-outline"
+        },
+        "archive_card": {
+            "service": "mdi:archive-outline"
+        },
         "get_card": {
             "service": "mdi:card-outline"
         },
