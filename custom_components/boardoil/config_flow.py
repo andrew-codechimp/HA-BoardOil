@@ -24,14 +24,18 @@ from .api import (
 )
 from .const import DOMAIN, LOGGER, MIN_REQUIRED_BOARDOIL_VERSION
 
-USER_SCHEMA = vol.Schema({
-    vol.Required(CONF_HOST): str,
-    vol.Required(CONF_API_TOKEN): str,
-    vol.Optional(CONF_VERIFY_SSL, default=True): bool,
-})
-REAUTH_SCHEMA = vol.Schema({
-    vol.Required(CONF_API_TOKEN): str,
-})
+USER_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_HOST): str,
+        vol.Required(CONF_API_TOKEN): str,
+        vol.Optional(CONF_VERIFY_SSL, default=True): bool,
+    }
+)
+REAUTH_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_API_TOKEN): str,
+    }
+)
 
 
 class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):

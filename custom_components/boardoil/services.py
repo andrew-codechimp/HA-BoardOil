@@ -17,6 +17,7 @@ from homeassistant.core import (
 from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
 from homeassistant.helpers import config_validation as cv, service
 
+from .api import BoardOilApiClientError
 from .const import (
     ATTR_ASSIGNED_USER_ID,
     ATTR_BOARD_ID,
@@ -37,63 +38,75 @@ if TYPE_CHECKING:
     from .data import BoardOilConfigEntry
 
 SERVICE_GET_CARD = "get_card"
-SERVICE_SCHEMA_GET_CARD = vol.Schema({
-    vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-    vol.Required(ATTR_BOARD_ID): cv.positive_int,
-    vol.Required(ATTR_CARD_ID): cv.positive_int,
-})
+SERVICE_SCHEMA_GET_CARD = vol.Schema(
+    {
+        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+        vol.Required(ATTR_BOARD_ID): cv.positive_int,
+        vol.Required(ATTR_CARD_ID): cv.positive_int,
+    }
+)
 SERVICE_GET_CARDS = "get_cards"
-SERVICE_SCHEMA_GET_CARDS = vol.Schema({
-    vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-    vol.Required(ATTR_BOARD_ID): cv.positive_int,
-    vol.Optional(ATTR_COLUMN_ID): cv.positive_int,
-})
+SERVICE_SCHEMA_GET_CARDS = vol.Schema(
+    {
+        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+        vol.Required(ATTR_BOARD_ID): cv.positive_int,
+        vol.Optional(ATTR_COLUMN_ID): cv.positive_int,
+    }
+)
 SERVICE_ADD_CARD = "add_card"
-SERVICE_SCHEMA_ADD_CARD = vol.Schema({
-    vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-    vol.Required(ATTR_BOARD_ID): cv.positive_int,
-    vol.Optional(ATTR_COLUMN_ID): cv.positive_int,
-    vol.Optional(ATTR_CARD_TYPE_ID): cv.positive_int,
-    vol.Required(ATTR_TITLE): cv.string,
-    vol.Optional(ATTR_DESCRIPTION, default=""): cv.string,
-    vol.Optional(ATTR_TAG_NAMES): vol.Any(
-        cv.string,
-        vol.All(cv.ensure_list, [cv.string]),
-        {cv.string: object},
-    ),
-    vol.Optional(ATTR_SLICK_NAME): cv.string,
-    vol.Optional(ATTR_EXTERNAL_URL): cv.string,
-})
+SERVICE_SCHEMA_ADD_CARD = vol.Schema(
+    {
+        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+        vol.Required(ATTR_BOARD_ID): cv.positive_int,
+        vol.Optional(ATTR_COLUMN_ID): cv.positive_int,
+        vol.Optional(ATTR_CARD_TYPE_ID): cv.positive_int,
+        vol.Required(ATTR_TITLE): cv.string,
+        vol.Optional(ATTR_DESCRIPTION, default=""): cv.string,
+        vol.Optional(ATTR_TAG_NAMES): vol.Any(
+            cv.string,
+            vol.All(cv.ensure_list, [cv.string]),
+            {cv.string: object},
+        ),
+        vol.Optional(ATTR_SLICK_NAME): cv.string,
+        vol.Optional(ATTR_EXTERNAL_URL): cv.string,
+    }
+)
 SERVICE_UPDATE_CARD = "update_card"
-SERVICE_SCHEMA_UPDATE_CARD = vol.Schema({
-    vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-    vol.Required(ATTR_BOARD_ID): cv.positive_int,
-    vol.Required(ATTR_CARD_ID): cv.positive_int,
-    vol.Required(ATTR_TITLE): cv.string,
-    vol.Optional(ATTR_DESCRIPTION, default=""): cv.string,
-    vol.Optional(ATTR_TAG_NAMES): vol.Any(
-        cv.string,
-        vol.All(cv.ensure_list, [cv.string]),
-        {cv.string: object},
-    ),
-    vol.Optional(ATTR_COLUMN_ID): cv.positive_int,
-    vol.Optional(ATTR_CARD_TYPE_ID): cv.positive_int,
-    vol.Optional(ATTR_ASSIGNED_USER_ID): cv.positive_int,
-    vol.Optional(ATTR_SLICK_NAME): cv.string,
-    vol.Optional(ATTR_EXTERNAL_URL): cv.string,
-})
+SERVICE_SCHEMA_UPDATE_CARD = vol.Schema(
+    {
+        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+        vol.Required(ATTR_BOARD_ID): cv.positive_int,
+        vol.Required(ATTR_CARD_ID): cv.positive_int,
+        vol.Required(ATTR_TITLE): cv.string,
+        vol.Optional(ATTR_DESCRIPTION, default=""): cv.string,
+        vol.Optional(ATTR_TAG_NAMES): vol.Any(
+            cv.string,
+            vol.All(cv.ensure_list, [cv.string]),
+            {cv.string: object},
+        ),
+        vol.Optional(ATTR_COLUMN_ID): cv.positive_int,
+        vol.Optional(ATTR_CARD_TYPE_ID): cv.positive_int,
+        vol.Optional(ATTR_ASSIGNED_USER_ID): cv.positive_int,
+        vol.Optional(ATTR_SLICK_NAME): cv.string,
+        vol.Optional(ATTR_EXTERNAL_URL): cv.string,
+    }
+)
 SERVICE_DELETE_CARD = "delete_card"
-SERVICE_SCHEMA_DELETE_CARD = vol.Schema({
-    vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-    vol.Required(ATTR_BOARD_ID): cv.positive_int,
-    vol.Required(ATTR_CARD_ID): cv.positive_int,
-})
+SERVICE_SCHEMA_DELETE_CARD = vol.Schema(
+    {
+        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+        vol.Required(ATTR_BOARD_ID): cv.positive_int,
+        vol.Required(ATTR_CARD_ID): cv.positive_int,
+    }
+)
 SERVICE_ARCHIVE_CARD = "archive_card"
-SERVICE_SCHEMA_ARCHIVE_CARD = vol.Schema({
-    vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-    vol.Required(ATTR_BOARD_ID): cv.positive_int,
-    vol.Required(ATTR_CARD_ID): cv.positive_int,
-})
+SERVICE_SCHEMA_ARCHIVE_CARD = vol.Schema(
+    {
+        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+        vol.Required(ATTR_BOARD_ID): cv.positive_int,
+        vol.Required(ATTR_CARD_ID): cv.positive_int,
+    }
+)
 
 
 def _is_valid_url(url: str) -> bool:
@@ -263,6 +276,9 @@ async def async_update_card_service(call: ServiceCall) -> None:
     entry: BoardOilConfigEntry = service.async_get_config_entry(
         call.hass, DOMAIN, call.data[ATTR_CONFIG_ENTRY_ID]
     )
+    board_id = call.data[ATTR_BOARD_ID]
+    card_id = call.data[ATTR_CARD_ID]
+
     tag_names = _normalize_tag_names(call.data.get(ATTR_TAG_NAMES))
     url = call.data.get(ATTR_EXTERNAL_URL)
     if url and not _is_valid_url(url):
@@ -271,17 +287,30 @@ async def async_update_card_service(call: ServiceCall) -> None:
             translation_key="invalid_url",
         )
 
+    # Fetch the latest card data from API
+    try:
+        existing_card = await entry.runtime_data.client.async_get_card(
+            board_id, card_id
+        )
+    except BoardOilApiClientError as err:
+        raise CardNotFoundError(board_id=board_id, card_id=card_id) from err
+
+    # Apply new values to existing card data
     await entry.runtime_data.client.async_update_card(
-        board_id=call.data[ATTR_BOARD_ID],
-        card_id=call.data[ATTR_CARD_ID],
+        board_id=board_id,
+        card_id=card_id,
         title=call.data[ATTR_TITLE],
-        description=call.data.get(ATTR_DESCRIPTION, ""),
-        tag_names=tag_names,
+        description=call.data.get(
+            ATTR_DESCRIPTION, existing_card.get("description", "")
+        ),
+        tag_names=tag_names or existing_card.get("tagNames", []),
         column_id=call.data.get(ATTR_COLUMN_ID),
-        card_type_id=call.data.get(ATTR_CARD_TYPE_ID),
-        assigned_user_id=call.data.get(ATTR_ASSIGNED_USER_ID),
-        slick_name=call.data.get(ATTR_SLICK_NAME),
-        external_url=url,
+        card_type_id=call.data.get(ATTR_CARD_TYPE_ID, existing_card.get("cardTypeId")),
+        assigned_user_id=call.data.get(
+            ATTR_ASSIGNED_USER_ID, existing_card.get("assignedUserId")
+        ),
+        slick_name=call.data.get(ATTR_SLICK_NAME, existing_card.get("slickName")),
+        external_url=url or existing_card.get("externalUrl"),
     )
     await entry.runtime_data.coordinator.async_request_refresh()
 

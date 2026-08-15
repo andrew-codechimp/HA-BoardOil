@@ -77,6 +77,13 @@ class BoardOilApiClient:
             path=f"boards/{board_id!s}",
         )
 
+    async def async_get_card(self, board_id: int, card_id: int) -> Any:
+        """Get a specific card from the API."""
+        return await self._api_wrapper(
+            method="get",
+            path=f"boards/{board_id!s}/cards/{card_id!s}",
+        )
+
     async def async_add_card(
         self,
         board_id: int,
@@ -126,17 +133,12 @@ class BoardOilApiClient:
             "title": title,
             "description": description,
             "tagNames": tag_names or [],
+            "cardTypeId": card_type_id,
+            "boardColumnId": column_id,
+            "assignedUserId": assigned_user_id,
+            "slickName": slick_name,
+            "externalUrl": external_url,
         }
-        if card_type_id is not None:
-            payload["cardTypeId"] = card_type_id
-        if column_id is not None:
-            payload["boardColumnId"] = column_id
-        if assigned_user_id is not None:
-            payload["assignedUserId"] = assigned_user_id
-        if slick_name is not None:
-            payload["slickName"] = slick_name
-        if external_url is not None:
-            payload["externalUrl"] = external_url
 
         return await self._api_wrapper(
             method="put",
