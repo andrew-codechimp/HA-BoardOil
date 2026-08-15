@@ -1,8 +1,8 @@
-# Board Oil Home Assistant Integration
+# BoardOil Home Assistant Integration
 
 ## Preview Release
 
-This integration connects Home Assistant to [Board Oil](https://github.com/dozigden/boardoil).
+This integration connects Home Assistant to [BoardOil](https://github.com/dozigden/boardoil).
 
 It creates:
 - One device for each board
@@ -19,6 +19,6 @@ It also provides actions to:
 
 ## Setup
 
-In Board Oil, create a Client Account in System Settings, then copy its token to use when adding this integration.
+In BoardOil, create a Client Account in System Settings, then copy its token to use when adding this integration.
 
 For each board you want Home Assistant to access, open Board Configuration and add that client account as a contributor under Members.

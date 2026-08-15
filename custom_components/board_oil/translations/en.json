@@ -5,8 +5,8 @@
             "description": "Add a new card to a board column.",
             "fields": {
                 "config_entry_id": {
-                    "name": "Board Oil instance",
-                    "description": "The Board Oil instance to use for this action."
+                    "name": "BoardOil instance",
+                    "description": "The BoardOil instance to use for this action."
                 },
                 "board_id": {
                     "name": "Board ID",
@@ -30,7 +30,7 @@
                 },
                 "card_type_id": {
                     "name": "Card type ID",
-                    "description": "Numeric ID of the card type (default: card type default within Board Oil)."
+                    "description": "Numeric ID of the card type (default: card type default within BoardOil)."
                 },
                 "slick_name": {
                     "name": "Slick name",
@@ -47,8 +47,8 @@
             "description": "Return card data for a card on a board.",
             "fields": {
                 "config_entry_id": {
-                    "name": "Board Oil instance",
-                    "description": "The Board Oil instance to use for this action."
+                    "name": "BoardOil instance",
+                    "description": "The BoardOil instance to use for this action."
                 },
                 "board_id": {
                     "name": "Board ID",
@@ -65,8 +65,8 @@
             "description": "Return card data for cards on a board, optionally filtered by column ID.",
             "fields": {
                 "config_entry_id": {
-                    "name": "Board Oil instance",
-                    "description": "The Board Oil instance to use for this action."
+                    "name": "BoardOil instance",
+                    "description": "The BoardOil instance to use for this action."
                 },
                 "board_id": {
                     "name": "Board ID",
@@ -84,12 +84,12 @@
             "user": {
                 "data": {
                     "api_token": "Client account token",
-                    "host": "Hostname or IP address of the Board Oil server",
+                    "host": "Hostname or IP address of the BoardOil server",
                     "verify_ssl": "Verify SSL certificate"
                 },
                 "data_description": {
-                    "api_token": "The client account token of your Board Oil instance from system settings/client accounts.",
-                    "host": "The URL of your Board Oil instance.",
+                    "api_token": "The client account token of your BoardOil instance from system settings/client accounts.",
+                    "host": "The URL of your BoardOil instance.",
                     "verify_ssl": "Should SSL certificates be verified? This should be off for self-signed certificates."
                 }
             },
@@ -98,28 +98,28 @@
                     "api_token": "Client account token"
                 },
                 "data_description": {
-                    "api_token": "The client account token of your Board Oil instance from system settings/client accounts."
+                    "api_token": "The client account token of your BoardOil instance from system settings/client accounts."
                 },
-                "description": "Please reauthenticate with Board Oil."
+                "description": "Please reauthenticate with BoardOil."
             },
             "reconfigure": {
                 "data": {
                     "api_token": "Client account token",
-                    "host": "Hostname or IP address of the Board Oil server",
+                    "host": "Hostname or IP address of the BoardOil server",
                     "verify_ssl": "Verify SSL certificate"
                 },
                 "data_description": {
-                    "api_token": "The client account token of your Board Oil instance from system settings/client accounts.",
-                    "host": "The URL of your Board Oil instance.",
+                    "api_token": "The client account token of your BoardOil instance from system settings/client accounts.",
+                    "host": "The URL of your BoardOil instance.",
                     "verify_ssl": "Should SSL certificates be verified? This should be off for self-signed certificates."
                 },
-                "description": "Please reconfigure with Board Oil."
+                "description": "Please reconfigure with BoardOil."
             }
         },
         "error": {
             "auth": "Host name or Client account token is wrong.",
             "connection": "Unable to connect to the server.",
-            "boardoil_version": "The version of Board Oil you are running is not compatible with this integration, please upgrade Board Oil.",
+            "boardoil_version": "The version of BoardOil you are running is not compatible with this integration, please upgrade BoardOil.",
             "unknown": "Unknown error occurred."
         },
         "abort": {
@@ -155,10 +155,10 @@
             "message": "The provided URL is not valid. Please provide a valid HTTP or HTTPS URL."
         },
         "update_failed": {
-            "message": "Unable to fetch Board Oil data."
+            "message": "Unable to fetch BoardOil data."
         },
         "version_error": {
-            "message": "You are running {boardoil_version} of Board Oil. Minimum required version is {min_version}. Please upgrade Board Oil and then retry."
+            "message": "You are running {boardoil_version} of BoardOil. Minimum required version is {min_version}. Please upgrade BoardOil and then retry."
         }
     }
 }

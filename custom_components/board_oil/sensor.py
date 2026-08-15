@@ -99,14 +99,14 @@ async def async_setup_entry(
                 include_disabled_entities=True,
             ):
                 LOGGER.debug(
-                    "Removing orphaned Board Oil entity %s from device %s",
+                    "Removing orphaned BoardOil entity %s from device %s",
                     entity_entry.entity_id,
                     device.id,
                 )
                 entity_registry.async_remove(entity_entry.entity_id)
 
             LOGGER.debug(
-                "Removing orphaned Board Oil device %s identifiers=%s",
+                "Removing orphaned BoardOil device %s identifiers=%s",
                 device.id,
                 sorted(device_identifiers),
             )
@@ -141,15 +141,13 @@ def _create_entities(
 class BoardOilColumnCardCountSensor(BoardOilEntity, SensorEntity):
     """Sensor showing number of cards for a board column."""
 
-    _unrecorded_attributes = frozenset(
-        {
-            "board_id",
-            "board_name",
-            "column_id",
-            "column_title",
-            "cards",
-        }
-    )
+    _unrecorded_attributes = frozenset({
+        "board_id",
+        "board_name",
+        "column_id",
+        "column_title",
+        "cards",
+    })
 
     @property
     def column_name(self) -> str:

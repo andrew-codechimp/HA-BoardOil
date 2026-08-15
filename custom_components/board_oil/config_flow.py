@@ -24,18 +24,14 @@ from .api import (
 )
 from .const import DOMAIN, LOGGER, MIN_REQUIRED_BOARDOIL_VERSION
 
-USER_SCHEMA = vol.Schema(
-    {
-        vol.Required(CONF_HOST): str,
-        vol.Required(CONF_API_TOKEN): str,
-        vol.Optional(CONF_VERIFY_SSL, default=True): bool,
-    }
-)
-REAUTH_SCHEMA = vol.Schema(
-    {
-        vol.Required(CONF_API_TOKEN): str,
-    }
-)
+USER_SCHEMA = vol.Schema({
+    vol.Required(CONF_HOST): str,
+    vol.Required(CONF_API_TOKEN): str,
+    vol.Optional(CONF_VERIFY_SSL, default=True): bool,
+})
+REAUTH_SCHEMA = vol.Schema({
+    vol.Required(CONF_API_TOKEN): str,
+})
 
 
 class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
@@ -93,7 +89,7 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
                 )
                 self._abort_if_unique_id_configured()
                 return self.async_create_entry(
-                    title="Board Oil",
+                    title="BoardOil",
                     data=user_input,
                 )
 

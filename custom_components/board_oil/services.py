@@ -36,39 +36,33 @@ if TYPE_CHECKING:
     from .data import BoardOilConfigEntry
 
 SERVICE_GET_CARD = "get_card"
-SERVICE_SCHEMA_GET_CARD = vol.Schema(
-    {
-        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-        vol.Required(ATTR_BOARD_ID): cv.positive_int,
-        vol.Required(ATTR_CARD_ID): cv.positive_int,
-    }
-)
+SERVICE_SCHEMA_GET_CARD = vol.Schema({
+    vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+    vol.Required(ATTR_BOARD_ID): cv.positive_int,
+    vol.Required(ATTR_CARD_ID): cv.positive_int,
+})
 SERVICE_GET_CARDS = "get_cards"
-SERVICE_SCHEMA_GET_CARDS = vol.Schema(
-    {
-        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-        vol.Required(ATTR_BOARD_ID): cv.positive_int,
-        vol.Optional(ATTR_COLUMN_ID): cv.positive_int,
-    }
-)
+SERVICE_SCHEMA_GET_CARDS = vol.Schema({
+    vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+    vol.Required(ATTR_BOARD_ID): cv.positive_int,
+    vol.Optional(ATTR_COLUMN_ID): cv.positive_int,
+})
 SERVICE_ADD_CARD = "add_card"
-SERVICE_SCHEMA_ADD_CARD = vol.Schema(
-    {
-        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-        vol.Required(ATTR_BOARD_ID): cv.positive_int,
-        vol.Optional(ATTR_COLUMN_ID): cv.positive_int,
-        vol.Optional(ATTR_CARD_TYPE_ID): cv.positive_int,
-        vol.Required(ATTR_TITLE): cv.string,
-        vol.Optional(ATTR_DESCRIPTION, default=""): cv.string,
-        vol.Optional(ATTR_TAG_NAMES): vol.Any(
-            cv.string,
-            vol.All(cv.ensure_list, [cv.string]),
-            {cv.string: object},
-        ),
-        vol.Optional(ATTR_SLICK_NAME): cv.string,
-        vol.Optional(ATTR_EXTERNAL_URL): cv.string,
-    }
-)
+SERVICE_SCHEMA_ADD_CARD = vol.Schema({
+    vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+    vol.Required(ATTR_BOARD_ID): cv.positive_int,
+    vol.Optional(ATTR_COLUMN_ID): cv.positive_int,
+    vol.Optional(ATTR_CARD_TYPE_ID): cv.positive_int,
+    vol.Required(ATTR_TITLE): cv.string,
+    vol.Optional(ATTR_DESCRIPTION, default=""): cv.string,
+    vol.Optional(ATTR_TAG_NAMES): vol.Any(
+        cv.string,
+        vol.All(cv.ensure_list, [cv.string]),
+        {cv.string: object},
+    ),
+    vol.Optional(ATTR_SLICK_NAME): cv.string,
+    vol.Optional(ATTR_EXTERNAL_URL): cv.string,
+})
 
 
 def _is_valid_url(url: str) -> bool:

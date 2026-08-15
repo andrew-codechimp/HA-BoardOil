@@ -1,4 +1,4 @@
-"""Board Oil API Client."""
+"""BoardOil API Client."""
 
 from __future__ import annotations
 

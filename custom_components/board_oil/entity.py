@@ -1,4 +1,4 @@
-"""Board Oil Entity class."""
+"""board_oil Entity class."""
 
 from __future__ import annotations
 
@@ -29,7 +29,7 @@ class BoardOilEntity(CoordinatorEntity[BoardOilDataUpdateCoordinator]):
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, f"{coordinator.config_entry.entry_id}:{board.id}")},
             entry_type=DeviceEntryType.SERVICE,
-            name=f"Board Oil - {board.name}",
+            name=f"BoardOil - {board.name}",
             sw_version=(
                 f"{coordinator.config_entry.runtime_data.version} "
                 f"({coordinator.config_entry.runtime_data.build})"
