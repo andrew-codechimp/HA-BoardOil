@@ -1,6 +1,9 @@
 # BoardOil Home Assistant Integration
 
-## Preview Release
+[![GitHub Release][releases-shield]][releases]
+[![GitHub Activity][commits-shield]][commits]
+[![Downloads][download-latest-shield]]()
+[![License][license-shield]](LICENSE)
 
 This integration connects Home Assistant to [BoardOil](https://github.com/dozigden/boardoil).
 
@@ -34,3 +37,14 @@ This is a HACS custom integration; if the link does not work, you will have to a
 In BoardOil, create a Client Account in System Settings, then copy its token to use when adding this integration.
 
 For each board you want Home Assistant to access, open Board Configuration and add that client account as a contributor under Members.
+
+
+[commits-shield]: https://img.shields.io/github/commit-activity/y/andrew-codechimp/HA-BoardOil.svg?style=for-the-badge
+[commits]: https://github.com/andrew-codechimp/HA-BoardOil/commits/main
+[hacs]: https://github.com/hacs/integration
+[hacsbadge]: https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/andrew-codechimp/HA-BoardOil.svg?style=for-the-badge
+[releases-shield]: https://img.shields.io/github/release/andrew-codechimp/HA-BoardOil.svg?style=for-the-badge
+[releases]: https://github.com/andrew-codechimp/HA-BoardOil/releases
+[download-latest-shield]: https://img.shields.io/github/downloads/andrew-codechimp/HA-BoardOil/latest/total?style=for-the-badge
+[hacs-installs-shield]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Flauwbier.nl%2Fhacs%2Fboardoil&style=for-the-badge
