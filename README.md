@@ -14,6 +14,9 @@ Sensor attributes include additional card details.
 - Get all cards for a board, optionally a specific column
 - Get a specific card
 - Add a new card
+- Update a card
+- Delete a card
+- Archive a card
 
 ### Events
 - Card events fire when a card is added, updated, moved, or removed.
