@@ -35,7 +35,7 @@ class BoardOilEntity(CoordinatorEntity[BoardOilDataUpdateCoordinator]):
                 f"({coordinator.config_entry.runtime_data.build})"
             ),
             configuration_url=(
-                f"{coordinator.config_entry.data[CONF_HOST].rstrip('/')}/boards/"
+                f"{str(coordinator.config_entry.data[CONF_HOST]).rstrip('/')}/boards/"
                 f"{board.id}"
             ),
         )
