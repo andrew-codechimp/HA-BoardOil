@@ -19,6 +19,7 @@ from homeassistant.const import (
     __version__ as HA_VERSION,  # noqa: N812
 )
 from homeassistant.exceptions import ConfigEntryError
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.loader import async_get_loaded_integration
 
@@ -40,6 +41,8 @@ PLATFORMS: list[Platform] = [
     Platform.EVENT,
     Platform.SENSOR,
 ]
+
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:  # noqa: ARG001
