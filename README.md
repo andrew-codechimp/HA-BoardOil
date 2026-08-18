@@ -20,7 +20,7 @@ Sensor attributes include additional card details.
 - Tags count
 - Slicks count
 
-Sensor attributes include lists of their relevant data
+Sensor attributes include lists of their relevant data.
 
 ### Actions
 - Get all cards for a board, optionally a specific column
