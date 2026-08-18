@@ -8,7 +8,17 @@ from typing import Any
 import aiohttp
 import async_timeout
 
-from .models import CardType, Slick, Tag
+from .models import (
+    Board,
+    BoardSummary,
+    Card,
+    CardType,
+    ColumnWithCards,
+    Me,
+    Slick,
+    Tag,
+    Version,
+)
 
 
 class BoardOilApiClientError(Exception):
@@ -51,32 +61,93 @@ class BoardOilApiClient:
         self._apitoken = api_token
         self._session = session
 
-    async def async_get_me(self) -> Any:
+    async def async_get_me(self) -> Me:
         """Get me from the API."""
-        return await self._api_wrapper(
+        response = await self._api_wrapper(
             method="get",
             path="auth/me",
         )
+        return Me(
+            id=response.get("data", {}).get("id", 0),
+            username=response.get("data", {}).get("username", ""),
+            display_name=response.get("data", {}).get("displayName", ""),
+            role=response.get("data", {}).get("role", ""),
+        )
 
-    async def async_get_version(self) -> Any:
+    async def async_get_version(self) -> Version:
         """Get version from the API."""
-        return await self._api_wrapper(
+        response = await self._api_wrapper(
             method="get",
             path="version",
         )
+        return Version(
+            version=response.get("data", {}).get("version", ""),
+            channel=response.get("data", {}).get("channel", ""),
+            build=response.get("data", {}).get("build", ""),
+            commit=response.get("data", {}).get("commit", ""),
+        )
 
-    async def async_get_boards(self) -> Any:
+    async def async_get_boards(self) -> list[BoardSummary]:
         """Get boards from the API."""
-        return await self._api_wrapper(
+        response = await self._api_wrapper(
             method="get",
             path="boards",
         )
+        return [
+            BoardSummary(
+                id=board.get("id"),
+                name=board.get("name"),
+                description=board.get("description", ""),
+            )
+            for board in response.get("data", [])
+        ]
 
-    async def async_get_board(self, board_id: int) -> Any:
+    async def async_get_board(self, board_id: int) -> Board:
         """Get board from the API."""
-        return await self._api_wrapper(
+        response = await self._api_wrapper(
             method="get",
             path=f"boards/{board_id!s}",
+        )
+        board_data = response.get("data", {})
+
+        columns: list[ColumnWithCards] = []
+        for column in board_data.get("columns", []):
+            cards: list[Card] = []
+            for card_data in column.get("cards", []):
+                if not isinstance(card_data, dict):
+                    continue
+                cards.append(
+                    Card(
+                        id=card_data["id"],
+                        card_type_id=card_data["cardTypeId"],
+                        card_type_name=card_data["cardTypeName"],
+                        card_type_emoji=card_data.get("cardTypeEmoji", ""),
+                        title=card_data.get("title", ""),
+                        description=card_data.get("description", ""),
+                        sort_key=card_data.get("sortKey", ""),
+                        tag_names=card_data.get("tagNames", []),
+                        updated_at_utc=card_data.get("updatedAtUtc", ""),
+                        assigned_user_id=card_data.get("assignedUserId"),
+                        assigned_user_name=card_data.get("assignedUserName"),
+                        external_url=card_data.get("externalUrl"),
+                        slick_id=card_data.get("slickId"),
+                        slick_name=card_data.get("slickName"),
+                        raw_data=card_data,
+                    )
+                )
+            columns.append(
+                ColumnWithCards(
+                    id=column["id"],
+                    title=column.get("title", ""),
+                    cards=cards,
+                )
+            )
+
+        return Board(
+            id=board_id,
+            name=board_data.get("name", ""),
+            description=board_data.get("description", ""),
+            columns=columns,
         )
 
     async def async_get_card_types(self, board_id: int) -> list[CardType]:

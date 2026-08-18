@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from datetime import timedelta
 from enum import StrEnum
 from functools import partial
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import ConfigEntryAuthFailed
@@ -17,7 +17,7 @@ from .api import (
     BoardOilApiClientAuthenticationError,
     BoardOilApiClientError,
 )
-from .models import CardType, Slick, Tag
+from .models import Card, CardType, Slick, Tag
 
 if TYPE_CHECKING:
     from .data import BoardOilConfigEntry
@@ -54,27 +54,6 @@ class ColumnData:
     id: int
     title: str
     cards: list[Card]
-
-
-@dataclass
-class Card:
-    """Data class for card data."""
-
-    id: int
-    card_type_id: int
-    card_type_name: str
-    card_type_emoji: str
-    title: str
-    description: str
-    sort_key: str
-    tag_names: list[str]
-    updated_at_utc: str
-    assigned_user_id: int | None
-    assigned_user_name: str | None
-    external_url: str | None
-    slick_id: int | None
-    slick_name: str | None
-    raw_data: dict[str, Any]
 
 
 @dataclass
@@ -299,7 +278,7 @@ class BoardOilDataUpdateCoordinator(DataUpdateCoordinator[list[BoardData]]):
         """Check if a card's content has changed."""
         return old_card.updated_at_utc != new_card.updated_at_utc
 
-    async def _async_update_data(self) -> list[BoardData]:  # noqa: PLR0912
+    async def _async_update_data(self) -> list[BoardData]:
         """Update data via client."""
         # Store previous boards for change detection
         self._previous_boards = self.boards.copy()
@@ -309,45 +288,21 @@ class BoardOilDataUpdateCoordinator(DataUpdateCoordinator[list[BoardData]]):
             board_list = await client.async_get_boards()
             self.boards = []
 
-            for board_summary in board_list.get("data", []):
-                board_id = board_summary.get("id")
+            for board_summary in board_list:
+                board_id = board_summary.id
                 if board_id is None:
                     continue
 
                 board = await client.async_get_board(board_id)
-                board_data = board.get("data", {})
 
-                columns: list[ColumnData] = []
-                for column in board_data.get("columns", []):
-                    cards = [
-                        Card(
-                            id=card_data["id"],
-                            card_type_id=card_data["cardTypeId"],
-                            card_type_name=card_data["cardTypeName"],
-                            card_type_emoji=card_data.get("cardTypeEmoji", ""),
-                            title=card_data.get("title", ""),
-                            description=card_data.get("description", ""),
-                            sort_key=card_data.get("sortKey", ""),
-                            tag_names=card_data.get("tagNames", []),
-                            updated_at_utc=card_data.get("updatedAtUtc", ""),
-                            assigned_user_id=card_data.get("assignedUserId"),
-                            assigned_user_name=card_data.get("assignedUserName"),
-                            external_url=card_data.get("externalUrl"),
-                            slick_id=card_data.get("slickId"),
-                            slick_name=card_data.get("slickName"),
-                            raw_data=card_data,
-                        )
-                        for card in column.get("cards", [])
-                        if isinstance(card, dict)
-                        if (card_data := dict(card))
-                    ]
-                    columns.append(
-                        ColumnData(
-                            id=column["id"],
-                            title=column.get("title", ""),
-                            cards=cards,
-                        )
+                columns: list[ColumnData] = [
+                    ColumnData(
+                        id=column.id,
+                        title=column.title,
+                        cards=column.cards,
                     )
+                    for column in board.columns
+                ]
 
                 card_types = await client.async_get_card_types(board_id)
                 tags = await client.async_get_tags(board_id)
@@ -355,8 +310,8 @@ class BoardOilDataUpdateCoordinator(DataUpdateCoordinator[list[BoardData]]):
 
                 self.boards.append(
                     BoardData(
-                        id=board_id,
-                        name=board_data.get("name", ""),
+                        id=board.id,
+                        name=board.name,
                         columns=columns,
                         card_types=card_types,
                         tags=tags,
@@ -376,11 +331,11 @@ class BoardOilDataUpdateCoordinator(DataUpdateCoordinator[list[BoardData]]):
             ) from exception
 
         if not self._first_refresh:
-            for board in self.boards:
-                changes = self.get_board_changes(board.id)
+            for board_data in self.boards:
+                changes = self.get_board_changes(board_data.id)
                 if changes.has_changes():
                     LOGGER.debug(
-                        "Detected changes in board %s: %s", board.name, changes
+                        "Detected changes in board %s: %s", board_data.name, changes
                     )
                     for change in changes.card_changes:
                         card = (
@@ -396,7 +351,7 @@ class BoardOilDataUpdateCoordinator(DataUpdateCoordinator[list[BoardData]]):
                         assert column_id is not None
                         column_name = ""
                         if column_id is not None:
-                            for col in board.columns:
+                            for col in board_data.columns:
                                 if col.id == column_id:
                                     column_name = col.title
                                     break

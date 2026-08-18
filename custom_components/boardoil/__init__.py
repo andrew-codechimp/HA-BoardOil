@@ -75,20 +75,18 @@ async def async_setup_entry(
         ),
     )
     try:
-        response = await client.async_get_version()
-        version = response.get("data", {}).get("version", "")
-        build = response.get("data", {}).get("build", "")
+        version_info = await client.async_get_version()
     except BoardOilApiClientError as exception:
         LOGGER.error("Error connecting to BoardOil API: %s", exception)
         return False
 
-    v = AwesomeVersion(version)
+    v = AwesomeVersion(version_info.version)
     if v.valid and v < MIN_REQUIRED_BOARDOIL_VERSION:
         raise ConfigEntryError(
             translation_domain=DOMAIN,
             translation_key="version_error",
             translation_placeholders={
-                "boardoil_version": version,
+                "boardoil_version": version_info.version,
                 "min_version": MIN_REQUIRED_BOARDOIL_VERSION,
             },
         )
@@ -98,8 +96,8 @@ async def async_setup_entry(
         client=client,
         integration=async_get_loaded_integration(hass, entry.domain),
         coordinator=coordinator,
-        version=version,
-        build=build,
+        version=version_info.version,
+        build=version_info.build,
     )
 
     await coordinator.async_config_entry_first_refresh()

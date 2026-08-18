@@ -59,10 +59,8 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
             session=async_create_clientsession(self.hass, verify_ssl=verify_ssl),
         )
         try:
-            result_me = await client.async_get_me()
-            client_id = result_me.get("data", {}).get("id", "")
-            result_version = await client.async_get_version()
-            version = result_version.get("data", {}).get("version", "")
+            me = await client.async_get_me()
+            version_info = await client.async_get_version()
         except BoardOilApiClientAuthenticationError:
             return {"base": "auth"}, None, None
         except BoardOilApiClientCommunicationError:
@@ -70,7 +68,7 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
         except BoardOilApiClientError:
             LOGGER.exception("Unexpected error")
             return {"base": "unknown"}, None, None
-        return {}, client_id, version
+        return {}, str(me.id), version_info.version
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
