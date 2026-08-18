@@ -15,6 +15,8 @@ class BoardOilEntity(CoordinatorEntity[BoardOilDataUpdateCoordinator]):
 
     _attr_has_entity_name = True
 
+    key: str
+
     def __init__(
         self,
         coordinator: BoardOilDataUpdateCoordinator,

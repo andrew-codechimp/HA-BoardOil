@@ -231,6 +231,73 @@
                     }
                 }
             }
+        },
+        "sensor": {
+            "card_count": {
+                "unit_of_measurement": "cards",
+                "state_attributes": {
+                    "board_id": {
+                        "name": "Board ID"
+                    },
+                    "board_name": {
+                        "name": "Board name"
+                    },
+                    "column_id": {
+                        "name": "Column ID"
+                    },
+                    "column_title": {
+                        "name": "Column title"
+                    },
+                    "cards": {
+                        "name": "Cards"
+                    }
+                }
+            },
+            "card_types": {
+                "name": "Card types",
+                "unit_of_measurement": "types",
+                "state_attributes": {
+                    "board_id": {
+                        "name": "Board ID"
+                    },
+                    "board_name": {
+                        "name": "Board name"
+                    },
+                    "card_types": {
+                        "name": "Card types"
+                    }
+                }
+            },
+            "slicks": {
+                "name": "Slicks",
+                "unit_of_measurement": "slicks",
+                "state_attributes": {
+                    "board_id": {
+                        "name": "Board ID"
+                    },
+                    "board_name": {
+                        "name": "Board name"
+                    },
+                    "slicks": {
+                        "name": "Slicks"
+                    }
+                }
+            },
+            "tags": {
+                "name": "Tags",
+                "unit_of_measurement": "tags",
+                "state_attributes": {
+                    "board_id": {
+                        "name": "Board ID"
+                    },
+                    "board_name": {
+                        "name": "Board name"
+                    },
+                    "tags": {
+                        "name": "Tags"
+                    }
+                }
+            }
         }
     },
     "exceptions": {

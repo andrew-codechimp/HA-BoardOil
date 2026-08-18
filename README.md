@@ -15,6 +15,13 @@ Card viewing is not available from the UI because cards support complex features
 
 Sensor attributes include additional card details.
 
+### Diagnostic sensors
+- Card types count
+- Tags count
+- Slicks count
+
+Sensor attributes include lists of their relevant data
+
 ### Actions
 - Get all cards for a board, optionally a specific column
 - Get a specific card

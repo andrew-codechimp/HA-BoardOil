@@ -1,4 +1,17 @@
 {
+    "entity": {
+        "sensor": {
+            "card_types": {
+                "default": "mdi:cards-outline"
+            },
+            "slicks": {
+                "default": "mdi:group"
+            },
+            "tags": {
+                "default": "mdi:tag-outline"
+            }
+        }
+    },
     "services": {
         "add_card": {
             "service": "mdi:card-plus-outline"

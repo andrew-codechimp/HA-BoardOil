@@ -8,6 +8,8 @@ from typing import Any
 import aiohttp
 import async_timeout
 
+from .models import CardType, Slick, Tag
+
 
 class BoardOilApiClientError(Exception):
     """Exception to indicate a general API error."""
@@ -76,6 +78,48 @@ class BoardOilApiClient:
             method="get",
             path=f"boards/{board_id!s}",
         )
+
+    async def async_get_card_types(self, board_id: int) -> list[CardType]:
+        """Get card types for the board."""
+        response = await self._api_wrapper(
+            method="get",
+            path=f"boards/{board_id!s}/card-types",
+        )
+        return [
+            CardType(
+                id=card_type.get("id"),
+                name=card_type.get("name"),
+            )
+            for card_type in response.get("data", [])
+        ]
+
+    async def async_get_tags(self, board_id: int) -> list[Tag]:
+        """Get tags for the board."""
+        response = await self._api_wrapper(
+            method="get",
+            path=f"boards/{board_id!s}/tags",
+        )
+        return [
+            Tag(
+                id=tag.get("id"),
+                name=tag.get("name"),
+            )
+            for tag in response.get("data", [])
+        ]
+
+    async def async_get_slicks(self, board_id: int) -> list[Slick]:
+        """Get tags for the board."""
+        response = await self._api_wrapper(
+            method="get",
+            path=f"boards/{board_id!s}/slicks",
+        )
+        return [
+            Slick(
+                id=slick.get("id"),
+                name=slick.get("name"),
+            )
+            for slick in response.get("data", [])
+        ]
 
     async def async_add_card(
         self,
