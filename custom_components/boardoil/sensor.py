@@ -1,24 +1,15 @@
 """Sensor platform for boardoil."""
 
-from __future__ import annotations
-
-from typing import TYPE_CHECKING
-
 from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN, SensorEntity
 from homeassistant.const import EntityCategory
-from homeassistant.core import callback
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import device_registry as dr, entity_registry as er
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN, LOGGER
-from .coordinator import ColumnData
+from .coordinator import BoardData, BoardOilDataUpdateCoordinator, ColumnData
+from .data import BoardOilConfigEntry
 from .entity import BoardOilEntity
-
-if TYPE_CHECKING:
-    from homeassistant.core import HomeAssistant
-    from homeassistant.helpers.entity_platform import AddEntitiesCallback
-
-    from .coordinator import BoardData, BoardOilDataUpdateCoordinator
-    from .data import BoardOilConfigEntry
 
 
 async def async_setup_entry(
