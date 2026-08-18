@@ -50,6 +50,9 @@ async def async_setup_entry(
         latest_keys.update(
             {_build_slicks_entity_key(board_id=board.id) for board in coordinator.data}
         )
+        latest_keys.update(
+            {_build_members_entity_key(board_id=board.id) for board in coordinator.data}
+        )
         existing_keys = set(entities)
 
         added_keys = latest_keys - existing_keys
@@ -140,6 +143,11 @@ def _build_slicks_entity_key(board_id: int) -> str:
     return f"slicks:{board_id}"
 
 
+def _build_members_entity_key(board_id: int) -> str:
+    """Build a stable key for a board's members."""
+    return f"members:{board_id}"
+
+
 def _create_entities(
     coordinator: BoardOilDataUpdateCoordinator,
     boards: list[BoardData],
@@ -186,6 +194,17 @@ def _create_entities(
     entities.extend(
         [
             BoardOilSlicksSensor(
+                coordinator=coordinator,
+                board=board,
+            )
+            for board in boards
+        ]
+    )
+
+    # Add members sensors
+    entities.extend(
+        [
+            BoardOilMembersSensor(
                 coordinator=coordinator,
                 board=board,
             )
@@ -458,5 +477,62 @@ class BoardOilSlicksSensor(BoardOilEntity, SensorEntity):
                     "name": slick.name,
                 }
                 for slick in slick_list
+            ],
+        }
+
+
+class BoardOilMembersSensor(BoardOilEntity, SensorEntity):
+    """Sensor showing number of members for a board."""
+
+    _unrecorded_attributes = frozenset(
+        {
+            "board_id",
+            "board_name",
+            "members",
+        }
+    )
+
+    def __init__(
+        self,
+        coordinator: BoardOilDataUpdateCoordinator,
+        board: BoardData,
+    ) -> None:
+        """Initialize the sensor."""
+        super().__init__(coordinator, board)
+        self.key = _build_members_entity_key(board_id=board.id)
+        self._attr_translation_key = "members"
+        self._attr_name = "Members"
+        self._attr_unique_id = f"{coordinator.config_entry.entry_id}_{board.id}_members"
+        self._attr_entity_category = EntityCategory.DIAGNOSTIC
+
+    @property
+    def native_value(self) -> int:
+        """Return the number of members."""
+        board = next(
+            (b for b in self.coordinator.data if b.id == self.board_id),
+            None,
+        )
+        if board is None:
+            return 0
+        return len(board.members)
+
+    @property
+    def extra_state_attributes(self) -> dict[str, object]:
+        """Return extra state attributes."""
+        board = next(
+            (b for b in self.coordinator.data if b.id == self.board_id),
+            None,
+        )
+        member_list = board.members if board else []
+        return {
+            "board_id": self.board_id,
+            "board_name": self.board_name,
+            "members": [
+                {
+                    "id": member.id,
+                    "username": member.username,
+                    "display_name": member.display_name,
+                }
+                for member in member_list
             ],
         }

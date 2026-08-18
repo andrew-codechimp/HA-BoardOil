@@ -46,19 +46,19 @@ class Board:
 
 
 @dataclass
+class Column:
+    """Represents a column."""
+
+    id: int
+    title: str
+
+
+@dataclass
 class CardType:
     """Represents a card type in a board."""
 
     id: int
     name: str
-
-
-@dataclass
-class Column:
-    """Represents a column in a board."""
-
-    id: int
-    title: str
 
 
 @dataclass
@@ -68,6 +68,15 @@ class ColumnWithCards:
     id: int
     title: str
     cards: list[Card]
+
+
+@dataclass
+class Member:
+    """Represents a user in a board."""
+
+    id: int
+    username: str
+    display_name: str
 
 
 @dataclass

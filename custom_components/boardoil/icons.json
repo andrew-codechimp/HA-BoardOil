@@ -9,6 +9,9 @@
             },
             "tags": {
                 "default": "mdi:tag-outline"
+            },
+            "members": {
+                "default": "mdi:account-multiple"
             }
         }
     },

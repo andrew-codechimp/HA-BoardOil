@@ -17,7 +17,7 @@ from .api import (
     BoardOilApiClientAuthenticationError,
     BoardOilApiClientError,
 )
-from .models import Card, CardType, Slick, Tag
+from .models import Card, CardType, Member, Slick, Tag
 
 if TYPE_CHECKING:
     from .data import BoardOilConfigEntry
@@ -45,6 +45,7 @@ class BoardData:
     card_types: list[CardType]
     tags: list[Tag]
     slicks: list[Slick]
+    members: list[Member]
 
 
 @dataclass
@@ -307,6 +308,7 @@ class BoardOilDataUpdateCoordinator(DataUpdateCoordinator[list[BoardData]]):
                 card_types = await client.async_get_card_types(board_id)
                 tags = await client.async_get_tags(board_id)
                 slicks = await client.async_get_slicks(board_id)
+                members = await client.async_get_members(board_id)
 
                 self.boards.append(
                     BoardData(
@@ -316,6 +318,7 @@ class BoardOilDataUpdateCoordinator(DataUpdateCoordinator[list[BoardData]]):
                         card_types=card_types,
                         tags=tags,
                         slicks=slicks,
+                        members=members,
                     )
                 )
 

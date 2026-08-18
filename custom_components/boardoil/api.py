@@ -13,8 +13,10 @@ from .models import (
     BoardSummary,
     Card,
     CardType,
+    Column,
     ColumnWithCards,
     Me,
+    Member,
     Slick,
     Tag,
     Version,
@@ -150,6 +152,20 @@ class BoardOilApiClient:
             columns=columns,
         )
 
+    async def async_get_columns(self, board_id: int) -> list[Column]:
+        """Get boards from the API."""
+        response = await self._api_wrapper(
+            method="get",
+            path=f"boards/{board_id!s}/columns",
+        )
+        return [
+            Column(
+                id=column.get("id"),
+                title=column.get("title"),
+            )
+            for column in response.get("data", [])
+        ]
+
     async def async_get_card_types(self, board_id: int) -> list[CardType]:
         """Get card types for the board."""
         response = await self._api_wrapper(
@@ -179,7 +195,7 @@ class BoardOilApiClient:
         ]
 
     async def async_get_slicks(self, board_id: int) -> list[Slick]:
-        """Get tags for the board."""
+        """Get slicks for the board."""
         response = await self._api_wrapper(
             method="get",
             path=f"boards/{board_id!s}/slicks",
@@ -192,6 +208,21 @@ class BoardOilApiClient:
             for slick in response.get("data", [])
         ]
 
+    async def async_get_members(self, board_id: int) -> list[Member]:
+        """Get member for the board."""
+        response = await self._api_wrapper(
+            method="get",
+            path=f"boards/{board_id!s}/members",
+        )
+        return [
+            Member(
+                id=member.get("userId"),
+                username=member.get("userName"),
+                display_name=member.get("displayName"),
+            )
+            for member in response.get("data", [])
+        ]
+
     async def async_add_card(
         self,
         board_id: int,
@@ -201,6 +232,7 @@ class BoardOilApiClient:
         tag_names: list[str] | None,
         card_type_id: int | None,
         slick_name: str | None,
+        assigned_user_id: int | None,
         external_url: str | None,
     ) -> Any:
         """Post a card to the API."""
@@ -215,6 +247,8 @@ class BoardOilApiClient:
             payload["boardColumnId"] = column_id
         if card_type_id is not None:
             payload["cardTypeId"] = card_type_id
+        if assigned_user_id is not None:
+            payload["assignedUserId"] = assigned_user_id
 
         return await self._api_wrapper(
             method="post",

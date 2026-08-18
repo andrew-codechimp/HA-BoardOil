@@ -8,13 +8,13 @@
                     "name": "BoardOil instance",
                     "description": "The BoardOil instance to use for this action."
                 },
-                "board_id": {
-                    "name": "Board ID",
-                    "description": "ID of the board."
+                "board": {
+                    "name": "Board",
+                    "description": "ID or name of the board."
                 },
-                "column_id": {
-                    "name": "Column ID",
-                    "description": "ID of the column in the board (default: first column)."
+                "column": {
+                    "name": "Column",
+                    "description": "ID or title of the column in the board (default: first column)."
                 },
                 "title": {
                     "name": "Title",
@@ -28,13 +28,17 @@
                     "name": "Tag names",
                     "description": "Comma-separated tag names to apply to the card."
                 },
-                "card_type_id": {
-                    "name": "Card type ID",
-                    "description": "ID of the card type (default: card type default within BoardOil)."
+                "card_type": {
+                    "name": "Card type",
+                    "description": "ID or name of the card type (default: card type default within BoardOil)."
                 },
                 "slick_name": {
                     "name": "Slick name",
                     "description": "Slick to add card to."
+                },
+                "assigned_user": {
+                    "name": "Assigned to",
+                    "description": "ID or name of the user to assign the card to."
                 },
                 "external_url": {
                     "name": "External URL",
@@ -50,9 +54,9 @@
                     "name": "BoardOil instance",
                     "description": "The BoardOil instance to use for this action."
                 },
-                "board_id": {
-                    "name": "Board ID",
-                    "description": "ID of the board."
+                "board": {
+                    "name": "Board",
+                    "description": "ID or name of the board."
                 },
                 "card_id": {
                     "name": "Card ID",
@@ -70,17 +74,17 @@
                     "name": "Tag names",
                     "description": "Comma-separated tag names to apply to the card."
                 },
-                "column_id": {
-                    "name": "Column ID",
-                    "description": "ID of the column in the board."
+                "column": {
+                    "name": "Column",
+                    "description": "ID or title of the column in the board."
                 },
-                "card_type_id": {
-                    "name": "Card type ID",
-                    "description": "ID of the card type."
+                "card_type": {
+                    "name": "Card type",
+                    "description": "ID or name of the card type."
                 },
-                "assigned_user_id": {
-                    "name": "Assigned user ID",
-                    "description": "ID of the user to assign the card to."
+                "assigned_user": {
+                    "name": "Assigned to",
+                    "description": "ID or name of the user to assign the card to."
                 },
                 "slick_name": {
                     "name": "Slick name",
@@ -100,9 +104,9 @@
                     "name": "BoardOil instance",
                     "description": "The BoardOil instance to use for this action."
                 },
-                "board_id": {
-                    "name": "Board ID",
-                    "description": "ID of the board."
+                "board": {
+                    "name": "Board",
+                    "description": "ID or name of the board."
                 },
                 "card_id": {
                     "name": "Card ID",
@@ -118,9 +122,9 @@
                     "name": "BoardOil instance",
                     "description": "The BoardOil instance to use for this action."
                 },
-                "board_id": {
-                    "name": "Board ID",
-                    "description": "ID of the board."
+                "board": {
+                    "name": "Board",
+                    "description": "ID or name of the board."
                 },
                 "card_id": {
                     "name": "Card ID",
@@ -136,9 +140,9 @@
                     "name": "BoardOil instance",
                     "description": "The BoardOil instance to use for this action."
                 },
-                "board_id": {
-                    "name": "Board ID",
-                    "description": "ID of the board."
+                "board": {
+                    "name": "Board",
+                    "description": "ID or name of the board."
                 },
                 "card_id": {
                     "name": "Card ID",
@@ -154,13 +158,13 @@
                     "name": "BoardOil instance",
                     "description": "The BoardOil instance to use for this action."
                 },
-                "board_id": {
-                    "name": "Board ID",
-                    "description": "ID of the board."
+                "board": {
+                    "name": "Board",
+                    "description": "ID or name of the board."
                 },
-                "column_id": {
-                    "name": "Column ID",
-                    "description": "Optional ID of a specific column to filter cards (default all cards for the board)."
+                "column": {
+                    "name": "Column",
+                    "description": "Optional ID or name of a specific column to filter cards (default all cards for the board)."
                 }
             }
         }
@@ -295,6 +299,15 @@
                     },
                     "tags": {
                         "name": "Tags"
+                    }
+                }
+            },
+            "members": {
+                "name": "Members",
+                "unit_of_measurement": "members",
+                "state_attributes": {
+                    "users": {
+                        "name": "Members"
                     }
                 }
             }

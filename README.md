@@ -19,6 +19,7 @@ Sensor attributes include additional card details.
 - Card types count
 - Tags count
 - Slicks count
+- Members count
 
 Sensor attributes include lists of their relevant data.
 

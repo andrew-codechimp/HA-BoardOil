@@ -5,12 +5,10 @@ get_card:
       selector:
         config_entry:
           integration: boardoil
-    board_id:
+    board:
       required: true
       selector:
-        number:
-          min: 1
-          mode: box
+        text:
     card_id:
       required: true
       selector:
@@ -25,18 +23,14 @@ get_cards:
       selector:
         config_entry:
           integration: boardoil
-    board_id:
+    board:
       required: true
       selector:
-        number:
-          min: 1
-          mode: box
-    column_id:
+        text:
+    column:
       required: false
       selector:
-        number:
-          min: 1
-          mode: box
+        text:
 
 add_card:
   fields:
@@ -45,24 +39,10 @@ add_card:
       selector:
         config_entry:
           integration: boardoil
-    board_id:
+    board:
       required: true
       selector:
-        number:
-          min: 1
-          mode: box
-    column_id:
-      required: false
-      selector:
-        number:
-          min: 1
-          mode: box
-    card_type_id:
-      required: false
-      selector:
-        number:
-          min: 1
-          mode: box
+        text:
     title:
       required: true
       selector:
@@ -72,12 +52,24 @@ add_card:
       selector:
         text:
           multiline: true
+    column:
+      required: false
+      selector:
+        text:
+    card_type:
+      required: false
+      selector:
+        text:
     tag_names:
       required: false
       selector:
         text:
           multiline: true
     slick_name:
+      required: false
+      selector:
+        text:
+    assigned_user:
       required: false
       selector:
         text:
@@ -93,18 +85,14 @@ update_card:
       selector:
         config_entry:
           integration: boardoil
-    board_id:
+    board:
       required: true
       selector:
-        number:
-          min: 1
-          mode: box
+        text:
     card_id:
       required: true
       selector:
-        number:
-          min: 1
-          mode: box
+        text:
     title:
       required: false
       selector:
@@ -114,30 +102,24 @@ update_card:
       selector:
         text:
           multiline: true
+    column:
+      required: false
+      selector:
+        text:   
+    card_type:
+      required: false
+      selector:
+        text:               
     tag_names:
       required: false
       selector:
         text:
           multiline: true
-    column_id:
-      required: false
-      selector:
-        number:
-          min: 1
-          mode: box
-    card_type_id:
-      required: false
-      selector:
-        number:
-          min: 1
-          mode: box
-    assigned_user_id:
-      required: false
-      selector:
-        number:
-          min: 1
-          mode: box
     slick_name:
+      required: false
+      selector:
+        text:          
+    assigned_user:
       required: false
       selector:
         text:
@@ -153,12 +135,10 @@ delete_card:
       selector:
         config_entry:
           integration: boardoil
-    board_id:
+    board:
       required: true
       selector:
-        number:
-          min: 1
-          mode: box
+        text:
     card_id:
       required: true
       selector:
@@ -173,12 +153,10 @@ archive_card:
       selector:
         config_entry:
           integration: boardoil
-    board_id:
+    board:
       required: true
       selector:
-        number:
-          min: 1
-          mode: box
+        text:
     card_id:
       required: true
       selector:
