@@ -7,7 +7,7 @@
 
 This integration connects Home Assistant to [BoardOil](https://github.com/dozigden/boardoil) allowing you to automate card tasks.
 
-Card viewing is not available from the UI because cards support complex features like card type, tags, slicks, and column transitions that Home Assistant Todo lists do not support.
+Card viewing is not available from the UI because cards support complex features like card type, tags, slicks, and column transitions that Home Assistant to-do lists do not support.
 
 ### Sensors
 - One device for each board
