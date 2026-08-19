@@ -14,9 +14,12 @@ from homeassistant.core import (
     ServiceResponse,
     SupportsResponse,
 )
-from homeassistant.exceptions import ServiceValidationError
+from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
 from homeassistant.helpers import config_validation as cv, service
 
+from .api import (
+    BoardOilApiClientCommunicationError,
+)
 from .const import (
     ATTR_ASSIGNED_USER,
     ATTR_BOARD,
@@ -216,7 +219,14 @@ class UserNotFoundError(ServiceValidationError):
 async def get_board_id(entry: BoardOilConfigEntry, board_param: str) -> int:
     """Get the board id for a given board parameter."""
 
-    boards = await entry.runtime_data.client.async_get_boards()
+    try:
+        boards = await entry.runtime_data.client.async_get_boards()
+    except BoardOilApiClientCommunicationError as ex:
+        raise HomeAssistantError(
+            translation_domain=DOMAIN,
+            translation_key="connection_error",
+        ) from ex
+
     matching_boards = [
         board
         for board in boards
@@ -236,7 +246,14 @@ async def get_column_id(
     if column_param is None:
         return None
 
-    columns = await entry.runtime_data.client.async_get_columns(board_id=board_id)
+    try:
+        columns = await entry.runtime_data.client.async_get_columns(board_id=board_id)
+    except BoardOilApiClientCommunicationError as ex:
+        raise HomeAssistantError(
+            translation_domain=DOMAIN,
+            translation_key="connection_error",
+        ) from ex
+
     matching_columns = [
         column
         for column in columns
@@ -256,7 +273,16 @@ async def get_card_type_id(
     if card_type_param is None:
         return None
 
-    card_types = await entry.runtime_data.client.async_get_card_types(board_id=board_id)
+    try:
+        card_types = await entry.runtime_data.client.async_get_card_types(
+            board_id=board_id
+        )
+    except BoardOilApiClientCommunicationError as ex:
+        raise HomeAssistantError(
+            translation_domain=DOMAIN,
+            translation_key="connection_error",
+        ) from ex
+
     matching_card_types = [
         card_type
         for card_type in card_types
@@ -276,7 +302,14 @@ async def get_user_id(
     if user_param is None:
         return None
 
-    members = await entry.runtime_data.client.async_get_members(board_id=board_id)
+    try:
+        members = await entry.runtime_data.client.async_get_members(board_id=board_id)
+    except BoardOilApiClientCommunicationError as ex:
+        raise HomeAssistantError(
+            translation_domain=DOMAIN,
+            translation_key="connection_error",
+        ) from ex
+
     matching_display_names = [
         member
         for member in members
@@ -409,17 +442,23 @@ async def async_add_card_service(call: ServiceCall) -> None:
         else None
     )
 
-    await entry.runtime_data.client.async_add_card(
-        board_id=board_id,
-        column_id=column_id,
-        title=call.data[ATTR_TITLE],
-        description=call.data.get(ATTR_DESCRIPTION, ""),
-        tag_names=tag_names,
-        card_type_id=card_type_id,
-        slick_name=call.data.get(ATTR_SLICK_NAME),
-        assigned_user_id=assigned_user_id,
-        external_url=url,
-    )
+    try:
+        await entry.runtime_data.client.async_add_card(
+            board_id=board_id,
+            column_id=column_id,
+            title=call.data[ATTR_TITLE],
+            description=call.data.get(ATTR_DESCRIPTION, ""),
+            tag_names=tag_names,
+            card_type_id=card_type_id,
+            slick_name=call.data.get(ATTR_SLICK_NAME),
+            assigned_user_id=assigned_user_id,
+            external_url=url,
+        )
+    except BoardOilApiClientCommunicationError as ex:
+        raise HomeAssistantError(
+            translation_domain=DOMAIN,
+            translation_key="connection_error",
+        ) from ex
     await entry.runtime_data.coordinator.async_request_refresh()
 
 
@@ -514,18 +553,26 @@ async def async_update_card_service(call: ServiceCall) -> None:
         else None
     )
 
-    await entry.runtime_data.client.async_update_card(
-        board_id=board_id,
-        card_id=card_id,
-        title=call.data.get(ATTR_TITLE) or existing_title_str,
-        description=call.data.get(ATTR_DESCRIPTION) or existing_description_str,
-        tag_names=tag_names or existing_tag_names_list,
-        column_id=column_id or call.data.get(ATTR_COLUMN),
-        card_type_id=card_type_id or existing_card_type_id_int,
-        assigned_user_id=assigned_user_id or existing_assigned_user_id_int,
-        slick_name=call.data.get(ATTR_SLICK_NAME, existing_card_raw.get("slickName")),
-        external_url=url or existing_external_url_str,
-    )
+    try:
+        await entry.runtime_data.client.async_update_card(
+            board_id=board_id,
+            card_id=card_id,
+            title=call.data.get(ATTR_TITLE) or existing_title_str,
+            description=call.data.get(ATTR_DESCRIPTION) or existing_description_str,
+            tag_names=tag_names or existing_tag_names_list,
+            column_id=column_id or call.data.get(ATTR_COLUMN),
+            card_type_id=card_type_id or existing_card_type_id_int,
+            assigned_user_id=assigned_user_id or existing_assigned_user_id_int,
+            slick_name=call.data.get(
+                ATTR_SLICK_NAME, existing_card_raw.get("slickName")
+            ),
+            external_url=url or existing_external_url_str,
+        )
+    except BoardOilApiClientCommunicationError as ex:
+        raise HomeAssistantError(
+            translation_domain=DOMAIN,
+            translation_key="connection_error",
+        ) from ex
     await entry.runtime_data.coordinator.async_request_refresh()
 
 
@@ -538,10 +585,16 @@ async def async_delete_card_service(call: ServiceCall) -> None:
     board_param = str(call.data[ATTR_BOARD])
     board_id = await get_board_id(entry, board_param)
 
-    await entry.runtime_data.client.async_delete_card(
-        board_id=board_id,
-        card_id=call.data[ATTR_CARD_ID],
-    )
+    try:
+        await entry.runtime_data.client.async_delete_card(
+            board_id=board_id,
+            card_id=call.data[ATTR_CARD_ID],
+        )
+    except BoardOilApiClientCommunicationError as ex:
+        raise HomeAssistantError(
+            translation_domain=DOMAIN,
+            translation_key="connection_error",
+        ) from ex
     await entry.runtime_data.coordinator.async_request_refresh()
 
 
@@ -554,10 +607,16 @@ async def async_archive_card_service(call: ServiceCall) -> None:
     board_param = str(call.data[ATTR_BOARD])
     board_id = await get_board_id(entry, board_param)
 
-    await entry.runtime_data.client.async_archive_card(
-        board_id=board_id,
-        card_id=call.data[ATTR_CARD_ID],
-    )
+    try:
+        await entry.runtime_data.client.async_archive_card(
+            board_id=board_id,
+            card_id=call.data[ATTR_CARD_ID],
+        )
+    except BoardOilApiClientCommunicationError as ex:
+        raise HomeAssistantError(
+            translation_domain=DOMAIN,
+            translation_key="connection_error",
+        ) from ex
     await entry.runtime_data.coordinator.async_request_refresh()
 
 

@@ -317,6 +317,9 @@
         "auth_failed": {
             "message": "Authentication failed. Please reauthenticate."
         },
+        "connection_error": {
+            "message": "Error connecting to BoardOil."
+        },
         "invalid_url": {
             "message": "The provided URL is not valid. Please provide a valid HTTP or HTTPS URL."
         },
