@@ -14,7 +14,7 @@ from homeassistant.core import (
     ServiceResponse,
     SupportsResponse,
 )
-from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
+from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers import config_validation as cv, service
 
 from .const import (
@@ -147,49 +147,70 @@ def _normalize_tag_names(raw_tag_names: object) -> list[str]:
     return normalized
 
 
-class CardNotFoundError(HomeAssistantError):
+class CardNotFoundError(ServiceValidationError):
     """Raised when a card id is not found in a board."""
 
     def __init__(self, board_id: int, card_id: int) -> None:
         """Initialize the exception."""
-        msg = f"Card id {card_id} not found in board {board_id}"
-        super().__init__(msg)
+        super().__init__(
+            translation_domain=DOMAIN,
+            translation_key="card_not_found",
+            translation_placeholders={
+                "board_id": str(board_id),
+                "card_id": str(card_id),
+            },
+        )
 
 
-class BoardNotFoundError(HomeAssistantError):
+class BoardNotFoundError(ServiceValidationError):
     """Raised when a board id is not found."""
 
     def __init__(self, board: str | int) -> None:
         """Initialize the exception."""
-        msg = f"Board {board} not found"
-        super().__init__(msg)
+        super().__init__(
+            translation_domain=DOMAIN,
+            translation_key="board_not_found",
+            translation_placeholders={"board": str(board)},
+        )
 
 
-class ColumnNotFoundError(HomeAssistantError):
+class ColumnNotFoundError(ServiceValidationError):
     """Raised when a column id is not found in a board."""
 
     def __init__(self, board_id: int, column: str) -> None:
         """Initialize the exception."""
-        msg = f"Column {column} not found in board {board_id}"
-        super().__init__(msg)
+        super().__init__(
+            translation_domain=DOMAIN,
+            translation_key="column_not_found",
+            translation_placeholders={"board_id": str(board_id), "column": column},
+        )
 
 
-class CardTypeNotFoundError(HomeAssistantError):
+class CardTypeNotFoundError(ServiceValidationError):
     """Raised when a card type id is not found in a board."""
 
     def __init__(self, board_id: int, card_type: str) -> None:
         """Initialize the exception."""
-        msg = f"Card type {card_type} not found in board {board_id}"
-        super().__init__(msg)
+        super().__init__(
+            translation_domain=DOMAIN,
+            translation_key="card_type_not_found",
+            translation_placeholders={
+                "board_id": str(board_id),
+                "card_type": card_type,
+            },
+        )
 
 
-class UserNotFoundError(HomeAssistantError):
+class UserNotFoundError(ServiceValidationError):
     """Raised when a user id is not found in a board."""
 
     def __init__(self, board_id: int, user: str) -> None:
         """Initialize the exception."""
-        msg = f"User {user} not found in board {board_id}"
-        super().__init__(msg)
+        super().__init__(
+            translation_domain=DOMAIN,
+            translation_key="user_not_found",
+            translation_placeholders={"board_id": str(board_id), "user": user},
+        )
 
 
 async def get_board_id(entry: BoardOilConfigEntry, board_param: str) -> int:

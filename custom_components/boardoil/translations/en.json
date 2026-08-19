@@ -325,6 +325,21 @@
         },
         "version_error": {
             "message": "You are running {boardoil_version} of BoardOil. Minimum required version is {min_version}. Please upgrade BoardOil and then retry."
+        },
+        "board_not_found": {
+            "message": "Board {board} not found."
+        },
+        "card_not_found": {
+            "message": "Card {card_id} not found in board {board_id}."
+        },
+        "column_not_found": {
+            "message": "Column {column} not found in board {board_id}."
+        },
+        "card_type_not_found": {
+            "message": "Card type {card_type} not found in board {board_id}."
+        },
+        "user_not_found": {
+            "message": "User {user} not found in board {board_id}."
         }
     }
 }
