@@ -311,6 +311,23 @@ class BoardOilApiClient:
             path=f"boards/{board_id!s}/cards/{card_id!s}/archive",
         )
 
+    async def async_add_card_comment(
+        self,
+        board_id: int,
+        card_id: int,
+        comment: str,
+    ) -> Any:
+        """Add a comment to a card via the API."""
+        payload: dict[str, Any] = {
+            "text": comment,
+        }
+        return await self._api_wrapper(
+            method="post",
+            path=f"boards/{board_id!s}/cards/{card_id!s}/comments",
+            data=payload,
+            headers={"Content-type": "application/json; charset=UTF-8"},
+        )
+
     async def _api_wrapper(
         self,
         method: str,

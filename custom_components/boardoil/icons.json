@@ -33,6 +33,9 @@
         },
         "get_cards": {
             "service": "mdi:card-multiple-outline"
+        },
+        "add_card_comment": {
+            "service": "mdi:comment-plus-outline"
         }
     }
 }

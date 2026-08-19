@@ -132,6 +132,28 @@
                 }
             }
         },
+        "add_card_comment": {
+            "name": "Add card comment",
+            "description": "Add a comment to a card on a board.",
+            "fields": {
+                "config_entry_id": {
+                    "name": "BoardOil instance",
+                    "description": "The BoardOil instance to use for this action."
+                },
+                "board": {
+                    "name": "Board",
+                    "description": "ID or name of the board."
+                },
+                "card_id": {
+                    "name": "Card ID",
+                    "description": "ID of the card to update."
+                },
+                "comment": {
+                    "name": "Comment",
+                    "description": "The comment to add to the card."
+                }
+            }
+        },
         "get_card": {
             "name": "Get card",
             "description": "Return card data for a card on a board.",

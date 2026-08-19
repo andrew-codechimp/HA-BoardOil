@@ -30,6 +30,7 @@ Sensor attributes include lists of their relevant data.
 - Update a card
 - Delete a card
 - Archive a card
+- Add a comment to a card
 
 ### Events
 - Card events fire when a card is added, updated, moved, or removed.

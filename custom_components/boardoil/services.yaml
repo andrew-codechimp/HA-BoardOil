@@ -12,9 +12,7 @@ get_card:
     card_id:
       required: true
       selector:
-        number:
-          min: 1
-          mode: box
+        text:
 
 get_cards:
   fields:
@@ -142,9 +140,7 @@ delete_card:
     card_id:
       required: true
       selector:
-        number:
-          min: 1
-          mode: box
+        text:
 
 archive_card:
   fields:
@@ -160,6 +156,25 @@ archive_card:
     card_id:
       required: true
       selector:
-        number:
-          min: 1
-          mode: box
+        text:
+
+add_card_comment:
+  fields:
+    config_entry_id:
+      required: true
+      selector:
+        config_entry:
+          integration: boardoil
+    board:
+      required: true
+      selector:
+        text:
+    card_id:
+      required: true
+      selector:
+        text:
+    comment:
+      required: true
+      selector:
+        text:
+          multiline: true

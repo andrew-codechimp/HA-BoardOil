@@ -26,6 +26,7 @@ from .const import (
     ATTR_CARD_ID,
     ATTR_CARD_TYPE,
     ATTR_COLUMN,
+    ATTR_COMMENT,
     ATTR_DESCRIPTION,
     ATTR_EXTERNAL_URL,
     ATTR_SLICK_NAME,
@@ -108,6 +109,15 @@ SERVICE_SCHEMA_ARCHIVE_CARD = vol.Schema(
         vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
         vol.Required(ATTR_BOARD): cv.string,
         vol.Required(ATTR_CARD_ID): cv.string,
+    }
+)
+SERVICE_ADD_CARD_COMMENT = "add_card_comment"
+SERVICE_SCHEMA_ADD_CARD_COMMENT = vol.Schema(
+    {
+        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+        vol.Required(ATTR_BOARD): cv.string,
+        vol.Required(ATTR_CARD_ID): cv.positive_int,
+        vol.Required(ATTR_COMMENT): cv.string,
     }
 )
 
@@ -620,6 +630,29 @@ async def async_archive_card_service(call: ServiceCall) -> None:
     await entry.runtime_data.coordinator.async_request_refresh()
 
 
+async def async_add_card_comment_service(call: ServiceCall) -> None:
+    """Add a comment to a card on a board."""
+    entry: BoardOilConfigEntry = service.async_get_config_entry(
+        call.hass, DOMAIN, call.data[ATTR_CONFIG_ENTRY_ID]
+    )
+
+    board_param = str(call.data[ATTR_BOARD])
+    board_id = await get_board_id(entry, board_param)
+
+    try:
+        await entry.runtime_data.client.async_add_card_comment(
+            board_id=board_id,
+            card_id=call.data[ATTR_CARD_ID],
+            comment=call.data[ATTR_COMMENT],
+        )
+    except BoardOilApiClientCommunicationError as ex:
+        raise HomeAssistantError(
+            translation_domain=DOMAIN,
+            translation_key="connection_error",
+        ) from ex
+    await entry.runtime_data.coordinator.async_request_refresh()
+
+
 async def async_setup_services(hass: HomeAssistant) -> None:
     """Set up boardoil services."""
     hass.services.async_register(
@@ -662,5 +695,12 @@ async def async_setup_services(hass: HomeAssistant) -> None:
         SERVICE_ARCHIVE_CARD,
         async_archive_card_service,
         schema=SERVICE_SCHEMA_ARCHIVE_CARD,
+        supports_response=SupportsResponse.NONE,
+    )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_ADD_CARD_COMMENT,
+        async_add_card_comment_service,
+        schema=SERVICE_SCHEMA_ADD_CARD_COMMENT,
         supports_response=SupportsResponse.NONE,
     )
