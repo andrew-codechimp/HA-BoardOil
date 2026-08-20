@@ -130,7 +130,9 @@ class BoardOilApiClient:
                         tag_names=card_data.get("tagNames", []),
                         updated_at_utc=card_data.get("updatedAtUtc", ""),
                         assigned_user_id=card_data.get("assignedUserId"),
-                        assigned_user_name=card_data.get("assignedUserName"),
+                        assigned_user_display_name=card_data.get(
+                            "assignedUserDisplayName"
+                        ),
                         external_url=card_data.get("externalUrl"),
                         slick_id=card_data.get("slickId"),
                         slick_name=card_data.get("slickName"),

@@ -93,7 +93,7 @@ class Card:
     tag_names: list[str]
     updated_at_utc: str
     assigned_user_id: int | None
-    assigned_user_name: str | None
+    assigned_user_display_name: str | None
     external_url: str | None
     slick_id: int | None
     slick_name: str | None

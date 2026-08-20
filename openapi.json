@@ -3782,7 +3782,7 @@
                         "format": "int32",
                         "nullable": true
                     },
-                    "assignedUserName": {
+                    "assignedUserDisplayName": {
                         "type": "string",
                         "nullable": true
                     },

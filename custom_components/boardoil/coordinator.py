@@ -73,7 +73,7 @@ class BoardOilEventData:
     tag_names: list[str]
     updated_at_utc: str
     assigned_user_id: int | None
-    assigned_user_name: str | None
+    assigned_user_display_name: str | None
     external_url: str | None
     column_id: int
     column_name: str
@@ -372,7 +372,7 @@ class BoardOilDataUpdateCoordinator(DataUpdateCoordinator[list[BoardData]]):
                             tag_names=card.tag_names,
                             updated_at_utc=card.updated_at_utc,
                             assigned_user_id=card.assigned_user_id,
-                            assigned_user_name=card.assigned_user_name,
+                            assigned_user_display_name=card.assigned_user_display_name,
                             external_url=card.external_url,
                             column_id=column_id,
                             column_name=column_name,
