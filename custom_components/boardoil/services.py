@@ -41,85 +41,71 @@ if TYPE_CHECKING:
     from .data import BoardOilConfigEntry
 
 SERVICE_GET_CARD = "get_card"
-SERVICE_SCHEMA_GET_CARD = vol.Schema(
-    {
-        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-        vol.Required(ATTR_BOARD): cv.string,
-        vol.Required(ATTR_CARD_ID): cv.positive_int,
-    }
-)
+SERVICE_SCHEMA_GET_CARD = vol.Schema({
+    vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+    vol.Required(ATTR_BOARD): cv.string,
+    vol.Required(ATTR_CARD_ID): cv.positive_int,
+})
 SERVICE_GET_CARDS = "get_cards"
-SERVICE_SCHEMA_GET_CARDS = vol.Schema(
-    {
-        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-        vol.Required(ATTR_BOARD): cv.string,
-        vol.Optional(ATTR_COLUMN): cv.string,
-    }
-)
+SERVICE_SCHEMA_GET_CARDS = vol.Schema({
+    vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+    vol.Required(ATTR_BOARD): cv.string,
+    vol.Optional(ATTR_COLUMN): cv.string,
+})
 SERVICE_ADD_CARD = "add_card"
-SERVICE_SCHEMA_ADD_CARD = vol.Schema(
-    {
-        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-        vol.Required(ATTR_BOARD): cv.string,
-        vol.Required(ATTR_TITLE): cv.string,
-        vol.Optional(ATTR_DESCRIPTION, default=""): cv.string,
-        vol.Optional(ATTR_COLUMN): cv.string,
-        vol.Optional(ATTR_CARD_TYPE): cv.string,
-        vol.Optional(ATTR_TAG_NAMES): vol.Any(
-            cv.string,
-            vol.All(cv.ensure_list, [cv.string]),
-            {cv.string: object},
-        ),
-        vol.Optional(ATTR_SLICK_NAME): cv.string,
-        vol.Optional(ATTR_ASSIGNED_USER): cv.string,
-        vol.Optional(ATTR_EXTERNAL_URL): cv.string,
-    }
-)
+SERVICE_SCHEMA_ADD_CARD = vol.Schema({
+    vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+    vol.Required(ATTR_BOARD): cv.string,
+    vol.Required(ATTR_TITLE): cv.string,
+    vol.Optional(ATTR_DESCRIPTION, default=""): cv.string,
+    vol.Optional(ATTR_COLUMN): cv.string,
+    vol.Optional(ATTR_CARD_TYPE): cv.string,
+    vol.Optional(ATTR_TAG_NAMES): vol.Any(
+        cv.string,
+        vol.All(cv.ensure_list, [cv.string]),
+        {cv.string: object},
+    ),
+    vol.Optional(ATTR_SLICK_NAME): cv.string,
+    vol.Optional(ATTR_ASSIGNED_USER): cv.string,
+    vol.Optional(ATTR_EXTERNAL_URL): cv.string,
+})
 SERVICE_UPDATE_CARD = "update_card"
-SERVICE_SCHEMA_UPDATE_CARD = vol.Schema(
-    {
-        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-        vol.Required(ATTR_BOARD): cv.string,
-        vol.Required(ATTR_CARD_ID): cv.positive_int,
-        vol.Optional(ATTR_TITLE, default=""): cv.string,
-        vol.Optional(ATTR_DESCRIPTION, default=""): cv.string,
-        vol.Optional(ATTR_COLUMN): cv.string,
-        vol.Optional(ATTR_CARD_TYPE): cv.string,
-        vol.Optional(ATTR_TAG_NAMES): vol.Any(
-            cv.string,
-            vol.All(cv.ensure_list, [cv.string]),
-            {cv.string: object},
-        ),
-        vol.Optional(ATTR_SLICK_NAME): cv.string,
-        vol.Optional(ATTR_ASSIGNED_USER): cv.string,
-        vol.Optional(ATTR_EXTERNAL_URL): cv.string,
-    }
-)
+SERVICE_SCHEMA_UPDATE_CARD = vol.Schema({
+    vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+    vol.Required(ATTR_BOARD): cv.string,
+    vol.Required(ATTR_CARD_ID): cv.positive_int,
+    vol.Optional(ATTR_TITLE, default=""): cv.string,
+    vol.Optional(ATTR_DESCRIPTION, default=""): cv.string,
+    vol.Optional(ATTR_COLUMN): cv.string,
+    vol.Optional(ATTR_CARD_TYPE): cv.string,
+    vol.Optional(ATTR_TAG_NAMES): vol.Any(
+        cv.string,
+        vol.All(cv.ensure_list, [cv.string]),
+        {cv.string: object},
+    ),
+    vol.Optional(ATTR_SLICK_NAME): cv.string,
+    vol.Optional(ATTR_ASSIGNED_USER): cv.string,
+    vol.Optional(ATTR_EXTERNAL_URL): cv.string,
+})
 SERVICE_DELETE_CARD = "delete_card"
-SERVICE_SCHEMA_DELETE_CARD = vol.Schema(
-    {
-        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-        vol.Required(ATTR_BOARD): cv.string,
-        vol.Required(ATTR_CARD_ID): cv.string,
-    }
-)
+SERVICE_SCHEMA_DELETE_CARD = vol.Schema({
+    vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+    vol.Required(ATTR_BOARD): cv.string,
+    vol.Required(ATTR_CARD_ID): cv.string,
+})
 SERVICE_ARCHIVE_CARD = "archive_card"
-SERVICE_SCHEMA_ARCHIVE_CARD = vol.Schema(
-    {
-        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-        vol.Required(ATTR_BOARD): cv.string,
-        vol.Required(ATTR_CARD_ID): cv.string,
-    }
-)
+SERVICE_SCHEMA_ARCHIVE_CARD = vol.Schema({
+    vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+    vol.Required(ATTR_BOARD): cv.string,
+    vol.Required(ATTR_CARD_ID): cv.string,
+})
 SERVICE_ADD_CARD_COMMENT = "add_card_comment"
-SERVICE_SCHEMA_ADD_CARD_COMMENT = vol.Schema(
-    {
-        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-        vol.Required(ATTR_BOARD): cv.string,
-        vol.Required(ATTR_CARD_ID): cv.positive_int,
-        vol.Required(ATTR_COMMENT): cv.string,
-    }
-)
+SERVICE_SCHEMA_ADD_CARD_COMMENT = vol.Schema({
+    vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+    vol.Required(ATTR_BOARD): cv.string,
+    vol.Required(ATTR_CARD_ID): cv.positive_int,
+    vol.Required(ATTR_COMMENT): cv.string,
+})
 
 
 def _is_valid_url(url: str) -> bool:
@@ -229,6 +215,7 @@ class UserNotFoundError(ServiceValidationError):
 async def get_board_id(entry: BoardOilConfigEntry, board_param: str) -> int:
     """Get the board id for a given board parameter."""
 
+    board_param = board_param.strip()
     try:
         boards = await entry.runtime_data.client.async_get_boards()
     except BoardOilApiClientCommunicationError as ex:
@@ -256,6 +243,8 @@ async def get_column_id(
     if column_param is None:
         return None
 
+    column_param = column_param.strip()
+
     try:
         columns = await entry.runtime_data.client.async_get_columns(board_id=board_id)
     except BoardOilApiClientCommunicationError as ex:
@@ -282,6 +271,8 @@ async def get_card_type_id(
     """Get the card type id for a given board and card type parameter."""
     if card_type_param is None:
         return None
+
+    card_type_param = card_type_param.strip()
 
     try:
         card_types = await entry.runtime_data.client.async_get_card_types(
@@ -311,6 +302,8 @@ async def get_user_id(
     """Get the user id for a given board and user parameter."""
     if user_param is None:
         return None
+
+    user_param = user_param.strip()
 
     try:
         members = await entry.runtime_data.client.async_get_members(board_id=board_id)
