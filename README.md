@@ -24,16 +24,18 @@ Sensor attributes include additional card details.
 Sensor attributes include lists of their relevant data.
 
 ### Actions
-- Get all cards for a board, optionally a specific column
-- Get a specific card
-- Add a new card
-- Update a card
-- Delete a card
-- Archive a card
-- Add a comment to a card
+- `boardoil.get_cards` - Get all cards for a board, optionally a specific column
+- `boardoil.get_card` - Get a specific card
+- `boardoil.add_card` - Add a new card
+- `boardoil.update_card` - Update a card
+- `boardoil.delete_card` - Delete a card
+- `boardoil.archive_card` - Archive a card
+- `boardoil.add_card_comment` - Add a comment to a card
 
 ### Events
 - Card events fire when a card is added, updated, moved, or removed.
+
+The event data includes details for card, column, card type, tags and slick
 
 ## Installation
 

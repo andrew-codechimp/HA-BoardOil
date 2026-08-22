@@ -9,10 +9,11 @@ from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from .const import (
     ATTR_CARD_ID,
-    ATTR_CARD_TYPE,
+    ATTR_CARD_TYPE_ID,
     ATTR_CARD_TYPE_NAME,
-    ATTR_COLUMN,
+    ATTR_COLUMN_ID,
     ATTR_COLUMN_NAME,
+    ATTR_SLICK_NAME,
     ATTR_TAG_NAMES,
     ATTR_TITLE,
     EVENT_TYPE_CARD_CREATED,
@@ -93,11 +94,12 @@ class BoardOilEvent(BoardOilEntity, EventEntity):
             {
                 ATTR_TITLE: event_data.title,
                 ATTR_CARD_ID: event_data.card_id,
-                ATTR_CARD_TYPE: event_data.card_type_id,
+                ATTR_CARD_TYPE_ID: event_data.card_type_id,
                 ATTR_CARD_TYPE_NAME: event_data.card_type_name,
-                ATTR_COLUMN: event_data.column_id,
+                ATTR_COLUMN_ID: event_data.column_id,
                 ATTR_COLUMN_NAME: event_data.column_name,
                 ATTR_TAG_NAMES: event_data.tag_names,
+                ATTR_SLICK_NAME: event_data.slick_name,
             },
         )
 
