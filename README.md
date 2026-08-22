@@ -49,6 +49,39 @@ In BoardOil, create a Client Account in System Settings, then copy its token to 
 
 For each board you want Home Assistant to access, open Board Configuration and add that client account as a contributor under Members.
 
+## Examples
+
+Add a task to BoardOil when an update is available for a labelled entity
+
+```yaml
+alias: Add Firmware Update Tasks to BoardOil
+description: 'Add Firmware Update Tasks to BoardOil for Labelled entities and skip'
+triggers:
+  - trigger: update.became_available
+    target:
+      label_id: YOUR_LABEL
+    options:
+      for: '00:00:00'
+      behavior: each
+conditions: []
+actions:
+  - action: boardoil.add_card
+    metadata: {}
+    data:
+      board: 4
+      config_entry_id: YOUR_CONFIG_ENTRY
+      title: Update {{ device_attr(trigger.entity_id, 'name') }}
+      column: YOUR_COLUMN
+      card_type: YOUR_CARD_TYPE
+      tag_names: YOUR_TAG_NAME
+  - action: update.skip
+    metadata: {}
+    target:
+      entity_id: '{{trigger.entity_id}}'
+    data: {}
+mode: queued
+max: 10
+```
 
 [commits-shield]: https://img.shields.io/github/commit-activity/y/andrew-codechimp/HA-BoardOil.svg?style=for-the-badge
 [commits]: https://github.com/andrew-codechimp/HA-BoardOil/commits/main
