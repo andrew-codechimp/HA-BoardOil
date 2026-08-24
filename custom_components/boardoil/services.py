@@ -226,7 +226,7 @@ class UserNotFoundError(ServiceValidationError):
         )
 
 
-async def get_board_id(entry: BoardOilConfigEntry, board_param: str) -> int:
+async def _get_board_id(entry: BoardOilConfigEntry, board_param: str) -> int:
     """Get the board id for a given board parameter."""
 
     board_param = board_param.strip()
@@ -250,7 +250,7 @@ async def get_board_id(entry: BoardOilConfigEntry, board_param: str) -> int:
     return matching_boards[0].id
 
 
-async def get_column_id(
+async def _get_column_id(
     entry: BoardOilConfigEntry, board_id: int, column_param: str | None
 ) -> int | None:
     """Get the column id for a given board and column parameter."""
@@ -279,7 +279,7 @@ async def get_column_id(
     return matching_columns[0].id
 
 
-async def get_card_type_id(
+async def _get_card_type_id(
     entry: BoardOilConfigEntry, board_id: int, card_type_param: str | None
 ) -> int | None:
     """Get the card type id for a given board and card type parameter."""
@@ -310,7 +310,7 @@ async def get_card_type_id(
     return matching_card_types[0].id
 
 
-async def get_user_id(
+async def _get_user_id(
     entry: BoardOilConfigEntry, board_id: int, user_param: str | None
 ) -> int | None:
     """Get the user id for a given board and user parameter."""
@@ -357,7 +357,7 @@ async def async_get_card_service(call: ServiceCall) -> ServiceResponse:
 
     coordinator = entry.runtime_data.coordinator
 
-    board_id = await get_board_id(entry, board_param)
+    board_id = await _get_board_id(entry, board_param)
 
     for board in coordinator.data:
         if board.id != board_id:
@@ -389,9 +389,9 @@ async def async_get_cards_service(call: ServiceCall) -> ServiceResponse:
 
     coordinator = entry.runtime_data.coordinator
 
-    board_id = await get_board_id(entry, board_param)
+    board_id = await _get_board_id(entry, board_param)
     column_id = (
-        await get_column_id(entry, board_id, column_param) if column_param else None
+        await _get_column_id(entry, board_id, column_param) if column_param else None
     )
 
     for board in coordinator.data:
@@ -444,17 +444,17 @@ async def async_add_card_service(call: ServiceCall) -> None:
     card_type_param = call.data.get(ATTR_CARD_TYPE)
     assigned_user_param = call.data.get(ATTR_ASSIGNED_USER)
 
-    board_id = await get_board_id(entry, board_param)
+    board_id = await _get_board_id(entry, board_param)
     column_id = (
-        await get_column_id(entry, board_id, column_param) if column_param else None
+        await _get_column_id(entry, board_id, column_param) if column_param else None
     )
     card_type_id = (
-        await get_card_type_id(entry, board_id, card_type_param)
+        await _get_card_type_id(entry, board_id, card_type_param)
         if card_type_param
         else None
     )
     assigned_user_id = (
-        await get_user_id(entry, board_id, assigned_user_param)
+        await _get_user_id(entry, board_id, assigned_user_param)
         if assigned_user_param
         else None
     )
@@ -490,17 +490,17 @@ async def async_update_card_service(call: ServiceCall) -> None:
     card_type_param = call.data.get(ATTR_CARD_TYPE)
     assigned_user_param = call.data.get(ATTR_ASSIGNED_USER)
 
-    board_id = await get_board_id(entry, board_param)
+    board_id = await _get_board_id(entry, board_param)
     column_id = (
-        await get_column_id(entry, board_id, column_param) if column_param else None
+        await _get_column_id(entry, board_id, column_param) if column_param else None
     )
     card_type_id = (
-        await get_card_type_id(entry, board_id, card_type_param)
+        await _get_card_type_id(entry, board_id, card_type_param)
         if card_type_param
         else None
     )
     assigned_user_id = (
-        await get_user_id(entry, board_id, assigned_user_param)
+        await _get_user_id(entry, board_id, assigned_user_param)
         if assigned_user_param
         else None
     )
@@ -600,7 +600,7 @@ async def async_delete_card_service(call: ServiceCall) -> None:
     )
 
     board_param = str(call.data[ATTR_BOARD])
-    board_id = await get_board_id(entry, board_param)
+    board_id = await _get_board_id(entry, board_param)
 
     try:
         await entry.runtime_data.client.async_delete_card(
@@ -622,7 +622,7 @@ async def async_archive_card_service(call: ServiceCall) -> None:
     )
 
     board_param = str(call.data[ATTR_BOARD])
-    board_id = await get_board_id(entry, board_param)
+    board_id = await _get_board_id(entry, board_param)
 
     try:
         await entry.runtime_data.client.async_archive_card(
@@ -644,7 +644,7 @@ async def async_add_card_comment_service(call: ServiceCall) -> None:
     )
 
     board_param = str(call.data[ATTR_BOARD])
-    board_id = await get_board_id(entry, board_param)
+    board_id = await _get_board_id(entry, board_param)
 
     try:
         await entry.runtime_data.client.async_add_card_comment(
