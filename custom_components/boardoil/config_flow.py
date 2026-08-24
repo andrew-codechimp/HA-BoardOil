@@ -208,7 +208,7 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
         )
         self.verify_ssl = True
 
-        errors, user_id, version = await self.check_connection(
+        errors, client_id, version = await self.check_connection(
             self.host, user_input[CONF_API_TOKEN], self.verify_ssl
         )
 
@@ -217,7 +217,9 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
             errors["base"] = "boardoil_version"
 
         if not errors:
-            await self.async_set_unique_id(user_id)
+            await self.async_set_unique_id(
+                slugify(f"{user_input[CONF_HOST]}-{client_id}")
+            )
             self._abort_if_unique_id_configured()
             return self.async_create_entry(
                 title="BoardOil",
