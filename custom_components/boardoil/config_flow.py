@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, override
 
 from awesomeversion import AwesomeVersion
 
@@ -13,8 +13,9 @@ from slugify import slugify
 import voluptuous as vol
 
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
-from homeassistant.const import CONF_API_TOKEN, CONF_HOST, CONF_VERIFY_SSL
+from homeassistant.const import CONF_API_TOKEN, CONF_HOST, CONF_PORT, CONF_VERIFY_SSL
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
+from homeassistant.helpers.service_info.hassio import HassioServiceInfo
 
 from .api import (
     BoardOilApiClient,
@@ -32,6 +33,12 @@ USER_SCHEMA = vol.Schema(
     }
 )
 REAUTH_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_API_TOKEN): str,
+    }
+)
+
+DISCOVERY_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_API_TOKEN): str,
     }
@@ -171,4 +178,65 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
             step_id="reconfigure",
             data_schema=USER_SCHEMA,
             errors=errors,
+        )
+
+    @override
+    async def async_step_hassio(
+        self, discovery_info: HassioServiceInfo
+    ) -> ConfigFlowResult:
+        """Prepare configuration for a BoardOil app.
+
+        This flow is triggered by the discovery component.
+        """
+        await self._async_handle_discovery_without_unique_id()
+
+        self._hassio_discovery = discovery_info.config
+
+        return await self.async_step_hassio_confirm()
+
+    async def async_step_hassio_confirm(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Confirm Supervisor discovery and prompt for API token."""
+        if user_input is None:
+            return await self._show_hassio_form()
+
+        assert self._hassio_discovery
+
+        self.host = (
+            f"{self._hassio_discovery[CONF_HOST]}:{self._hassio_discovery[CONF_PORT]}"
+        )
+        self.verify_ssl = True
+
+        errors, user_id, version = await self.check_connection(
+            self.host, user_input[CONF_API_TOKEN], self.verify_ssl
+        )
+
+        v = AwesomeVersion(version) if version else None
+        if v is not None and v.valid and v < MIN_REQUIRED_BOARDOIL_VERSION:
+            errors["base"] = "boardoil_version"
+
+        if not errors:
+            await self.async_set_unique_id(user_id)
+            self._abort_if_unique_id_configured()
+            return self.async_create_entry(
+                title="BoardOil",
+                data={
+                    CONF_HOST: self.host,
+                    CONF_API_TOKEN: user_input[CONF_API_TOKEN],
+                    CONF_VERIFY_SSL: self.verify_ssl,
+                },
+            )
+        return await self._show_hassio_form(errors)
+
+    async def _show_hassio_form(
+        self, errors: dict[str, str] | None = None
+    ) -> ConfigFlowResult:
+        """Show the Hass.io confirmation form to the user."""
+        assert self._hassio_discovery
+        return self.async_show_form(
+            step_id="hassio_confirm",
+            data_schema=DISCOVERY_SCHEMA,
+            description_placeholders={"addon": self._hassio_discovery["addon"]},
+            errors=errors or {},
         )

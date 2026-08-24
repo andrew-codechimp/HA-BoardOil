@@ -226,6 +226,16 @@
                     "verify_ssl": "Should SSL certificates be verified? This should be off for self-signed certificates."
                 },
                 "description": "Please reconfigure with BoardOil."
+            },
+            "hassio_confirm": {
+                "data": {
+                    "api_token": "Client account token"
+                },
+                "data_description": {
+                    "api_token": "The client account token of your BoardOil instance from system settings/client accounts."
+                },
+                "description": "Do you want to configure Home Assistant to connect to the BoardOil instance provided by the app: {addon}?",
+                "title": "BoardOil via Home Assistant app"
             }
         },
         "error": {
