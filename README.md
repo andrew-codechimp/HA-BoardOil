@@ -70,7 +70,7 @@ actions:
   - action: boardoil.add_card
     metadata: {}
     data:
-      board: 4
+      board: YOUR_BOARD
       config_entry_id: YOUR_CONFIG_ENTRY
       title: Update {{ device_attr(trigger.entity_id, 'name') }}
       column: YOUR_COLUMN
