@@ -6,6 +6,7 @@
 [![License][license-shield]](LICENSE)
 
 This integration connects Home Assistant to [BoardOil](https://github.com/dozigden/boardoil) allowing you to automate card tasks.
+
 You can either install BoardOil as a [container](https://github.com/dozigden/boardoil/blob/main/GETTING_STARTED.md) or as a [Home Assistant App](https://github.com/bexelbie/ha-boardoil).
 
 Card viewing is not available from the UI because cards support complex features like card type, tags, slicks, and column transitions that Home Assistant to-do lists do not support.
