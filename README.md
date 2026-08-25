@@ -71,9 +71,9 @@ conditions: []
 actions:
   - action: boardoil.add_card
     metadata: {}
-    data:
-      board: YOUR_BOARD
+    data:      
       config_entry_id: YOUR_CONFIG_ENTRY
+      board: YOUR_BOARD
       title: Update {{ device_attr(trigger.entity_id, 'name') }}
       column: YOUR_COLUMN
       card_type: YOUR_CARD_TYPE
