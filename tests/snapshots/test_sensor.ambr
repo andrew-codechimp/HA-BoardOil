@@ -1,0 +1,360 @@
+# serializer version: 1
+# name: test_entities[sensor.boardoil_work_card_types-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'sensor.boardoil_work_card_types',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Card Types',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Card Types',
+    'platform': 'boardoil',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'card_types',
+    'unique_id': 'boardoil-entry_1_card_types',
+    'unit_of_measurement': 'types',
+  })
+# ---
+# name: test_entities[sensor.boardoil_work_card_types-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'board_id': 1,
+      'board_name': 'Work',
+      'card_types': list([
+        dict({
+          'id': 20,
+          'name': 'Task',
+        }),
+      ]),
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'BoardOil - Work Card Types',
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: 'types',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.boardoil_work_card_types',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1',
+  })
+# ---
+# name: test_entities[sensor.boardoil_work_done-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': None,
+    'entity_id': 'sensor.boardoil_work_done',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Done',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:table-column',
+    'original_name': 'Done',
+    'platform': 'boardoil',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'card_count',
+    'unique_id': 'boardoil-entry_1_11_card_count',
+    'unit_of_measurement': 'cards',
+  })
+# ---
+# name: test_entities[sensor.boardoil_work_done-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'board_id': 1,
+      'board_name': 'Work',
+      'cards': list([
+      ]),
+      'column_id': 11,
+      'column_title': 'Done',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'BoardOil - Work Done',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:table-column',
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: 'cards',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.boardoil_work_done',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '0',
+  })
+# ---
+# name: test_entities[sensor.boardoil_work_members-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'sensor.boardoil_work_members',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Members',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Members',
+    'platform': 'boardoil',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'members',
+    'unique_id': 'boardoil-entry_1_members',
+    'unit_of_measurement': 'members',
+  })
+# ---
+# name: test_entities[sensor.boardoil_work_members-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'board_id': 1,
+      'board_name': 'Work',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'BoardOil - Work Members',
+      'members': list([
+        dict({
+          'display_name': 'Alex',
+          'id': 7,
+          'username': 'alex',
+        }),
+      ]),
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: 'members',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.boardoil_work_members',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1',
+  })
+# ---
+# name: test_entities[sensor.boardoil_work_slicks-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'sensor.boardoil_work_slicks',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Slicks',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Slicks',
+    'platform': 'boardoil',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'slicks',
+    'unique_id': 'boardoil-entry_1_slicks',
+    'unit_of_measurement': 'slicks',
+  })
+# ---
+# name: test_entities[sensor.boardoil_work_slicks-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'board_id': 1,
+      'board_name': 'Work',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'BoardOil - Work Slicks',
+      'slicks': list([
+        dict({
+          'id': 40,
+          'name': 'Summer',
+        }),
+      ]),
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: 'slicks',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.boardoil_work_slicks',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1',
+  })
+# ---
+# name: test_entities[sensor.boardoil_work_tags-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'sensor.boardoil_work_tags',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Tags',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Tags',
+    'platform': 'boardoil',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'tags',
+    'unique_id': 'boardoil-entry_1_tags',
+    'unit_of_measurement': 'tags',
+  })
+# ---
+# name: test_entities[sensor.boardoil_work_tags-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'board_id': 1,
+      'board_name': 'Work',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'BoardOil - Work Tags',
+      'tags': list([
+        dict({
+          'id': 30,
+          'name': 'Home',
+        }),
+      ]),
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: 'tags',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.boardoil_work_tags',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1',
+  })
+# ---
+# name: test_entities[sensor.boardoil_work_to_do-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': None,
+    'entity_id': 'sensor.boardoil_work_to_do',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'To do',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:table-column',
+    'original_name': 'To do',
+    'platform': 'boardoil',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'card_count',
+    'unique_id': 'boardoil-entry_1_10_card_count',
+    'unit_of_measurement': 'cards',
+  })
+# ---
+# name: test_entities[sensor.boardoil_work_to_do-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'board_id': 1,
+      'board_name': 'Work',
+      'cards': list([
+        dict({
+          'card_type_id': 20,
+          'card_type_name': 'Task',
+          'id': 101,
+          'title': 'Water the plants',
+        }),
+      ]),
+      'column_id': 10,
+      'column_title': 'To do',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'BoardOil - Work To do',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:table-column',
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: 'cards',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.boardoil_work_to_do',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1',
+  })
+# ---

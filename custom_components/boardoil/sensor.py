@@ -64,6 +64,7 @@ async def async_setup_entry(
             ]
             for entity in new_entities:
                 entities[entity.key] = entity  # type: ignore[attr-defined]
+            async_add_entities(new_entities)
 
         removed_keys = existing_keys - latest_keys
         for key in removed_keys:

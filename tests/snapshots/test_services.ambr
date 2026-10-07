@@ -1,0 +1,107 @@
+# serializer version: 1
+# name: test_response_actions[all-cards]
+  dict({
+    'cards': list([
+      dict({
+        'card': dict({
+          'assignedUserDisplayName': 'Alex',
+          'assignedUserId': 7,
+          'cardTypeEmoji': '',
+          'cardTypeId': 20,
+          'cardTypeName': 'Task',
+          'description': 'Check the soil first',
+          'externalUrl': 'https://example.com/plants',
+          'id': 101,
+          'slickId': 40,
+          'slickName': 'Summer',
+          'sortKey': 'a0',
+          'tagNames': list([
+            'Home',
+          ]),
+          'title': 'Water the plants',
+          'updatedAtUtc': '2026-06-30T10:00:00Z',
+        }),
+      }),
+    ]),
+  })
+# ---
+# name: test_response_actions[column-id]
+  dict({
+    'cards': list([
+      dict({
+        'card': dict({
+          'assignedUserDisplayName': 'Alex',
+          'assignedUserId': 7,
+          'cardTypeEmoji': '',
+          'cardTypeId': 20,
+          'cardTypeName': 'Task',
+          'description': 'Check the soil first',
+          'externalUrl': 'https://example.com/plants',
+          'id': 101,
+          'slickId': 40,
+          'slickName': 'Summer',
+          'sortKey': 'a0',
+          'tagNames': list([
+            'Home',
+          ]),
+          'title': 'Water the plants',
+          'updatedAtUtc': '2026-06-30T10:00:00Z',
+        }),
+      }),
+    ]),
+  })
+# ---
+# name: test_response_actions[column-name]
+  dict({
+    'cards': list([
+      dict({
+        'card': dict({
+          'assignedUserDisplayName': 'Alex',
+          'assignedUserId': 7,
+          'cardTypeEmoji': '',
+          'cardTypeId': 20,
+          'cardTypeName': 'Task',
+          'description': 'Check the soil first',
+          'externalUrl': 'https://example.com/plants',
+          'id': 101,
+          'slickId': 40,
+          'slickName': 'Summer',
+          'sortKey': 'a0',
+          'tagNames': list([
+            'Home',
+          ]),
+          'title': 'Water the plants',
+          'updatedAtUtc': '2026-06-30T10:00:00Z',
+        }),
+      }),
+    ]),
+  })
+# ---
+# name: test_response_actions[empty-column]
+  dict({
+    'cards': list([
+    ]),
+  })
+# ---
+# name: test_response_actions[single-card]
+  dict({
+    'card': dict({
+      'assignedUserDisplayName': 'Alex',
+      'assignedUserId': 7,
+      'cardTypeEmoji': '',
+      'cardTypeId': 20,
+      'cardTypeName': 'Task',
+      'description': 'Check the soil first',
+      'externalUrl': 'https://example.com/plants',
+      'id': 101,
+      'slickId': 40,
+      'slickName': 'Summer',
+      'sortKey': 'a0',
+      'tagNames': list([
+        'Home',
+      ]),
+      'title': 'Water the plants',
+      'updatedAtUtc': '2026-06-30T10:00:00Z',
+    }),
+  })
+# ---

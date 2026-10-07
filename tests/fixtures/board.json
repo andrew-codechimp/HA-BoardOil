@@ -1,0 +1,32 @@
+{
+  "data": {
+    "id": 1,
+    "name": "Work",
+    "description": "Tasks for the week",
+    "columns": [
+      {
+        "id": 10,
+        "title": "To do",
+        "cards": [
+          {
+            "id": 101,
+            "cardTypeId": 20,
+            "cardTypeName": "Task",
+            "cardTypeEmoji": "",
+            "title": "Water the plants",
+            "description": "Check the soil first",
+            "sortKey": "a0",
+            "tagNames": ["Home"],
+            "updatedAtUtc": "2026-06-30T10:00:00Z",
+            "assignedUserId": 7,
+            "assignedUserDisplayName": "Alex",
+            "externalUrl": "https://example.com/plants",
+            "slickId": 40,
+            "slickName": "Summer"
+          }
+        ]
+      },
+      {"id": 11, "title": "Done", "cards": []}
+    ]
+  }
+}
