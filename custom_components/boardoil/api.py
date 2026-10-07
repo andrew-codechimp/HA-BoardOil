@@ -353,6 +353,8 @@ class BoardOilApiClient:
                 _verify_response_or_raise(response)
                 return await response.json()
 
+        except BoardOilApiClientAuthenticationError:
+            raise
         except TimeoutError as exception:
             msg = f"Timeout error fetching information - {exception}"
             raise BoardOilApiClientCommunicationError(

@@ -376,7 +376,7 @@ async def async_get_card_service(call: ServiceCall) -> ServiceResponse:
 
         raise CardNotFoundError(board_id=board_id, card_id=card_id)
 
-    raise BoardNotFoundError(board.id)
+    raise BoardNotFoundError(board_param)
 
 
 async def async_get_cards_service(call: ServiceCall) -> ServiceResponse:

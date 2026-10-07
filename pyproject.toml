@@ -59,6 +59,12 @@ dev = [
 
 [tool.uv]
 default-groups = ["dev"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+
 [tool.ruff]
 target-version = "py313"
 src = ["custom_components/boardoil"]
@@ -141,6 +147,9 @@ ignore = [
   "PLR0917", # Too many positional arguemnts
 ]
 
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["TC002"] # Keep fixture annotation types available at runtime.
 
 [tool.ruff.lint.mccabe]
 max-complexity = 25
