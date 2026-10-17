@@ -55,7 +55,7 @@ def mock_config_entry() -> MockConfigEntry:
         entry_id=ENTRY_ID,
         unique_id=UNIQUE_ID,
         title="BoardOil",
-        version=1,
+        version=2,
         data={CONF_HOST: HOST, CONF_API_TOKEN: API_TOKEN, CONF_VERIFY_SSL: True},
     )
 

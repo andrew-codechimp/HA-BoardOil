@@ -9,7 +9,6 @@ from awesomeversion import AwesomeVersion
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
-from slugify import slugify
 import voluptuous as vol
 
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
@@ -23,6 +22,7 @@ from .api import (
     BoardOilApiClientError,
 )
 from .const import DOMAIN, LOGGER, MIN_REQUIRED_BOARDOIL_VERSION
+from .util import create_unique_id
 
 USER_SCHEMA = vol.Schema(
     {
@@ -41,7 +41,7 @@ REAUTH_SCHEMA = vol.Schema(
 class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
     """Config flow for BoardOil."""
 
-    VERSION = 1
+    VERSION = 2
 
     host: str | None = None
     verify_ssl: bool = True
@@ -51,7 +51,7 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
         host: str,
         api_token: str,
         verify_ssl: bool,
-    ) -> tuple[dict[str, str], str | None, str | None]:
+    ) -> tuple[dict[str, str], int, str, str | None]:
         """Check connection to the BoardOil API."""
         client = BoardOilApiClient(
             host=host,
@@ -62,13 +62,13 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
             me = await client.async_get_me()
             version_info = await client.async_get_version()
         except BoardOilApiClientAuthenticationError:
-            return {"base": "auth"}, None, None
+            return {"base": "auth"}, 0, "", None
         except BoardOilApiClientCommunicationError:
-            return {"base": "connection"}, None, None
+            return {"base": "connection"}, 0, "", None
         except BoardOilApiClientError:
             LOGGER.exception("Unexpected error")
-            return {"base": "unknown"}, None, None
-        return {}, str(me.id), version_info.version
+            return {"base": "unknown"}, 0, "", None
+        return {}, me.id, me.username, version_info.version
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
@@ -76,7 +76,7 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
         """Handle a flow initialized by the user."""
         errors: dict[str, str] = {}
         if user_input:
-            errors, client_id, version = await self.check_connection(
+            errors, client_id, username, version = await self.check_connection(
                 user_input[CONF_HOST],
                 user_input[CONF_API_TOKEN],
                 user_input[CONF_VERIFY_SSL],
@@ -86,9 +86,7 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
                 errors["base"] = "boardoil_version"
 
             if not errors:
-                await self.async_set_unique_id(
-                    slugify(f"{user_input[CONF_HOST]}-{client_id}")
-                )
+                await self.async_set_unique_id(create_unique_id(client_id, username))
                 self._abort_if_unique_id_configured()
                 return self.async_create_entry(
                     title="BoardOil",
@@ -117,7 +115,7 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
         if user_input:
             if self.host is None:
                 return self.async_abort(reason="reauth_failed")
-            errors, client_id, version = await self.check_connection(
+            errors, client_id, username, version = await self.check_connection(
                 self.host,
                 user_input[CONF_API_TOKEN],
                 self.verify_ssl,
@@ -127,7 +125,7 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
                 errors["base"] = "boardoil_version"
 
             if not errors:
-                await self.async_set_unique_id(slugify(f"{self.host}-{client_id}"))
+                await self.async_set_unique_id(create_unique_id(client_id, username))
                 self._abort_if_unique_id_mismatch(reason="wrong_account")
                 return self.async_update_reload_and_abort(
                     self._get_reauth_entry(),
@@ -145,7 +143,7 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
         """Handle reconfiguration of the integration."""
         errors: dict[str, str] = {}
         if user_input:
-            errors, client_id, version = await self.check_connection(
+            errors, client_id, username, version = await self.check_connection(
                 user_input[CONF_HOST],
                 user_input[CONF_API_TOKEN],
                 user_input[CONF_VERIFY_SSL],
@@ -155,9 +153,7 @@ class BoardOilFlowHandler(ConfigFlow, domain=DOMAIN):
                 errors["base"] = "boardoil_version"
 
             if not errors:
-                await self.async_set_unique_id(
-                    slugify(f"{user_input[CONF_HOST]}-{client_id}")
-                )
+                await self.async_set_unique_id(create_unique_id(client_id, username))
                 self._abort_if_unique_id_mismatch(reason="wrong_account")
                 return self.async_update_reload_and_abort(
                     self._get_reconfigure_entry(),

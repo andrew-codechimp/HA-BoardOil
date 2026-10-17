@@ -7,7 +7,7 @@ from homeassistant.core import HomeAssistant
 HOST = "https://boardoil.example"
 API_TOKEN = "test-api-token"  # noqa: S105
 ENTRY_ID = "boardoil-entry"
-UNIQUE_ID = "https-boardoil-example-7"
+UNIQUE_ID = "7-alex"
 COLUMN_ENTITY_ID = "sensor.boardoil_work_to_do"
 EVENT_ENTITY_ID = "event.boardoil_work_card"
 
