@@ -71,7 +71,7 @@ class BoardOilApiClient:
         )
         return Me(
             id=response.get("data", {}).get("id", 0),
-            username=response.get("data", {}).get("username", ""),
+            username=response.get("data", {}).get("userName", ""),
             display_name=response.get("data", {}).get("displayName", ""),
             role=response.get("data", {}).get("role", ""),
         )
