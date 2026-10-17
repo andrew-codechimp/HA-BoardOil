@@ -28,6 +28,7 @@ from .const import DOMAIN, LOGGER, MIN_HA_VERSION, MIN_REQUIRED_BOARDOIL_VERSION
 from .coordinator import BoardOilDataUpdateCoordinator
 from .data import BoardOilData
 from .services import async_setup_services
+from .util import create_unique_id
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -104,6 +105,37 @@ async def async_setup_entry(
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))
+
+    return True
+
+
+async def async_migrate_entry(
+    hass: HomeAssistant,
+    entry: BoardOilConfigEntry,
+) -> bool:
+    """Migrate config entries to the current version."""
+    if entry.version > 2:
+        return False
+
+    if entry.version == 1:
+        client = BoardOilApiClient(
+            host=entry.data[CONF_HOST],
+            api_token=entry.data[CONF_API_TOKEN],
+            session=async_get_clientsession(
+                hass, verify_ssl=entry.data.get(CONF_VERIFY_SSL, True)
+            ),
+        )
+        try:
+            me = await client.async_get_me()
+        except BoardOilApiClientError as exception:
+            LOGGER.error("Error migrating BoardOil config entry: %s", exception)
+            return False
+
+        hass.config_entries.async_update_entry(
+            entry,
+            unique_id=create_unique_id(me.id, me.username),
+            version=2,
+        )
 
     return True
 

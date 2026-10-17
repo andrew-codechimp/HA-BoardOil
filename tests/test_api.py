@@ -48,7 +48,7 @@ async def api_client(
             "async_get_me",
             "auth/me",
             {},
-            {"id": 7, "username": "alex", "displayName": "Alex", "role": "client"},
+            {"id": 7, "userName": "alex", "displayName": "Alex", "role": "client"},
             Me(7, "alex", "Alex", "client"),
             id="account",
         ),

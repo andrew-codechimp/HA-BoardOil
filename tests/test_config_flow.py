@@ -27,7 +27,7 @@ pytestmark = pytest.mark.usefixtures("mock_api", "mock_setup_entry")
     [pytest.param(True, id="verify-ssl"), pytest.param(False, id="self-signed")],
 )
 async def test_user_flow(hass: HomeAssistant, verify_ssl: bool) -> None:
-    """Test user setup stores credentials and identifies the host/account pair."""
+    """Test user setup stores credentials and identifies the account."""
     result = await hass.config_entries.flow.async_init(
         DOMAIN, context={"source": SOURCE_USER}
     )
@@ -41,6 +41,21 @@ async def test_user_flow(hass: HomeAssistant, verify_ssl: bool) -> None:
     assert result["title"] == "BoardOil"
     assert result["data"] == data
     assert result["result"].unique_id == UNIQUE_ID
+    assert result["result"].version == 2
+
+
+async def test_user_flow_slugifies_username(
+    hass: HomeAssistant, mock_api: MagicMock
+) -> None:
+    """Test the account ID and username are slugified together."""
+    mock_api.async_get_me.return_value = Me(7, "Alex.Test_User", "Alex", "client")
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN,
+        context={"source": SOURCE_USER},
+        data={CONF_HOST: HOST, CONF_API_TOKEN: API_TOKEN, CONF_VERIFY_SSL: True},
+    )
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert result["result"].unique_id == "7-alex-test-user"
 
 
 @pytest.mark.parametrize(
@@ -111,10 +126,12 @@ async def test_unsupported_version(
 async def test_duplicate_account(
     hass: HomeAssistant, mock_config_entry: MockConfigEntry
 ) -> None:
-    """Test the same host/account cannot create a second entry."""
+    """Test the same account cannot create a second entry."""
     mock_config_entry.add_to_hass(hass)
     result = await hass.config_entries.flow.async_init(
-        DOMAIN, context={"source": SOURCE_USER}, data=dict(mock_config_entry.data)
+        DOMAIN,
+        context={"source": SOURCE_USER},
+        data={**mock_config_entry.data, CONF_HOST: "https://new.boardoil.example"},
     )
     assert result["type"] is FlowResultType.ABORT
     assert result["reason"] == "already_configured"
@@ -130,7 +147,7 @@ async def test_duplicate_account(
 async def test_update_credentials(
     hass: HomeAssistant, mock_config_entry: MockConfigEntry, source: str, reason: str
 ) -> None:
-    """Test credentials update while preserving the configured host/account."""
+    """Test credentials update while preserving the configured account."""
     mock_config_entry.add_to_hass(hass)
     result = await hass.config_entries.flow.async_init(
         DOMAIN,
@@ -154,15 +171,23 @@ async def test_update_credentials(
 
 
 @pytest.mark.parametrize("source", [SOURCE_REAUTH, SOURCE_RECONFIGURE])
+@pytest.mark.parametrize(
+    "account",
+    [
+        pytest.param(Me(8, "alex", "Alex", "client"), id="different-id"),
+        pytest.param(Me(7, "other", "Other", "client"), id="different-username"),
+    ],
+)
 async def test_wrong_account(
     hass: HomeAssistant,
     mock_config_entry: MockConfigEntry,
     mock_api: MagicMock,
     source: str,
+    account: Me,
 ) -> None:
     """Test reauthentication and reconfiguration cannot switch accounts."""
     mock_config_entry.add_to_hass(hass)
-    mock_api.async_get_me.return_value = Me(8, "other", "Other", "client")
+    mock_api.async_get_me.return_value = account
     result = await hass.config_entries.flow.async_init(
         DOMAIN,
         context={"source": source, "entry_id": mock_config_entry.entry_id},

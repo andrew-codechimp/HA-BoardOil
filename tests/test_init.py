@@ -3,9 +3,13 @@
 from datetime import timedelta
 from unittest.mock import MagicMock
 
-from custom_components.boardoil.api import BoardOilApiClientCommunicationError
+from custom_components.boardoil.api import (
+    BoardOilApiClientAuthenticationError,
+    BoardOilApiClientCommunicationError,
+    BoardOilApiClientError,
+)
 from custom_components.boardoil.const import DEFAULT_SCAN_INTERVAL, DOMAIN
-from custom_components.boardoil.models import Version
+from custom_components.boardoil.models import Me, Version
 from freezegun.api import FrozenDateTimeFactory
 import pytest
 from pytest_homeassistant_custom_component.common import (
@@ -22,6 +26,68 @@ from homeassistant.util import dt as dt_util
 from . import COLUMN_ENTITY_ID, setup_integration
 
 pytestmark = pytest.mark.usefixtures("mock_api")
+
+
+@pytest.mark.parametrize(
+    "verify_ssl",
+    [pytest.param(True, id="verify-ssl"), pytest.param(False, id="self-signed")],
+)
+async def test_migrate_entry(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_api: MagicMock,
+    verify_ssl: bool,
+) -> None:
+    """Test version 1 entries migrate to the slugified account ID and username."""
+    old_data = {**mock_config_entry.data, CONF_VERIFY_SSL: verify_ssl}
+    mock_config_entry.add_to_hass(hass)
+    hass.config_entries.async_update_entry(
+        mock_config_entry,
+        version=1,
+        unique_id="https-boardoil-example-7",
+        data=old_data,
+    )
+    mock_api.async_get_me.return_value = Me(7, "Alex.Test_User", "Alex", "client")
+
+    assert await hass.config_entries.async_setup(mock_config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    assert mock_config_entry.state is ConfigEntryState.LOADED
+    assert mock_config_entry.version == 2
+    assert mock_config_entry.unique_id == "7-alex-test-user"
+    assert mock_config_entry.data == old_data
+    mock_api.async_get_me.assert_awaited_once()
+
+
+@pytest.mark.parametrize(
+    "exception",
+    [
+        pytest.param(BoardOilApiClientAuthenticationError("auth"), id="authentication"),
+        pytest.param(BoardOilApiClientCommunicationError("offline"), id="connection"),
+        pytest.param(BoardOilApiClientError("unexpected"), id="unexpected"),
+    ],
+)
+async def test_migrate_entry_error(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_api: MagicMock,
+    exception: BoardOilApiClientError,
+) -> None:
+    """Test failed migrations preserve the old version, unique ID, and data."""
+    old_data = dict(mock_config_entry.data)
+    mock_config_entry.add_to_hass(hass)
+    hass.config_entries.async_update_entry(
+        mock_config_entry, version=1, unique_id="https-boardoil-example-7"
+    )
+    mock_api.async_get_me.side_effect = exception
+
+    assert not await hass.config_entries.async_setup(mock_config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    assert mock_config_entry.state is ConfigEntryState.MIGRATION_ERROR
+    assert mock_config_entry.version == 1
+    assert mock_config_entry.unique_id == "https-boardoil-example-7"
+    assert mock_config_entry.data == old_data
 
 
 async def test_setup_entry(
