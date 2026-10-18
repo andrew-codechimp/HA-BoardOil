@@ -15,6 +15,9 @@ async def async_get_config_entry_diagnostics(
     config_entry: BoardOilConfigEntry,
 ) -> dict[str, Any]:
     """Return diagnostics for a config entry."""
+    if not hasattr(config_entry, "runtime_data"):
+        return {"state": config_entry.state.value}
+
     data = config_entry.runtime_data
 
     return {
