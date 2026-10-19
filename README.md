@@ -4,6 +4,7 @@
 [![GitHub Activity][commits-shield]][commits]
 [![Downloads][download-latest-shield]]()
 [![License][license-shield]](LICENSE)
+[![hacs][hacsbadge]][hacs]
 
 This integration connects Home Assistant to [BoardOil](https://github.com/dozigden/boardoil) allowing you to automate card tasks.
 
@@ -45,7 +46,7 @@ The event data includes details for card, column, card type, tags and slick
 
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=andrew-codechimp&repository=HA-BoardOil&category=Integration)
 
-This is a HACS custom integration; if the link does not work, you will have to add this repository URL via HACS custom repositories.
+Or search for BoardOil within HACS.
 
 ## Setup
 
