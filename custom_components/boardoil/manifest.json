@@ -1,6 +1,7 @@
 {
   "domain": "boardoil",
   "name": "BoardOil",
+  "categories": [ "productivity_information" ],
   "codeowners": [
     "@andrew-codechimp"
   ],
