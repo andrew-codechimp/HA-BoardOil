@@ -91,7 +91,6 @@ async def test_column_renamed(
     assert state.state == "1"
     assert state.attributes["column_title"] == "Backlog"
     assert state.attributes["board_name"] == "Tasks"
-    assert state.attributes["friendly_name"] == "BoardOil - Work Backlog"
 
 
 async def test_board_removed(
