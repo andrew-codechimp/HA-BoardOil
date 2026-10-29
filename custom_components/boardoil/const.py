@@ -7,7 +7,7 @@ from awesomeversion import AwesomeVersion
 LOGGER: Logger = getLogger(__package__)
 
 DOMAIN = "boardoil"
-MIN_HA_VERSION = "2026.7.0"
+MIN_HA_VERSION = "2026.8.0"
 MIN_REQUIRED_BOARDOIL_VERSION = AwesomeVersion("1.5.0")
 DEFAULT_SCAN_INTERVAL = 60  # seconds
 

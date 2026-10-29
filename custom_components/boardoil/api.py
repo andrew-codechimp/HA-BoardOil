@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
+from asyncio import timeout
 import socket
 from typing import Any
 
 import aiohttp
-import async_timeout
 
 from .models import (
     Board,
@@ -339,7 +339,7 @@ class BoardOilApiClient:
     ) -> Any:
         """Get information from the API."""
         try:
-            async with async_timeout.timeout(10):
+            async with timeout(10):
                 response = await self._session.request(
                     method=method,
                     url=f"{self._host}/api/{path}",
