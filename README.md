@@ -1,3 +1,4 @@
+<!-- ha-marketplace:exclude-start -->
 # BoardOil Home Assistant Integration
 
 [![GitHub Release][releases-shield]][releases]
@@ -7,7 +8,7 @@
 [![marketplace][marketplacebadge]][marketplace]
 [![License][license-shield]](LICENSE)
 
-
+<!-- ha-marketplace:exclude-end -->
 This integration connects Home Assistant to [BoardOil](https://github.com/dozigden/boardoil) allowing you to automate card tasks.
 
 You can either install BoardOil as a [container](https://github.com/dozigden/boardoil/blob/main/GETTING_STARTED.md) or as a [Home Assistant App](https://github.com/bexelbie/ha-boardoil).
@@ -42,6 +43,7 @@ Sensor attributes include lists of their relevant data.
 
 The event data includes details for card, column, card type, tags and slick
 
+<!-- ha-marketplace:exclude-start -->
 ## Installation
 
 ### Marketplace/HACS
@@ -50,6 +52,7 @@ The event data includes details for card, column, card type, tags and slick
 
 Or search for BoardOil within Marketplace/HACS if My Home Assistant does not work for you.
 
+<!-- ha-marketplace:exclude-end -->
 ## Setup
 
 In BoardOil, create a Client Account in System Settings, then copy its token to use when adding this integration.
