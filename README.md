@@ -41,16 +41,14 @@ Sensor attributes include lists of their relevant data.
 ### Events
 - Card events fire when a card is added, updated, moved, or removed.
 
-The event data includes details for card, column, card type, tags and slick
+The event data includes details for card, column, card type, tags and slick.
 
 <!-- ha-marketplace:exclude-start -->
 ## Installation
 
-### Marketplace/HACS
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Marketplace.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=andrew-codechimp&repository=HA-BoardOil&category=Integration)
 
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=andrew-codechimp&repository=HA-BoardOil&category=Integration)
-
-Or search for BoardOil within Marketplace/HACS if My Home Assistant does not work for you.
+Or search for BoardOil within Marketplace if My Home Assistant does not work for you.
 
 <!-- ha-marketplace:exclude-end -->
 ## Setup
