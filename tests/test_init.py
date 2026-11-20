@@ -17,14 +17,14 @@ from pytest_homeassistant.common import (
     async_fire_time_changed,
 )
 
-from homeassistant.config_entries import ConfigEntryState
+from homeassistant.config_entries import SOURCE_REAUTH, ConfigEntryState
 from homeassistant.const import CONF_VERIFY_SSL
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryError
 from homeassistant.helpers import device_registry as dr, entity_registry as er
 from homeassistant.util import dt as dt_util
 
-from . import COLUMN_ENTITY_ID, setup_integration
+from . import COLUMN_ENTITY_ID, ENTRY_ID, setup_integration
 
 pytestmark = pytest.mark.usefixtures("mock_api")
 
@@ -127,16 +127,51 @@ async def test_setup_entry(
     }
 
 
-async def test_version_connection_error(
-    hass: HomeAssistant, mock_config_entry: MockConfigEntry, mock_api: MagicMock
+@pytest.mark.parametrize(
+    ("exception", "expected_state", "translation_key", "reauth_flows"),
+    [
+        pytest.param(
+            BoardOilApiClientAuthenticationError("Invalid credentials"),
+            ConfigEntryState.SETUP_ERROR,
+            "auth_failed",
+            [(SOURCE_REAUTH, ENTRY_ID)],
+            id="authentication",
+        ),
+        pytest.param(
+            BoardOilApiClientCommunicationError("offline"),
+            ConfigEntryState.SETUP_RETRY,
+            "connection_error",
+            [],
+            id="connection",
+        ),
+        pytest.param(
+            BoardOilApiClientError("unexpected"),
+            ConfigEntryState.SETUP_RETRY,
+            "connection_error",
+            [],
+            id="unexpected",
+        ),
+    ],
+)
+async def test_version_error(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_api: MagicMock,
+    exception: BoardOilApiClientError,
+    expected_state: ConfigEntryState,
+    translation_key: str,
+    reauth_flows: list[tuple[str, str]],
 ) -> None:
-    """Test an initial connection error schedules a translated setup retry."""
-    mock_api.async_get_version.side_effect = BoardOilApiClientCommunicationError(
-        "offline"
-    )
+    """Test initial API failures trigger reauthentication or a setup retry."""
+    mock_api.async_get_version.side_effect = exception
     await setup_integration(hass, mock_config_entry)
-    assert mock_config_entry.state is ConfigEntryState.SETUP_RETRY
-    assert mock_config_entry.error_reason_translation_key == "connection_error"
+    assert mock_config_entry.state is expected_state
+    assert mock_config_entry.error_reason_translation_key == translation_key
+    assert [
+        (flow["context"]["source"], flow["context"]["entry_id"])
+        for flow in hass.config_entries.flow.async_progress_by_handler(DOMAIN)
+    ] == reauth_flows
+    mock_api.async_get_boards.assert_not_awaited()
 
 
 async def test_unsupported_version(

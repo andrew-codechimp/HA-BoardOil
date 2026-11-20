@@ -18,12 +18,20 @@ from homeassistant.const import (
     Platform,
     __version__ as HA_VERSION,  # noqa: N812
 )
-from homeassistant.exceptions import ConfigEntryError, ConfigEntryNotReady
+from homeassistant.exceptions import (
+    ConfigEntryAuthFailed,
+    ConfigEntryError,
+    ConfigEntryNotReady,
+)
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.loader import async_get_loaded_integration
 
-from .api import BoardOilApiClient, BoardOilApiClientError
+from .api import (
+    BoardOilApiClient,
+    BoardOilApiClientAuthenticationError,
+    BoardOilApiClientError,
+)
 from .const import DOMAIN, LOGGER, MIN_HA_VERSION, MIN_REQUIRED_BOARDOIL_VERSION
 from .coordinator import BoardOilDataUpdateCoordinator
 from .data import BoardOilData
@@ -77,6 +85,11 @@ async def async_setup_entry(
     )
     try:
         version_info = await client.async_get_version()
+    except BoardOilApiClientAuthenticationError as exception:
+        raise ConfigEntryAuthFailed(
+            translation_domain=DOMAIN,
+            translation_key="auth_failed",
+        ) from exception
     except BoardOilApiClientError as exception:
         raise ConfigEntryNotReady(
             translation_domain=DOMAIN,
