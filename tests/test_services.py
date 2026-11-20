@@ -6,7 +6,7 @@ from custom_components.boardoil.api import BoardOilApiClientCommunicationError
 from custom_components.boardoil.const import DOMAIN
 from custom_components.boardoil.services import _normalize_tag_names
 import pytest
-from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant.common import MockConfigEntry
 from syrupy.assertion import SnapshotAssertion
 
 from homeassistant.const import ATTR_CONFIG_ENTRY_ID

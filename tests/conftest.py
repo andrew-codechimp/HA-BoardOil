@@ -21,8 +21,8 @@ from custom_components.boardoil.models import (
 )
 from freezegun.api import FrozenDateTimeFactory
 import pytest
-from pytest_homeassistant_custom_component.common import MockConfigEntry, load_fixture
-from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
+from pytest_homeassistant.common import MockConfigEntry, load_fixture
+from pytest_homeassistant.syrupy import HomeAssistantSnapshotExtension
 from syrupy.assertion import SnapshotAssertion
 
 from homeassistant.const import CONF_API_TOKEN, CONF_HOST, CONF_VERIFY_SSL
@@ -34,11 +34,6 @@ from . import API_TOKEN, ENTRY_ID, HOST, UNIQUE_ID
 def snapshot(snapshot: SnapshotAssertion) -> SnapshotAssertion:
     """Select the Home Assistant serializer regardless of plugin load order."""
     return snapshot.use_extension(HomeAssistantSnapshotExtension)
-
-
-@pytest.fixture(autouse=True)
-def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:
-    """Enable custom integrations in Home Assistant."""
 
 
 @pytest.fixture(autouse=True)

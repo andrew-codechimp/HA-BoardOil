@@ -18,7 +18,7 @@ from homeassistant.const import (
     Platform,
     __version__ as HA_VERSION,  # noqa: N812
 )
-from homeassistant.exceptions import ConfigEntryError
+from homeassistant.exceptions import ConfigEntryError, ConfigEntryNotReady
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.loader import async_get_loaded_integration
@@ -66,7 +66,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:  # noqa:
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: BoardOilConfigEntry,
-) -> bool:
+) -> None:
     """Set up this integration using UI."""
     client = BoardOilApiClient(
         host=entry.data[CONF_HOST],
@@ -78,8 +78,10 @@ async def async_setup_entry(
     try:
         version_info = await client.async_get_version()
     except BoardOilApiClientError as exception:
-        LOGGER.error("Error connecting to BoardOil API: %s", exception)
-        return False
+        raise ConfigEntryNotReady(
+            translation_domain=DOMAIN,
+            translation_key="connection_error",
+        ) from exception
 
     v = AwesomeVersion(version_info.version)
     if v.valid and v < MIN_REQUIRED_BOARDOIL_VERSION:
@@ -105,8 +107,6 @@ async def async_setup_entry(
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))
-
-    return True
 
 
 async def async_migrate_entry(
@@ -143,9 +143,9 @@ async def async_migrate_entry(
 async def async_unload_entry(
     hass: HomeAssistant,
     entry: BoardOilConfigEntry,
-) -> bool:
+) -> None:
     """Handle removal of an entry."""
-    return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+    await hass.config_entries.async_unload_platforms_or_raise(entry, PLATFORMS)
 
 
 async def async_reload_entry(

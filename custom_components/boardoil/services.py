@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+from enum import StrEnum
 from typing import TYPE_CHECKING, cast
 from urllib.parse import urlparse
 
-import voluptuous as vol
+import probatio
 
 from homeassistant.const import ATTR_CONFIG_ENTRY_ID
 from homeassistant.core import (
@@ -20,104 +21,113 @@ from homeassistant.helpers import config_validation as cv, service
 from .api import (
     BoardOilApiClientCommunicationError,
 )
-from .const import (
-    ATTR_ASSIGNED_USER,
-    ATTR_BOARD,
-    ATTR_CARD_ID,
-    ATTR_CARD_TYPE,
-    ATTR_COLUMN,
-    ATTR_COMMENT,
-    ATTR_DESCRIPTION,
-    ATTR_EXTERNAL_URL,
-    ATTR_SLICK_NAME,
-    ATTR_TAG_NAMES,
-    ATTR_TITLE,
-    DOMAIN,
-)
+from .const import DOMAIN
 
 if TYPE_CHECKING:
     from homeassistant.util.json import JsonObjectType, JsonValueType
 
     from .data import BoardOilConfigEntry
 
-SERVICE_GET_CARD = "get_card"
-SERVICE_SCHEMA_GET_CARD = vol.Schema(
+
+class BoardOilService(StrEnum):
+    """Service names for BoardOil."""
+
+    ADD_CARD = "add_card"
+    ADD_CARD_COMMENT = "add_card_comment"
+    ARCHIVE_CARD = "archive_card"
+    DELETE_CARD = "delete_card"
+    GET_CARD = "get_card"
+    GET_CARDS = "get_cards"
+    UPDATE_CARD = "update_card"
+
+
+class BoardOilServiceArgument(StrEnum):
+    """Service argument names for BoardOil."""
+
+    ASSIGNED_USER = "assigned_user"
+    BOARD = "board"
+    CARD_ID = "card_id"
+    CARD_TYPE = "card_type"
+    COLUMN = "column"
+    COMMENT = "comment"
+    DESCRIPTION = "description"
+    EXTERNAL_URL = "external_url"
+    SLICK_NAME = "slick_name"
+    TAG_NAMES = "tag_names"
+    TITLE = "title"
+
+
+SERVICE_SCHEMA_GET_CARD = probatio.Schema(
     {
-        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-        vol.Required(ATTR_BOARD): cv.string,
-        vol.Required(ATTR_CARD_ID): cv.positive_int,
+        probatio.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+        probatio.Required(BoardOilServiceArgument.BOARD): cv.string,
+        probatio.Required(BoardOilServiceArgument.CARD_ID): cv.positive_int,
     }
 )
-SERVICE_GET_CARDS = "get_cards"
-SERVICE_SCHEMA_GET_CARDS = vol.Schema(
+SERVICE_SCHEMA_GET_CARDS = probatio.Schema(
     {
-        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-        vol.Required(ATTR_BOARD): cv.string,
-        vol.Optional(ATTR_COLUMN): cv.string,
+        probatio.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+        probatio.Required(BoardOilServiceArgument.BOARD): cv.string,
+        probatio.Optional(BoardOilServiceArgument.COLUMN): cv.string,
     }
 )
-SERVICE_ADD_CARD = "add_card"
-SERVICE_SCHEMA_ADD_CARD = vol.Schema(
+SERVICE_SCHEMA_ADD_CARD = probatio.Schema(
     {
-        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-        vol.Required(ATTR_BOARD): cv.string,
-        vol.Required(ATTR_TITLE): cv.string,
-        vol.Optional(ATTR_DESCRIPTION, default=""): cv.string,
-        vol.Optional(ATTR_COLUMN): cv.string,
-        vol.Optional(ATTR_CARD_TYPE): cv.string,
-        vol.Optional(ATTR_TAG_NAMES): vol.Any(
+        probatio.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+        probatio.Required(BoardOilServiceArgument.BOARD): cv.string,
+        probatio.Required(BoardOilServiceArgument.TITLE): cv.string,
+        probatio.Optional(BoardOilServiceArgument.DESCRIPTION, default=""): cv.string,
+        probatio.Optional(BoardOilServiceArgument.COLUMN): cv.string,
+        probatio.Optional(BoardOilServiceArgument.CARD_TYPE): cv.string,
+        probatio.Optional(BoardOilServiceArgument.TAG_NAMES): probatio.Any(
             cv.string,
-            vol.All(cv.ensure_list, [cv.string]),
+            probatio.All(cv.ensure_list, [cv.string]),
             {cv.string: object},
         ),
-        vol.Optional(ATTR_SLICK_NAME): cv.string,
-        vol.Optional(ATTR_ASSIGNED_USER): cv.string,
-        vol.Optional(ATTR_EXTERNAL_URL): cv.string,
+        probatio.Optional(BoardOilServiceArgument.SLICK_NAME): cv.string,
+        probatio.Optional(BoardOilServiceArgument.ASSIGNED_USER): cv.string,
+        probatio.Optional(BoardOilServiceArgument.EXTERNAL_URL): cv.string,
     }
 )
-SERVICE_UPDATE_CARD = "update_card"
-SERVICE_SCHEMA_UPDATE_CARD = vol.Schema(
+SERVICE_SCHEMA_UPDATE_CARD = probatio.Schema(
     {
-        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-        vol.Required(ATTR_BOARD): cv.string,
-        vol.Required(ATTR_CARD_ID): cv.positive_int,
-        vol.Optional(ATTR_TITLE, default=""): cv.string,
-        vol.Optional(ATTR_DESCRIPTION, default=""): cv.string,
-        vol.Optional(ATTR_COLUMN): cv.string,
-        vol.Optional(ATTR_CARD_TYPE): cv.string,
-        vol.Optional(ATTR_TAG_NAMES): vol.Any(
+        probatio.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+        probatio.Required(BoardOilServiceArgument.BOARD): cv.string,
+        probatio.Required(BoardOilServiceArgument.CARD_ID): cv.positive_int,
+        probatio.Optional(BoardOilServiceArgument.TITLE, default=""): cv.string,
+        probatio.Optional(BoardOilServiceArgument.DESCRIPTION, default=""): cv.string,
+        probatio.Optional(BoardOilServiceArgument.COLUMN): cv.string,
+        probatio.Optional(BoardOilServiceArgument.CARD_TYPE): cv.string,
+        probatio.Optional(BoardOilServiceArgument.TAG_NAMES): probatio.Any(
             cv.string,
-            vol.All(cv.ensure_list, [cv.string]),
+            probatio.All(cv.ensure_list, [cv.string]),
             {cv.string: object},
         ),
-        vol.Optional(ATTR_SLICK_NAME): cv.string,
-        vol.Optional(ATTR_ASSIGNED_USER): cv.string,
-        vol.Optional(ATTR_EXTERNAL_URL): cv.string,
+        probatio.Optional(BoardOilServiceArgument.SLICK_NAME): cv.string,
+        probatio.Optional(BoardOilServiceArgument.ASSIGNED_USER): cv.string,
+        probatio.Optional(BoardOilServiceArgument.EXTERNAL_URL): cv.string,
     }
 )
-SERVICE_DELETE_CARD = "delete_card"
-SERVICE_SCHEMA_DELETE_CARD = vol.Schema(
+SERVICE_SCHEMA_DELETE_CARD = probatio.Schema(
     {
-        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-        vol.Required(ATTR_BOARD): cv.string,
-        vol.Required(ATTR_CARD_ID): cv.string,
+        probatio.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+        probatio.Required(BoardOilServiceArgument.BOARD): cv.string,
+        probatio.Required(BoardOilServiceArgument.CARD_ID): cv.string,
     }
 )
-SERVICE_ARCHIVE_CARD = "archive_card"
-SERVICE_SCHEMA_ARCHIVE_CARD = vol.Schema(
+SERVICE_SCHEMA_ARCHIVE_CARD = probatio.Schema(
     {
-        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-        vol.Required(ATTR_BOARD): cv.string,
-        vol.Required(ATTR_CARD_ID): cv.string,
+        probatio.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+        probatio.Required(BoardOilServiceArgument.BOARD): cv.string,
+        probatio.Required(BoardOilServiceArgument.CARD_ID): cv.string,
     }
 )
-SERVICE_ADD_CARD_COMMENT = "add_card_comment"
-SERVICE_SCHEMA_ADD_CARD_COMMENT = vol.Schema(
+SERVICE_SCHEMA_ADD_CARD_COMMENT = probatio.Schema(
     {
-        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
-        vol.Required(ATTR_BOARD): cv.string,
-        vol.Required(ATTR_CARD_ID): cv.positive_int,
-        vol.Required(ATTR_COMMENT): cv.string,
+        probatio.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+        probatio.Required(BoardOilServiceArgument.BOARD): cv.string,
+        probatio.Required(BoardOilServiceArgument.CARD_ID): cv.positive_int,
+        probatio.Required(BoardOilServiceArgument.COMMENT): cv.string,
     }
 )
 
@@ -144,7 +154,9 @@ def _normalize_tag_names(raw_tag_names: object) -> list[str]:
     elif isinstance(raw_tag_names, (list, tuple, set)):
         normalized = [str(item).strip() for item in raw_tag_names if str(item).strip()]
     elif isinstance(raw_tag_names, dict):
-        nested_value = raw_tag_names.get("tag_names") or raw_tag_names.get("tags")
+        nested_value = raw_tag_names.get(
+            BoardOilServiceArgument.TAG_NAMES
+        ) or raw_tag_names.get("tags")
         if nested_value is not None:
             normalized = _normalize_tag_names(nested_value)
         else:
@@ -352,8 +364,8 @@ async def async_get_card_service(call: ServiceCall) -> ServiceResponse:
     entry: BoardOilConfigEntry = service.async_get_config_entry(
         call.hass, DOMAIN, call.data[ATTR_CONFIG_ENTRY_ID]
     )
-    board_param = str(call.data[ATTR_BOARD])
-    card_id = call.data[ATTR_CARD_ID]
+    board_param = str(call.data[BoardOilServiceArgument.BOARD])
+    card_id = call.data[BoardOilServiceArgument.CARD_ID]
 
     coordinator = entry.runtime_data.coordinator
 
@@ -384,8 +396,8 @@ async def async_get_cards_service(call: ServiceCall) -> ServiceResponse:
     entry: BoardOilConfigEntry = service.async_get_config_entry(
         call.hass, DOMAIN, call.data[ATTR_CONFIG_ENTRY_ID]
     )
-    board_param = str(call.data[ATTR_BOARD])
-    column_param = call.data.get(ATTR_COLUMN)
+    board_param = str(call.data[BoardOilServiceArgument.BOARD])
+    column_param = call.data.get(BoardOilServiceArgument.COLUMN)
 
     coordinator = entry.runtime_data.coordinator
 
@@ -431,18 +443,18 @@ async def async_add_card_service(call: ServiceCall) -> None:
     entry: BoardOilConfigEntry = service.async_get_config_entry(
         call.hass, DOMAIN, call.data[ATTR_CONFIG_ENTRY_ID]
     )
-    tag_names = _normalize_tag_names(call.data.get(ATTR_TAG_NAMES))
-    url = call.data.get(ATTR_EXTERNAL_URL)
+    tag_names = _normalize_tag_names(call.data.get(BoardOilServiceArgument.TAG_NAMES))
+    url = call.data.get(BoardOilServiceArgument.EXTERNAL_URL)
     if url and not _is_valid_url(url):
         raise ServiceValidationError(
             translation_domain=DOMAIN,
             translation_key="invalid_url",
         )
 
-    board_param = str(call.data[ATTR_BOARD])
-    column_param = call.data.get(ATTR_COLUMN)
-    card_type_param = call.data.get(ATTR_CARD_TYPE)
-    assigned_user_param = call.data.get(ATTR_ASSIGNED_USER)
+    board_param = str(call.data[BoardOilServiceArgument.BOARD])
+    column_param = call.data.get(BoardOilServiceArgument.COLUMN)
+    card_type_param = call.data.get(BoardOilServiceArgument.CARD_TYPE)
+    assigned_user_param = call.data.get(BoardOilServiceArgument.ASSIGNED_USER)
 
     board_id = await _get_board_id(entry, board_param)
     column_id = (
@@ -463,11 +475,11 @@ async def async_add_card_service(call: ServiceCall) -> None:
         await entry.runtime_data.client.async_add_card(
             board_id=board_id,
             column_id=column_id,
-            title=call.data[ATTR_TITLE],
-            description=call.data.get(ATTR_DESCRIPTION, ""),
+            title=call.data[BoardOilServiceArgument.TITLE],
+            description=call.data.get(BoardOilServiceArgument.DESCRIPTION, ""),
             tag_names=tag_names,
             card_type_id=card_type_id,
-            slick_name=call.data.get(ATTR_SLICK_NAME),
+            slick_name=call.data.get(BoardOilServiceArgument.SLICK_NAME),
             assigned_user_id=assigned_user_id,
             external_url=url,
         )
@@ -484,11 +496,11 @@ async def async_update_card_service(call: ServiceCall) -> None:
     entry: BoardOilConfigEntry = service.async_get_config_entry(
         call.hass, DOMAIN, call.data[ATTR_CONFIG_ENTRY_ID]
     )
-    board_param = str(call.data[ATTR_BOARD])
-    card_id = call.data[ATTR_CARD_ID]
-    column_param = call.data.get(ATTR_COLUMN)
-    card_type_param = call.data.get(ATTR_CARD_TYPE)
-    assigned_user_param = call.data.get(ATTR_ASSIGNED_USER)
+    board_param = str(call.data[BoardOilServiceArgument.BOARD])
+    card_id = call.data[BoardOilServiceArgument.CARD_ID]
+    column_param = call.data.get(BoardOilServiceArgument.COLUMN)
+    card_type_param = call.data.get(BoardOilServiceArgument.CARD_TYPE)
+    assigned_user_param = call.data.get(BoardOilServiceArgument.ASSIGNED_USER)
 
     board_id = await _get_board_id(entry, board_param)
     column_id = (
@@ -505,8 +517,8 @@ async def async_update_card_service(call: ServiceCall) -> None:
         else None
     )
 
-    tag_names = _normalize_tag_names(call.data.get(ATTR_TAG_NAMES))
-    url = call.data.get(ATTR_EXTERNAL_URL)
+    tag_names = _normalize_tag_names(call.data.get(BoardOilServiceArgument.TAG_NAMES))
+    url = call.data.get(BoardOilServiceArgument.EXTERNAL_URL)
     if url and not _is_valid_url(url):
         raise ServiceValidationError(
             translation_domain=DOMAIN,
@@ -574,14 +586,15 @@ async def async_update_card_service(call: ServiceCall) -> None:
         await entry.runtime_data.client.async_update_card(
             board_id=board_id,
             card_id=card_id,
-            title=call.data.get(ATTR_TITLE) or existing_title_str,
-            description=call.data.get(ATTR_DESCRIPTION) or existing_description_str,
+            title=call.data.get(BoardOilServiceArgument.TITLE) or existing_title_str,
+            description=call.data.get(BoardOilServiceArgument.DESCRIPTION)
+            or existing_description_str,
             tag_names=tag_names or existing_tag_names_list,
-            column_id=column_id or call.data.get(ATTR_COLUMN),
+            column_id=column_id or call.data.get(BoardOilServiceArgument.COLUMN),
             card_type_id=card_type_id or existing_card_type_id_int,
             assigned_user_id=assigned_user_id or existing_assigned_user_id_int,
             slick_name=call.data.get(
-                ATTR_SLICK_NAME, existing_card_raw.get("slickName")
+                BoardOilServiceArgument.SLICK_NAME, existing_card_raw.get("slickName")
             ),
             external_url=url or existing_external_url_str,
         )
@@ -599,13 +612,13 @@ async def async_delete_card_service(call: ServiceCall) -> None:
         call.hass, DOMAIN, call.data[ATTR_CONFIG_ENTRY_ID]
     )
 
-    board_param = str(call.data[ATTR_BOARD])
+    board_param = str(call.data[BoardOilServiceArgument.BOARD])
     board_id = await _get_board_id(entry, board_param)
 
     try:
         await entry.runtime_data.client.async_delete_card(
             board_id=board_id,
-            card_id=call.data[ATTR_CARD_ID],
+            card_id=call.data[BoardOilServiceArgument.CARD_ID],
         )
     except BoardOilApiClientCommunicationError as ex:
         raise HomeAssistantError(
@@ -621,13 +634,13 @@ async def async_archive_card_service(call: ServiceCall) -> None:
         call.hass, DOMAIN, call.data[ATTR_CONFIG_ENTRY_ID]
     )
 
-    board_param = str(call.data[ATTR_BOARD])
+    board_param = str(call.data[BoardOilServiceArgument.BOARD])
     board_id = await _get_board_id(entry, board_param)
 
     try:
         await entry.runtime_data.client.async_archive_card(
             board_id=board_id,
-            card_id=call.data[ATTR_CARD_ID],
+            card_id=call.data[BoardOilServiceArgument.CARD_ID],
         )
     except BoardOilApiClientCommunicationError as ex:
         raise HomeAssistantError(
@@ -643,14 +656,14 @@ async def async_add_card_comment_service(call: ServiceCall) -> None:
         call.hass, DOMAIN, call.data[ATTR_CONFIG_ENTRY_ID]
     )
 
-    board_param = str(call.data[ATTR_BOARD])
+    board_param = str(call.data[BoardOilServiceArgument.BOARD])
     board_id = await _get_board_id(entry, board_param)
 
     try:
         await entry.runtime_data.client.async_add_card_comment(
             board_id=board_id,
-            card_id=call.data[ATTR_CARD_ID],
-            comment=call.data[ATTR_COMMENT],
+            card_id=call.data[BoardOilServiceArgument.CARD_ID],
+            comment=call.data[BoardOilServiceArgument.COMMENT],
         )
     except BoardOilApiClientCommunicationError as ex:
         raise HomeAssistantError(
@@ -664,49 +677,49 @@ async def async_setup_services(hass: HomeAssistant) -> None:
     """Set up boardoil services."""
     hass.services.async_register(
         DOMAIN,
-        SERVICE_GET_CARD,
+        BoardOilService.GET_CARD,
         async_get_card_service,
         schema=SERVICE_SCHEMA_GET_CARD,
         supports_response=SupportsResponse.ONLY,
     )
     hass.services.async_register(
         DOMAIN,
-        SERVICE_GET_CARDS,
+        BoardOilService.GET_CARDS,
         async_get_cards_service,
         schema=SERVICE_SCHEMA_GET_CARDS,
         supports_response=SupportsResponse.ONLY,
     )
     hass.services.async_register(
         DOMAIN,
-        SERVICE_ADD_CARD,
+        BoardOilService.ADD_CARD,
         async_add_card_service,
         schema=SERVICE_SCHEMA_ADD_CARD,
         supports_response=SupportsResponse.NONE,
     )
     hass.services.async_register(
         DOMAIN,
-        SERVICE_UPDATE_CARD,
+        BoardOilService.UPDATE_CARD,
         async_update_card_service,
         schema=SERVICE_SCHEMA_UPDATE_CARD,
         supports_response=SupportsResponse.NONE,
     )
     hass.services.async_register(
         DOMAIN,
-        SERVICE_DELETE_CARD,
+        BoardOilService.DELETE_CARD,
         async_delete_card_service,
         schema=SERVICE_SCHEMA_DELETE_CARD,
         supports_response=SupportsResponse.NONE,
     )
     hass.services.async_register(
         DOMAIN,
-        SERVICE_ARCHIVE_CARD,
+        BoardOilService.ARCHIVE_CARD,
         async_archive_card_service,
         schema=SERVICE_SCHEMA_ARCHIVE_CARD,
         supports_response=SupportsResponse.NONE,
     )
     hass.services.async_register(
         DOMAIN,
-        SERVICE_ADD_CARD_COMMENT,
+        BoardOilService.ADD_CARD_COMMENT,
         async_add_card_comment_service,
         schema=SERVICE_SCHEMA_ADD_CARD_COMMENT,
         supports_response=SupportsResponse.NONE,

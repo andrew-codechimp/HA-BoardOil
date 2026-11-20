@@ -1,6 +1,6 @@
 """Tests for the BoardOil integration."""
 
-from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant.common import MockConfigEntry
 
 from homeassistant.core import HomeAssistant
 

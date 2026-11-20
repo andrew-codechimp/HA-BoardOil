@@ -7,7 +7,7 @@ from custom_components.boardoil.api import BoardOilApiClientCommunicationError
 from custom_components.boardoil.const import DOMAIN
 from custom_components.boardoil.models import Board, ColumnWithCards
 import pytest
-from pytest_homeassistant_custom_component.common import (
+from pytest_homeassistant.common import (
     MockConfigEntry,
     snapshot_platform,
 )
@@ -70,6 +70,49 @@ async def test_column_removed(
     await hass.async_block_till_done()
     assert entity_registry.async_get(COLUMN_ENTITY_ID) is None
     assert hass.states.get(COLUMN_ENTITY_ID) is None
+
+
+async def test_entity_id_changed(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_api: MagicMock,
+    board: Board,
+    entity_registry: er.EntityRegistry,
+) -> None:
+    """Test renamed sensors keep updating and can still be removed by column ID."""
+    await setup_integration(hass, mock_config_entry)
+    coordinator = mock_config_entry.runtime_data.coordinator
+    registry_id = entity_registry.async_get(COLUMN_ENTITY_ID).id
+    empty_board = replace(
+        board, columns=[replace(board.columns[0], cards=[]), board.columns[1]]
+    )
+    entity_id = COLUMN_ENTITY_ID
+
+    for new_entity_id, updated_board, expected_count in (
+        ("sensor.renamed_board_column", empty_board, "0"),
+        ("sensor.renamed_board_column_again", board, "1"),
+    ):
+        previous_state = hass.states.get(entity_id)
+        entity_registry.async_update_entity(entity_id, new_entity_id=new_entity_id)
+        await hass.async_block_till_done()
+
+        assert hass.states.get(entity_id) is None
+        state = hass.states.get(new_entity_id)
+        assert state.state == previous_state.state
+        assert state.attributes == previous_state.attributes
+        assert entity_registry.async_get(new_entity_id).id == registry_id
+        entity_id = new_entity_id
+
+        mock_api.async_get_board.return_value = updated_board
+        await coordinator.async_refresh()
+        await hass.async_block_till_done()
+        assert hass.states.get(entity_id).state == expected_count
+
+    mock_api.async_get_board.return_value = replace(board, columns=[board.columns[1]])
+    await coordinator.async_refresh()
+    await hass.async_block_till_done()
+    assert entity_registry.async_get(entity_id) is None
+    assert hass.states.get(entity_id) is None
 
 
 async def test_column_renamed(
