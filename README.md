@@ -1,7 +1,6 @@
 <!-- ha-marketplace:exclude-start -->
 # BoardOil Home Assistant Integration
 
-[![GitHub Release][releases-shield]][releases]
 [![GitHub Activity][commits-shield]][commits]
 [![Downloads][download-latest-shield]]()
 [![Installs][marketplace-installs-shield]][marketplace-install]
@@ -94,8 +93,6 @@ max: 10
 [commits-shield]: https://img.shields.io/github/commit-activity/y/andrew-codechimp/HA-BoardOil.svg?style=for-the-badge
 [commits]: https://github.com/andrew-codechimp/HA-BoardOil/commits/main
 [license-shield]: https://img.shields.io/github/license/andrew-codechimp/HA-BoardOil.svg?style=for-the-badge
-[releases-shield]: https://img.shields.io/github/release/andrew-codechimp/HA-BoardOil.svg?style=for-the-badge
-[releases]: https://github.com/andrew-codechimp/HA-BoardOil/releases
 [download-latest-shield]: https://img.shields.io/github/downloads/andrew-codechimp/HA-BoardOil/latest/total?style=for-the-badge
 [repository]: https://github.com/andrew-codechimp/HA-BoardOil
 [marketplace-installs-shield]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fanalytics.home-assistant.io%2Fcustom_integrations.json&query=%24.boardoil.total&style=for-the-badge&label=Marketplace%20installs
