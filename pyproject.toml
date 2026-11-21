@@ -15,7 +15,7 @@ classifiers = [
   "Programming Language :: Python :: 3.14",
   "Programming Language :: Python :: 3",
 ]
-requires-python = "==3.14.2"
+requires-python = ">=3.14.8"
 dependencies = [] # Use dev for all dependencies
 
 [project.urls]
@@ -27,9 +27,10 @@ Changelog = "https://github.com/andrew-codechimp/HA-BoardOil/releases"
 
 [dependency-groups]
 dev = [
-    "homeassistant==2026.8.0",
+    "homeassistant==2026.11.0",
     "mypy",
-    "pytest-homeassistant-custom-component==0.13.354",
+    "pytest-cov",
+    "pytest-homeassistant==2026.11.0",
     "ruff",
 ]
 
@@ -39,10 +40,19 @@ default-groups = ["dev"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
+addopts = "-p no:respx"
+filterwarnings = [
+    # Home Assistant intentionally subclasses aiohttp application.
+    "ignore:Inheritance class HomeAssistantApplication from web.Application is discouraged:DeprecationWarning:homeassistant.components.http.server",
+    # Backoff uses an asyncio API deprecated in Python 3.14.
+    "ignore:'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16:DeprecationWarning:(backoff._decorator|backoff._async)",
+]
+pythonpath = ["."]
 testpaths = ["tests"]
 
+
 [tool.ruff]
-target-version = "py313"
+target-version = "py314"
 src = ["custom_components/boardoil"]
 
 [tool.ruff.format]

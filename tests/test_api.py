@@ -23,8 +23,8 @@ from custom_components.boardoil.models import (
     Version,
 )
 import pytest
-from pytest_homeassistant_custom_component.common import load_fixture
-from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
+from pytest_homeassistant.common import load_fixture
+from pytest_homeassistant.test_util.aiohttp import AiohttpClientMocker
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession

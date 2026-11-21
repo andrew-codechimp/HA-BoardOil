@@ -10,7 +10,7 @@ from custom_components.boardoil.api import (
 from custom_components.boardoil.const import DOMAIN
 from custom_components.boardoil.models import Me, Version
 import pytest
-from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant.common import MockConfigEntry
 
 from homeassistant.config_entries import SOURCE_REAUTH, SOURCE_RECONFIGURE, SOURCE_USER
 from homeassistant.const import CONF_API_TOKEN, CONF_HOST, CONF_VERIFY_SSL

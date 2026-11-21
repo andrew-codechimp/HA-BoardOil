@@ -1,7 +1,7 @@
 """Tests for BoardOil loading, errors, polling, and cleanup."""
 
 from datetime import timedelta
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 from custom_components.boardoil.api import (
     BoardOilApiClientAuthenticationError,
@@ -12,18 +12,19 @@ from custom_components.boardoil.const import DEFAULT_SCAN_INTERVAL, DOMAIN
 from custom_components.boardoil.models import Me, Version
 from freezegun.api import FrozenDateTimeFactory
 import pytest
-from pytest_homeassistant_custom_component.common import (
+from pytest_homeassistant.common import (
     MockConfigEntry,
     async_fire_time_changed,
 )
 
-from homeassistant.config_entries import ConfigEntryState
+from homeassistant.config_entries import SOURCE_REAUTH, ConfigEntryState
 from homeassistant.const import CONF_VERIFY_SSL
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import ConfigEntryError
 from homeassistant.helpers import device_registry as dr, entity_registry as er
 from homeassistant.util import dt as dt_util
 
-from . import COLUMN_ENTITY_ID, setup_integration
+from . import COLUMN_ENTITY_ID, ENTRY_ID, setup_integration
 
 pytestmark = pytest.mark.usefixtures("mock_api")
 
@@ -126,15 +127,51 @@ async def test_setup_entry(
     }
 
 
-async def test_version_connection_error(
-    hass: HomeAssistant, mock_config_entry: MockConfigEntry, mock_api: MagicMock
+@pytest.mark.parametrize(
+    ("exception", "expected_state", "translation_key", "reauth_flows"),
+    [
+        pytest.param(
+            BoardOilApiClientAuthenticationError("Invalid credentials"),
+            ConfigEntryState.SETUP_ERROR,
+            "auth_failed",
+            [(SOURCE_REAUTH, ENTRY_ID)],
+            id="authentication",
+        ),
+        pytest.param(
+            BoardOilApiClientCommunicationError("offline"),
+            ConfigEntryState.SETUP_RETRY,
+            "connection_error",
+            [],
+            id="connection",
+        ),
+        pytest.param(
+            BoardOilApiClientError("unexpected"),
+            ConfigEntryState.SETUP_RETRY,
+            "connection_error",
+            [],
+            id="unexpected",
+        ),
+    ],
+)
+async def test_version_error(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_api: MagicMock,
+    exception: BoardOilApiClientError,
+    expected_state: ConfigEntryState,
+    translation_key: str,
+    reauth_flows: list[tuple[str, str]],
 ) -> None:
-    """Test an initial connection error prevents setup."""
-    mock_api.async_get_version.side_effect = BoardOilApiClientCommunicationError(
-        "offline"
-    )
+    """Test initial API failures trigger reauthentication or a setup retry."""
+    mock_api.async_get_version.side_effect = exception
     await setup_integration(hass, mock_config_entry)
-    assert mock_config_entry.state is ConfigEntryState.SETUP_ERROR
+    assert mock_config_entry.state is expected_state
+    assert mock_config_entry.error_reason_translation_key == translation_key
+    assert [
+        (flow["context"]["source"], flow["context"]["entry_id"])
+        for flow in hass.config_entries.flow.async_progress_by_handler(DOMAIN)
+    ] == reauth_flows
+    mock_api.async_get_boards.assert_not_awaited()
 
 
 async def test_unsupported_version(
@@ -181,6 +218,25 @@ async def test_polling_and_unload(
     async_fire_time_changed(hass, dt_util.utcnow())
     await hass.async_block_till_done()
     assert mock_api.async_get_boards.await_count == 2
+
+
+@pytest.mark.no_fail_on_log_exception
+async def test_unload_failure(
+    hass: HomeAssistant, mock_config_entry: MockConfigEntry
+) -> None:
+    """Test a platform unload failure preserves the entry's runtime data."""
+    await setup_integration(hass, mock_config_entry)
+    runtime_data = mock_config_entry.runtime_data
+
+    with patch(
+        "homeassistant.components.sensor.async_unload_entry",
+        side_effect=ConfigEntryError("Unable to unload sensor platform"),
+    ):
+        assert not await hass.config_entries.async_unload(mock_config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    assert mock_config_entry.state is ConfigEntryState.FAILED_UNLOAD
+    assert mock_config_entry.runtime_data is runtime_data
 
 
 async def test_options_reload(
